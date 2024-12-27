@@ -3,5 +3,5 @@ node_modules
 cursor.txt
 *.log
 labels.db*
-
+bun.lockb
 .DS_Store
