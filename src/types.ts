@@ -7,6 +7,19 @@ export interface Post {
   cid: string;
 }
 
+export interface Handle {
+  did: string;
+  time: number;
+  handle: string;
+}
+
+export interface Profile {
+  did: string;
+  time: number;
+  displayName?: string;
+  description?: string;
+}
+
 // Define the type for the link feature
 export interface LinkFeature {
   $type: "app.bsky.richtext.facet#link";
