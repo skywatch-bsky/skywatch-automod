@@ -1,6 +1,8 @@
 import {
   CommitCreateEvent,
-  CommitDeleteEvent,
+  CommitUpdateEvent,
+  EventType,
+  IdentityEvent,
   Jetstream,
 } from "@skyware/jetstream";
 import fs from "node:fs";
@@ -16,8 +18,10 @@ import {
 } from "./config.js";
 import logger from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
-import { Post, LinkFeature } from "./types.js";
+import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
+import { checkHandle } from "./checkHandles.js";
+import { checkProfile } from "./checkProfiles.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -44,7 +48,11 @@ try {
 }
 
 const jetstream = new Jetstream({
-  wantedCollections: [WANTED_COLLECTION],
+  wantedCollections: [
+    "app.bsky.feed.post",
+    "app.bsky.actor.defs",
+    "app.bsky.actor.profile",
+  ],
   endpoint: FIREHOSE_URL,
   cursor: cursor,
 });
@@ -75,11 +83,13 @@ jetstream.on("error", (error) => {
 });
 
 jetstream.onCreate(
-  WANTED_COLLECTION,
+  "app.bsky.feed.post",
   (event: CommitCreateEvent<typeof WANTED_COLLECTION>) => {
     const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
     const hasFacets = event.commit.record.hasOwnProperty("facets");
     const hasText = event.commit.record.hasOwnProperty("text");
+
+    const tasks: Promise<void>[] = [];
 
     // Check if the record has facets
     if (hasFacets) {
@@ -109,7 +119,7 @@ jetstream.onCreate(
               cid: event.commit.cid,
             },
           ];
-          checkPosts(posts);
+          tasks.push(checkPosts(posts));
         });
       }
     } else if (hasText) {
@@ -123,10 +133,42 @@ jetstream.onCreate(
           cid: event.commit.cid,
         },
       ];
-      checkPosts(posts);
+      tasks.push(checkPosts(posts));
     }
   },
 );
+
+/*
+jetstream.onUpdate(
+  "app.bsky.actor.profile",
+  (event: CommitUpdateEvent<typeof WANTED_COLLECTION>) => {
+    const promise = checkProfile(
+      event.did,
+      event.time_us,
+      event.commit.record.displayName,
+      event.commit.record.description,
+    );
+
+    try {
+      promise.then(() => {});
+    } catch (error) {
+      logger.error(`Error checking profile:  ${error}`);
+    }
+  },
+);*/
+
+jetstream.on("identity", (event: IdentityEvent) => {
+  const handle: Handle[] = [
+    { did: event.did, handle: event.identity.handle, time: event.time_us },
+  ];
+  const promise = checkHandle(handle);
+
+  try {
+    promise.then(() => {});
+  } catch (error) {
+    logger.error(`Error checking handle: ${error}`);
+  }
+});
 
 const metricsServer = startMetricsServer(METRICS_PORT);
 
