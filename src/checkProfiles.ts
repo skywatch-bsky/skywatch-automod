@@ -16,7 +16,10 @@ export const checkProfile = async (
   displayName: string,
   description: string,
 ) => {
-  /*
+  if (IGNORED_DIDS.includes(did)) {
+    return logger.info(`Ignoring DID: ${did}`);
+  } else if (swastika.test(displayName) || swastika.test(description)) {
+    /*
   const displayNameNormalized = normalizeUnicode(displayName);
   const descriptionNormalized = normalizeUnicode(description);
 
@@ -58,7 +61,6 @@ export const checkProfile = async (
     );
   }*/
 
-  if (swastika.test(displayName) || swastika.test(description)) {
     logger.info("Swastika in profile");
     createAccountLabel(
       did,
