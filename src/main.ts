@@ -10,6 +10,7 @@ import fs from "node:fs";
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
+  METRICS_PORT,
   WANTED_COLLECTION,
 } from "./config.js";
 import logger from "./logger.js";
