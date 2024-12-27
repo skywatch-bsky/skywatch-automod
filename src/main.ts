@@ -10,10 +10,7 @@ import fs from "node:fs";
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
-  HOST,
   METRICS_PORT,
-  PORT,
-  TARGET,
   WANTED_COLLECTION,
 } from "./config.js";
 import logger from "./logger.js";
@@ -138,6 +135,7 @@ jetstream.onCreate(
   },
 );
 
+// Check for profile updates
 /*
 jetstream.onUpdate(
   "app.bsky.actor.profile",
@@ -157,6 +155,7 @@ jetstream.onUpdate(
   },
 );*/
 
+// Check for handle updates
 jetstream.on("identity", (event: IdentityEvent) => {
   const handle: Handle[] = [
     { did: event.did, handle: event.identity.handle, time: event.time_us },
