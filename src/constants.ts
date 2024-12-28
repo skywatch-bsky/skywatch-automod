@@ -59,6 +59,11 @@ export const troll = new RegExp(
   "i",
 );
 
+export const trollPosts = new RegExp(
+  "(l[i4]bt[a4]rd|only ?2.*genders?|gender.*only ?2|only ?two.*genders?|wokemind|woke.*virus|crybabylib|snowflakelib|woke.*snowflake|scaredlib|liberals.*suck|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r)",
+  "i",
+);
+
 // Check for Nazism
 export const nazism = new RegExp(
   "(h[i1]tl[e3]r|goebbels|göring|himmler|führer|reichskanzler|HWABAG|nazigamingclan\.com)",
