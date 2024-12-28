@@ -79,6 +79,7 @@ jetstream.on("error", (error) => {
   logger.error(`Jetstream error: ${error.message}`);
 });
 
+// Check for post updates
 jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<typeof WANTED_COLLECTION>) => {
@@ -136,7 +137,6 @@ jetstream.onCreate(
 );
 
 // Check for profile updates
-/*
 jetstream.onUpdate(
   "app.bsky.actor.profile",
   (event: CommitUpdateEvent<typeof WANTED_COLLECTION>) => {
@@ -153,7 +153,7 @@ jetstream.onUpdate(
       logger.error(`Error checking profile:  ${error}`);
     }
   },
-);*/
+);
 
 // Check for handle updates
 jetstream.on("identity", (event: IdentityEvent) => {

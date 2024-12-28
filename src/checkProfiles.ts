@@ -7,6 +7,7 @@ import {
   hammerAndSickle,
 } from "./constants.js";
 import { Profile } from "./types.js";
+import { IGNORED_DIDS } from "./whitelist.js";
 import logger from "./logger.js";
 import { createAccountLabel } from "./moderation.js";
 
@@ -18,67 +19,64 @@ export const checkProfile = async (
 ) => {
   if (IGNORED_DIDS.includes(did)) {
     return logger.info(`Ignoring DID: ${did}`);
-  } else if (swastika.test(displayName) || swastika.test(description)) {
-    /*
-  const displayNameNormalized = normalizeUnicode(displayName);
-  const descriptionNormalized = normalizeUnicode(description);
+  } else {
+    const displayNameNormalized = normalizeUnicode(displayName);
 
-   if (
-    magaTrump.test(displayNameNormalized) ||
-    magaTrump.test(descriptionNormalized)
-  ) {
-    createAccountLabel(
-      did,
-      "maga-trump",
-      `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
-    );
-  }
-  if (troll.test(displayNameNormalized) || troll.test(descriptionNormalized))
+    /*if (magaTrump.test(displayNameNormalized) || magaTrump.test(description)) {
+      logger.info("Trump in profile");
+      createAccountLabel(
+        did,
+        "maga-trump",
+        `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
+      );
+    }*/
+    if (troll.test(displayNameNormalized) || troll.test(description)) {
+      logger.info("Troll reference in profile");
       createAccountLabel(
         did,
         "troll",
         `${time}: Troll in profile: ${displayName} - ${description}`,
       );
-  }
-  if (
-    nazism.test(displayNameNormalized) ||
-    nazism.test(descriptionNormalized)
-  ) {
-    createAccountLabel(
-      did,
-      "nazi-symbolism",
-      `${time}: Nazism in profile: ${displayName} - ${description}`,
-    );
-  }
-  if (
-    elonMusk.test(displayNameNormalized) ||
-    elonMusk.test(descriptionNormalized)
-  ) {
-    createAccountLabel(
-      did,
-      "elon-musk",
-      `${time}: Elon Musk in profile: ${displayName} - ${description}`,
-    );
-  }*/
-
-    logger.info("Swastika in profile");
-    createAccountLabel(
-      did,
-      "nazi-symbolism",
-      `${time}: Swastika in profile: ${displayName} - ${description}`,
-    );
-  }
-  if (hammerAndSickle.test(displayName) || hammerAndSickle.test(description)) {
-    logger.info("Hammer and sickle in profile");
-    createAccountLabel(
-      did,
-      "hammer-sickle",
-      `${time}: Hammer and sickle in profile: ${displayName} - ${description}`,
-    );
+    }
+    if (nazism.test(displayNameNormalized) || nazism.test(description)) {
+      logger.info("Nazi reference in profile");
+      createAccountLabel(
+        did,
+        "nazi-symbolism",
+        `${time}: Nazism in profile: ${displayName} - ${description}`,
+      );
+    }
+    if (elonMusk.test(displayNameNormalized) || elonMusk.test(description)) {
+      logger.info("Elon Musk in profile");
+      createAccountLabel(
+        did,
+        "elon-musk",
+        `${time}: Elon Musk in profile: ${displayName} - ${description}`,
+      );
+    }
+    if (swastika.test(displayName) || swastika.test(description)) {
+      logger.info("Swastika in profile");
+      createAccountLabel(
+        did,
+        "nazi-symbolism",
+        `${time}: Swastika in profile: ${displayName} - ${description}`,
+      );
+    }
+    if (
+      hammerAndSickle.test(displayName) ||
+      hammerAndSickle.test(description)
+    ) {
+      logger.info("Hammer and sickle in profile");
+      createAccountLabel(
+        did,
+        "hammer-sickle",
+        `${time}: Hammer and sickle in profile: ${displayName} - ${description}`,
+      );
+    }
   }
 
   // Normalize the Unicode characters
-  function normalizeUnicode(text) {
+  function normalizeUnicode(text: string): string {
     // First decompose the characters (NFD)
     const decomposed = text.normalize("NFD");
 
