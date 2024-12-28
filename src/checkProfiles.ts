@@ -5,8 +5,8 @@ import {
   elonMusk,
   swastika,
   hammerAndSickle,
+  slur,
 } from "./constants.js";
-import { Profile } from "./types.js";
 import { IGNORED_DIDS } from "./whitelist.js";
 import logger from "./logger.js";
 import { createAccountLabel } from "./moderation.js";
