@@ -6,9 +6,6 @@ import {
   sportsBetting,
   slur,
   slurWhiteList,
-  troll,
-  trollProfile,
-  magaTrump,
   swastika,
   trollPosts,
   gore,
@@ -27,10 +24,6 @@ export const checkPosts = async (post: Post[]) => {
       "fundraising-link",
       `${post[0].time}: Fundraising link found in post at ${post[0].atURI} - ${post[0].check}`,
     );
-    /* createAccountComment(
-      post[0].did,
-      `${post[0].time}: Fundraising link found in post at ${post[0].atURI} - ${post[0].check}`,
-    ); */
   }
   if (fringeMedia.test(post[0].check)) {
     logger.info("Fringe media link found");

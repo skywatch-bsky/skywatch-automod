@@ -1,7 +1,6 @@
 import {
   CommitCreateEvent,
   CommitUpdateEvent,
-  EventType,
   IdentityEvent,
   Jetstream,
 } from "@skyware/jetstream";
@@ -45,11 +44,7 @@ try {
 }
 
 const jetstream = new Jetstream({
-  wantedCollections: [
-    "app.bsky.feed.post",
-    "app.bsky.actor.defs",
-    "app.bsky.actor.profile",
-  ],
+  wantedCollections: WANTED_COLLECTION,
   endpoint: FIREHOSE_URL,
   cursor: cursor,
 });
