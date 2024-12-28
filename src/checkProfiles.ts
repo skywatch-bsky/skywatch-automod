@@ -20,9 +20,9 @@ export const checkProfile = async (
   if (IGNORED_DIDS.includes(did)) {
     return logger.info(`Ignoring DID: ${did}`);
   } else {
-    const displayNameNormalized = normalizeUnicode(displayName);
+    /*const displayName = normalizeUnicode(displayName);*/
 
-    /*if (magaTrump.test(displayNameNormalized) || magaTrump.test(description)) {
+    /*if (magaTrump.test(displayName) || magaTrump.test(description)) {
       logger.info("Trump in profile");
       createAccountLabel(
         did,
@@ -30,7 +30,7 @@ export const checkProfile = async (
         `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
       );
     }*/
-    if (troll.test(displayNameNormalized) || troll.test(description)) {
+    if (troll.test(displayName) || troll.test(description)) {
       logger.info("Troll reference in profile");
       createAccountLabel(
         did,
@@ -38,7 +38,7 @@ export const checkProfile = async (
         `${time}: Troll in profile: ${displayName} - ${description}`,
       );
     }
-    if (nazism.test(displayNameNormalized) || nazism.test(description)) {
+    if (nazism.test(displayName) || nazism.test(description)) {
       logger.info("Nazi reference in profile");
       createAccountLabel(
         did,
@@ -46,7 +46,7 @@ export const checkProfile = async (
         `${time}: Nazism in profile: ${displayName} - ${description}`,
       );
     }
-    if (elonMusk.test(displayNameNormalized) || elonMusk.test(description)) {
+    if (elonMusk.test(displayName) || elonMusk.test(description)) {
       logger.info("Elon Musk in profile");
       createAccountLabel(
         did,
@@ -60,6 +60,14 @@ export const checkProfile = async (
         did,
         "nazi-symbolism",
         `${time}: Swastika in profile: ${displayName} - ${description}`,
+      );
+    }
+    if (slur.test(displayName) || slur.test(description)) {
+      logger.info("slur in profile");
+      createAccountLabel(
+        did,
+        "contains-slur",
+        `${time}: Slur in profile: ${displayName} - ${description}`,
       );
     }
     if (
