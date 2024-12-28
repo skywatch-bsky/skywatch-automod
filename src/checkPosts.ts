@@ -12,7 +12,6 @@ import {
   swastika,
   trollPosts,
   gore,
-  followback,
   followBackSpam,
 } from "./constants.js";
 import { Post } from "./types.js";
