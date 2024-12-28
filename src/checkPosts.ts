@@ -12,6 +12,8 @@ import {
   swastika,
   trollPosts,
   gore,
+  followback,
+  followBackSpam,
 } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
@@ -147,6 +149,14 @@ export const checkPosts = async (post: Post[]) => {
     createAccountComment(
       post[0].did,
       `${post[0].time}: Possible Troll reference in post at ${post[0].atURI} - ${post[0].check}`,
+    );
+  }
+  if (followBackSpam.test(post[0].check)) {
+    logger.info("Follow back post detected");
+
+    createAccountComment(
+      post[0].did,
+      `${post[0].time}: Possible Follow Back Scam in post at ${post[0].atURI} - ${post[0].check}`,
     );
   }
 };
