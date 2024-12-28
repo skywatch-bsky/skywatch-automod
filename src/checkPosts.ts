@@ -4,6 +4,7 @@ import {
   fringeMedia,
   disinfoNetwork,
   sportsBetting,
+  slur,
 } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
@@ -81,6 +82,21 @@ export const checkPosts = async (post: Post[]) => {
     createAccountComment(
       post[0].did,
       `${post[0].time}: Sports betting link found in post at ${post[0].atURI} - ${post[0].check}`,
+    );
+  }
+  if (slur.test(post[0].check)) {
+    logger.info("Slur found");
+
+    createPostLabel(
+      post[0].atURI,
+      post[0].cid,
+      "contains-slur",
+      `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
+    );
+
+    createAccountComment(
+      post[0].did,
+      `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
     );
   }
 };
