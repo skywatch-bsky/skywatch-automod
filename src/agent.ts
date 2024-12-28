@@ -1,10 +1,10 @@
 import { setGlobalDispatcher, Agent as Agent } from "undici";
 setGlobalDispatcher(new Agent({ connect: { timeout: 20_000 } }));
-import { BSKY_HANDLE, BSKY_PASSWORD } from "./config.js";
+import { BSKY_HANDLE, BSKY_PASSWORD, OZONE_PDS } from "./config.js";
 import { AtpAgent } from "@atproto/api";
 
 export const agent = new AtpAgent({
-  service: "https://oysterling.us-west.host.bsky.network",
+  service: `https://${OZONE_PDS}`,
 });
 export const login = () =>
   agent.login({

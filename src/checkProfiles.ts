@@ -67,7 +67,9 @@ export const checkProfile = async (
       );
     }
     if (slurWhiteList.test(displayName) || slurWhiteList.test(description)) {
-      logger.info("User is Probably scottish");
+      logger.info(
+        "User is probably Scottish, a golfer, or works for the vineyard in Oregon",
+      ); // I swear to god.
       createAccountComment(
         did,
         `${time}: User is Scottish: ${displayName} - ${description}`,
@@ -95,7 +97,7 @@ export const checkProfile = async (
     }
   }
 
-  // Normalize the Unicode characters
+  /*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
   function normalizeUnicode(text: string): string {
     // First decompose the characters (NFD)
     const decomposed = text.normalize("NFD");

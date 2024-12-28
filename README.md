@@ -7,8 +7,7 @@ To install dependencies:
 ```bash
 bun i
 ```
-
-To run:
+Modify .env.example with your own values and rename it to .env
 
 ```bash
 bun run start
@@ -22,8 +21,6 @@ To run in docker:
 docker build -pull -t skywatch-tools .
 docker run -d -p 4101:4101 skywatch-autolabeler
 ```
-
-
 
 
 This project was created using `bun init` in bun v1.1.37. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
