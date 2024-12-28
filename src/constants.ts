@@ -61,7 +61,7 @@ export const nazism = new RegExp(
 );
 
 // Check for Nazi Symbolism
-export const swastika = new RegExp("卐|✠|\\bHH1488\\b", "i");
+export const swastika = new RegExp("卐|\\bHH ?1488\\b", "i");
 
 // Check for Hammer and Sickle
 export const hammerAndSickle = new RegExp("☭", "i");
