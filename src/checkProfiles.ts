@@ -1,15 +1,16 @@
 import {
-  magaTrump,
-  troll,
+  magaTrumpProfile,
+  trollProfile,
   nazism,
   elonMusk,
   swastika,
   hammerAndSickle,
   slur,
+  slurWhiteList,
 } from "./constants.js";
 import { IGNORED_DIDS } from "./whitelist.js";
 import logger from "./logger.js";
-import { createAccountLabel } from "./moderation.js";
+import { createAccountComment, createAccountLabel } from "./moderation.js";
 
 export const checkProfile = async (
   did: string,
@@ -22,15 +23,18 @@ export const checkProfile = async (
   } else {
     /*const displayName = normalizeUnicode(displayName);*/
 
-    /*if (magaTrump.test(displayName) || magaTrump.test(description)) {
+    if (
+      magaTrumpProfile.test(displayName) ||
+      magaTrumpProfile.test(description)
+    ) {
       logger.info("Trump in profile");
       createAccountLabel(
         did,
         "maga-trump",
         `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
       );
-    }*/
-    if (troll.test(displayName) || troll.test(description)) {
+    }
+    if (trollProfile.test(displayName) || trollProfile.test(description)) {
       logger.info("Troll reference in profile");
       createAccountLabel(
         did,
@@ -62,13 +66,21 @@ export const checkProfile = async (
         `${time}: Swastika in profile: ${displayName} - ${description}`,
       );
     }
-    if (slur.test(displayName) || slur.test(description)) {
-      logger.info("slur in profile");
-      createAccountLabel(
+    if (slurWhiteList.test(displayName) || slurWhiteList.test(description)) {
+      logger.info("User is Probably scottish");
+      createAccountComment(
         did,
-        "contains-slur",
-        `${time}: Slur in profile: ${displayName} - ${description}`,
+        `${time}: User is Scottish: ${displayName} - ${description}`,
       );
+    } else {
+      if (slur.test(displayName) || slur.test(description)) {
+        logger.info("slur in profile");
+        createAccountLabel(
+          did,
+          "contains-slur",
+          `${time}: Slur in profile: ${displayName} - ${description}`,
+        );
+      }
     }
     if (
       hammerAndSickle.test(displayName) ||

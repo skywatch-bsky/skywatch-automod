@@ -5,6 +5,7 @@ import {
   disinfoNetwork,
   sportsBetting,
   slur,
+  slurWhiteList,
 } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
@@ -87,16 +88,20 @@ export const checkPosts = async (post: Post[]) => {
   if (slur.test(post[0].check)) {
     logger.info("Slur found");
 
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "contains-slur",
-      `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
+    if (slurWhiteList.test(post[0].check)) {
+      logger.info("User is scottish");
+    } else {
+      createPostLabel(
+        post[0].atURI,
+        post[0].cid,
+        "contains-slur",
+        `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
+      );
 
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
+      createAccountComment(
+        post[0].did,
+        `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
+      );
+    }
   }
 };
