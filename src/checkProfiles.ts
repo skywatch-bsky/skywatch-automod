@@ -10,7 +10,11 @@ import {
 } from "./constants.js";
 import { IGNORED_DIDS } from "./whitelist.js";
 import logger from "./logger.js";
-import { createAccountComment, createAccountLabel } from "./moderation.js";
+import {
+  addToList,
+  createAccountComment,
+  createAccountLabel,
+} from "./moderation.js";
 
 export const checkProfile = async (
   did: string,
@@ -33,6 +37,8 @@ export const checkProfile = async (
         "maga-trump",
         `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
       );
+
+      addToList("maga-trump", did);
     }
     if (trollProfile.test(displayName) || trollProfile.test(description)) {
       logger.info("Troll reference in profile");
@@ -41,6 +47,8 @@ export const checkProfile = async (
         "troll",
         `${time}: Troll in profile: ${displayName} - ${description}`,
       );
+
+      addToList("troll", did);
     }
     if (elonMusk.test(displayName)) {
       logger.info("Elon Musk in profile");
@@ -49,6 +57,8 @@ export const checkProfile = async (
         "elon-musk",
         `${time}: Elon Musk in profile: ${displayName}`,
       );
+
+      addToList("elon-musk", did);
     }
     if (swastika.test(displayName) || swastika.test(description)) {
       logger.info("Swastika in profile");
@@ -57,6 +67,8 @@ export const checkProfile = async (
         "nazi-symbolism",
         `${time}: Swastika in profile: ${displayName} - ${description}`,
       );
+
+      addToList("nazi-symbolism", did);
     }
     if (slurWhiteList.test(displayName) || slurWhiteList.test(description)) {
       logger.info(
@@ -86,6 +98,8 @@ export const checkProfile = async (
         "hammer-sickle",
         `${time}: Hammer and sickle in profile: ${displayName} - ${description}`,
       );
+
+      addToList("hammer-sickle", did);
     }
   }
 
