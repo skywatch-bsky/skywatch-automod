@@ -42,12 +42,12 @@ export const checkProfile = async (
         `${time}: Troll in profile: ${displayName} - ${description}`,
       );
     }
-    if (elonMusk.test(displayName) || elonMusk.test(description)) {
+    if (elonMusk.test(displayName)) {
       logger.info("Elon Musk in profile");
       createAccountLabel(
         did,
         "elon-musk",
-        `${time}: Elon Musk in profile: ${displayName} - ${description}`,
+        `${time}: Elon Musk in profile: ${displayName}`,
       );
     }
     if (swastika.test(displayName) || swastika.test(description)) {
