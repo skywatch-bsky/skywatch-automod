@@ -54,7 +54,10 @@ export const whitelist = new RegExp(
 );
 
 // Check for Elon Musk
-export const elonMusk = new RegExp("elon([r0-9]?musk|.*musk|reevesmusk)", "i");
+export const elonMusk = new RegExp(
+  "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann",
+  "i",
+);
 
 // Check for Troll Handles
 export const troll = new RegExp(
