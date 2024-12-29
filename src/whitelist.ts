@@ -6,4 +6,6 @@ export const IGNORED_DIDS = [
   "did:plc:kv2twqy5didztis6w4hvjn5t", //Scot from Troon, Ayrshire
   "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
   "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
+  "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
+  "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
 ];

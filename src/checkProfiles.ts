@@ -27,7 +27,7 @@ export const checkProfile = async (
   } else {
     /*const displayName = normalizeUnicode(displayName);*/
 
-    if (
+    /*if (
       magaTrumpProfile.test(displayName) ||
       magaTrumpProfile.test(description)
     ) {
@@ -36,7 +36,7 @@ export const checkProfile = async (
         did,
         "maga-trump",
         `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
-      );
+      );*/
 
       addToList("maga-trump", did);
     }
