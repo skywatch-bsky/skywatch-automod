@@ -1,4 +1,4 @@
-import { agent, isLoggedIn } from "./agent.js";
+import { agent, isLoggedIn, isLoggedInList, listAgent } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
 import logger from "./logger.js";
@@ -217,16 +217,17 @@ export const createAccountComment = async (did: string, comment: string) => {
   });
 };
 
-export const addToList = async (did: string, label: string) => {
+export const addToList = async (label: string, did: string) => {
   await isLoggedIn;
-  const newList = LISTS.find((list) => list.rkey === rkey);
+
+  const newList = LISTS.find((list) => list.label === label);
   if (!newList) {
     logger.warn(
       `List not found for ${label}. Likely a label not associated with a list`,
     );
     return;
   }
-  logger.info(`New label: ${newList.rkey}`);
+  logger.info(`New label added to list: ${newList.label}`);
 
   const listUri = `at://${MOD_DID!}/app.bsky.graph.list/${newList.rkey}`;
 
