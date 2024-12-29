@@ -40,11 +40,11 @@ export const magaTrump = new RegExp(
 );
 
 /* We need a seperate profile related regexp because resist libs insist on using all the most useful terms in their profiles */
-export const magaTrumpProfile = new RegExp("#MAGA|#Trump ?2024🇺🇸?", "iu");
+export const magaTrumpProfile = new RegExp("#MAGA|#Trump ?2024🇺🇸?", "i");
 
 export const trollProfile = new RegExp(
   "only ?2.*genders?|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|watchpeopledie\\.tv|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r",
-  "iu",
+  "i",
 );
 
 // Some people insist on these handles
@@ -59,13 +59,13 @@ export const elonMusk = new RegExp("elon([r0-9]?musk|.*musk|reevesmusk)", "i");
 // Check for Troll Handles
 export const troll = new RegExp(
   "(l[i4]bt[a4]rd|libsof(tiktok|x|bsky|bluesky)|libs[- ]of[- ](tiktok|x|bsky|bluesky)|liberal.*tears?|lib.*tears|democrat.*tears|end.*woke(ness|ns)|triggering.*libs?|copemore|only ?2.*genders?|gender.*only ?2|only ?two.*genders?|wokemind|woke.*virus|crybabylib|snowflakelib|woke.*snowflake|scaredlib|liberals.*suck|lynch.*?(black|nigger)s?]|total[ -]?(nigger|troon|tranny)[ -]?death|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|watchpeopledie\\.tv|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r)",
-  "iu",
+  "i",
 );
 
 /* We need a seperate regexp for posts because libs will not stop reclaiming anything that moves */
 export const trollPosts = new RegExp(
   "(l[i4]bt[a4]rd|only ?2.*genders?|gender.*only ?2|only ?two.*genders?|wokemind|woke.*virus|crybabylib|snowflakelib|woke.*snowflake|scaredlib|liberals.*suck|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lynch.*?(black|nigger)s?]|total[ -]?(nigger|troon|tranny)[ -]?death)",
-  "iu",
+  "i",
 );
 
 // Check for Nazism
@@ -75,10 +75,10 @@ export const nazism = new RegExp(
 );
 
 // Check for Nazi Symbolism
-export const swastika = new RegExp("卐|\\bHH ?1488\\b", "iu");
+export const swastika = new RegExp("卐|\\bHH ?1488\\b", "i");
 
 // Check for Hammer and Sickle
-export const hammerAndSickle = new RegExp("☭", "iu");
+export const hammerAndSickle = new RegExp("☭", "i");
 
 // Check for Slurs
 /* Checks for singular and plural, but one is left in as plural regardless to avoid picking up a spanish name */
@@ -90,7 +90,7 @@ export const slur = new RegExp(
 // Again with the Scottish
 export const slurWhiteList = new RegExp(
   "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard",
-  "iu",
+  "i",
 );
 
 // This needs to be built out more
@@ -102,5 +102,5 @@ export const terf = new RegExp(
 // Evolving list of follow back spam phrases
 export const followBackSpam = new RegExp(
   "💙Vetted RESISTERS🦋|Follow Back Pack|#MEGABOOST|💙Amazing Blue Accounts|#NoDemUnder5k|#NoDemUnder1k|#FBR",
-  "iu",
+  "i",
 );
