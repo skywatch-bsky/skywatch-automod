@@ -42,14 +42,6 @@ export const checkProfile = async (
         `${time}: Troll in profile: ${displayName} - ${description}`,
       );
     }
-    if (nazism.test(displayName) || nazism.test(description)) {
-      logger.info("Nazi reference in profile");
-      createAccountLabel(
-        did,
-        "nazi-symbolism",
-        `${time}: Nazism in profile: ${displayName} - ${description}`,
-      );
-    }
     if (elonMusk.test(displayName) || elonMusk.test(description)) {
       logger.info("Elon Musk in profile");
       createAccountLabel(
