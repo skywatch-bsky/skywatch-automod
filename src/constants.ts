@@ -70,7 +70,7 @@ export const trollPosts = new RegExp(
 
 // Check for Nazism
 export const nazism = new RegExp(
-  "(h[i1]tl[e3]r|goebbels|göring|himmler|führer|reichskanzler|HWABAG|nazigamingclan\.com)",
+  "(h[i1]tl[e3]r|goebbels|göring|himmler|\\bführer\\b|reichskanzler|HWABAG|nazigamingclan\.com)",
   "i",
 );
 
