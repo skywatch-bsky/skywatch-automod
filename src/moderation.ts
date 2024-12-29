@@ -1,6 +1,8 @@
 import { agent, isLoggedIn } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
+import logger from "./logger.js";
+import { LISTS } from "./lists.js";
 
 /**
  * Creates a moderation label for a post on ATProto/Bluesky.
@@ -209,6 +211,36 @@ export const createAccountComment = async (did: string, comment: string) => {
           },
         },
       );
+    } catch (e) {
+      console.error(e);
+    }
+  });
+};
+
+export const addToList = async (did: string, label: string) => {
+  await isLoggedIn;
+  const newList = LISTS.find((list) => list.rkey === rkey);
+  if (!newList) {
+    logger.warn(
+      `List not found for ${label}. Likely a label not associated with a list`,
+    );
+    return;
+  }
+  logger.info(`New label: ${newList.rkey}`);
+
+  const listUri = `at://${MOD_DID!}/app.bsky.graph.list/${newList.rkey}`;
+
+  await limit(async () => {
+    try {
+      return agent.com.atproto.repo.createRecord({
+        collection: "app.bsky.graph.listitem",
+        repo: `${MOD_DID!}`,
+        record: {
+          subject: did,
+          list: listUri,
+          createdAt: new Date().toISOString(),
+        },
+      });
     } catch (e) {
       console.error(e);
     }

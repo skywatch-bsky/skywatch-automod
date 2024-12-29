@@ -71,3 +71,8 @@ export interface Record {
   facets: Facet[];
   text: string;
 }
+
+export interface List {
+  label: string;
+  rkey: string;
+}
