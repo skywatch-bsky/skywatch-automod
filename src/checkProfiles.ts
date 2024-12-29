@@ -36,10 +36,10 @@ export const checkProfile = async (
         did,
         "maga-trump",
         `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
-      );*/
+      );
 
       addToList("maga-trump", did);
-    }
+    }*/
     if (trollProfile.test(displayName) || trollProfile.test(description)) {
       logger.info("Troll reference in profile");
       createAccountLabel(
