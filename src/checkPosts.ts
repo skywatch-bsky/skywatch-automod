@@ -10,6 +10,7 @@ import {
   trollPosts,
   gore,
   followBackSpam,
+  followfarming,
 } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
@@ -149,6 +150,19 @@ export const checkPosts = async (post: Post[]) => {
     createAccountComment(
       post[0].did,
       `${post[0].time}: Possible Follow Back Scam in post at ${post[0].atURI} - ${post[0].check}`,
+    );
+  }
+  if (followfarming.test(post[0].check)) {
+    createPostLabel(
+      post[0].atURI,
+      post[0].cid,
+      "follow-farming",
+      `${post[0].time}: Follow farming link found ${post[0].atURI} - ${post[0].check}`,
+    );
+
+    createAccountComment(
+      post[0].did,
+      `${post[0].time}: Follow farming link found in post at ${post[0].atURI} - ${post[0].check}`,
     );
   }
 };
