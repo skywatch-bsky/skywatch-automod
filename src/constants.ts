@@ -97,10 +97,7 @@ export const slurWhiteList = new RegExp(
 );
 
 // This needs to be built out more
-export const terf = new RegExp(
-  "[🌈🏳️‍🌈]?lgb(✂️tq|, without the)[🌈🏳️‍🌈]?|#KPSS",
-  "iu",
-);
+export const terf = new RegExp("[🌈🏳️‍🌈]?lgb(✂️tq|, without the)|#KPSS", "iu");
 
 // Evolving list of follow back spam phrases
 export const followBackSpam = new RegExp(
