@@ -135,15 +135,13 @@ jetstream.onCreate(
 jetstream.onUpdate(
   "app.bsky.actor.profile",
   (event: CommitUpdateEvent<typeof WANTED_COLLECTION>) => {
-    const promise = checkProfile(
-      event.did,
-      event.time_us,
-      event.commit.record.displayName,
-      event.commit.record.description,
-    );
-
     try {
-      promise.then(() => {});
+      const ret = checkProfile(
+        event.did,
+        event.time_us,
+        event.commit.record.displayName,
+        event.commit.record.description,
+      );
     } catch (error) {
       logger.error(`Error checking profile:  ${error}`);
     }
@@ -151,14 +149,13 @@ jetstream.onUpdate(
 );
 
 // Check for handle updates
-jetstream.on("identity", (event: IdentityEvent) => {
+jetstream.on("identity", async (event: IdentityEvent) => {
   const handle: Handle[] = [
     { did: event.did, handle: event.identity.handle, time: event.time_us },
   ];
-  const promise = checkHandle(handle);
 
   try {
-    promise.then(() => {});
+    const ret = await checkHandle(handle);
   } catch (error) {
     logger.error(`Error checking handle: ${error}`);
   }
