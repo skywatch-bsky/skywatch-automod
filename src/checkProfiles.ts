@@ -38,7 +38,7 @@ export const checkProfile = async (
         `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
       );
 
-      addToList("maga-trump", did);
+      // addToList("maga-trump", did);
     }*/
     if (trollProfile.test(displayName) || trollProfile.test(description)) {
       logger.info("Troll reference in profile");
@@ -48,7 +48,7 @@ export const checkProfile = async (
         `${time}: Troll in profile: ${displayName} - ${description}`,
       );
 
-      addToList("troll", did);
+      // addToList("troll", did);
     }
     if (elonMusk.test(displayName)) {
       logger.info("Elon Musk in profile");
@@ -58,7 +58,7 @@ export const checkProfile = async (
         `${time}: Elon Musk in profile: ${displayName}`,
       );
 
-      addToList("elon-musk", did);
+      // addToList("elon-musk", did);
     }
     if (swastika.test(displayName) || swastika.test(description)) {
       logger.info("Swastika in profile");
@@ -68,7 +68,7 @@ export const checkProfile = async (
         `${time}: Swastika in profile: ${displayName} - ${description}`,
       );
 
-      addToList("nazi-symbolism", did);
+      // addToList("nazi-symbolism", did);
     }
     if (slurWhiteList.test(displayName) || slurWhiteList.test(description)) {
       logger.info(
@@ -99,7 +99,7 @@ export const checkProfile = async (
         `${time}: Hammer and sickle in profile: ${displayName} - ${description}`,
       );
 
-      addToList("hammer-sickle", did);
+      // addToList("hammer-sickle", did);
     }
   }
 

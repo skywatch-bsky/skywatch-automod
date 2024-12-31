@@ -17,7 +17,7 @@ export const checkHandle = async (handle: Handle[]) => {
         `${handle[0].time}: MAGA/Trump handle found: ${handle[0].handle}`,
       );
 
-      addToList("maga-trump", handle[0].did);
+      // addToList("maga-trump", handle[0].did);
     }
     if (troll.test(handle[0].handle)) {
       logger.info(`Troll handle found: ${handle[0].handle}`);
@@ -27,7 +27,7 @@ export const checkHandle = async (handle: Handle[]) => {
         `${handle[0].time}: Troll handle found: ${handle[0].handle}`,
       );
 
-      addToList("troll", handle[0].did);
+      // addToList("troll", handle[0].did);
     }
     if (nazism.test(handle[0].handle)) {
       logger.info(`Nazi reference handle found: ${handle[0].handle}`);
@@ -37,7 +37,7 @@ export const checkHandle = async (handle: Handle[]) => {
         `${handle[0].time}: Nazism handle found: ${handle[0].handle}`,
       );
 
-      addToList("nazi-symbolism", handle[0].did);
+      // addToList("nazi-symbolism", handle[0].did);
     }
     if (elonMusk.test(handle[0].handle)) {
       logger.info(`Elon Musk handle found: ${handle[0].handle}`);
@@ -47,7 +47,7 @@ export const checkHandle = async (handle: Handle[]) => {
         `${handle[0].time}: Elon Musk handle found: ${handle[0].handle}`,
       );
 
-      addToList("elon-musk", handle[0].did);
+      // addToList("elon-musk", handle[0].did);
     }
   }
 };
