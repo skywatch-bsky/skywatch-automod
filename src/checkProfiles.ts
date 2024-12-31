@@ -7,6 +7,7 @@ import {
   hammerAndSickle,
   slur,
   slurWhiteList,
+  terf,
 } from "./constants.js";
 import { IGNORED_DIDS } from "./whitelist.js";
 import logger from "./logger.js";
@@ -66,6 +67,16 @@ export const checkProfile = async (
         did,
         "nazi-symbolism",
         `${time}: Swastika in profile: ${displayName} - ${description}`,
+      );
+
+      // addToList("nazi-symbolism", did);
+    }
+    if (terf.test(displayName) || terf.test(description)) {
+      logger.info("Terf language in profile");
+      createAccountLabel(
+        did,
+        "terf-gc",
+        `${time}: Terf language: ${displayName} - ${description}`,
       );
 
       // addToList("nazi-symbolism", did);
