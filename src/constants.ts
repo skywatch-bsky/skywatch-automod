@@ -104,11 +104,11 @@ export const terf = new RegExp(
 
 // Evolving list of follow back spam phrases
 export const followBackSpam = new RegExp(
-  "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts|#NoDemUnder5k|#NoDemUnder1k|#FBR|blueskyfollower\\.com",
+  "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts",
   "i",
 );
 
 export const followfarming = new RegExp(
-  "blueskyfollower\\.com|#MEGABOOST",
+  "blueskyfollower\\.com|#MEGABOOST|#NoDemUnder5k|#NoDemUnder1k|#FBR|#BlueCrew|#DonkParty",
   "i",
 );
