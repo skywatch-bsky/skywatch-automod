@@ -10,4 +10,5 @@ export const IGNORED_DIDS = [
   "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
   "did:plc:56bp6c77m2hlpa2deyi3cofa", //Parody Account
   "did:plc:oofxrmqsyqjjovsjt7ygbfcj", //TrumpSucks99 - For fucks sake people
+  "did:plc:lmuoejh44euyubyxynofwavg",
 ];
