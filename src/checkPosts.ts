@@ -58,7 +58,10 @@ export const checkPosts = async (post: Post[]) => {
                 `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
               );
             } else {
-              if (checkPost?.label !== "fundraising-link") {
+              if (
+                checkPost?.label !== "fundraising-link" &&
+                checkPost!.commentOnly === false
+              ) {
                 // skip fundraising links—hardcoded because of the insane volume by spammers.
                 createAccountReport(
                   post[0].did,
