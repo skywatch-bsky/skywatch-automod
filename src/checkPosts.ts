@@ -53,7 +53,7 @@ export const checkPosts = async (post: Post[]) => {
 
             if (checkPost!.commentOnly === true) {
               logger.info(`Comment only: ${post[0].did}`);
-              createAccountReport(
+              createAccountComment(
                 post[0].did,
                 `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
               );
