@@ -75,6 +75,7 @@ jetstream.on("error", (error) => {
 });
 
 // Check for post updates
+
 jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<typeof WANTED_COLLECTION>) => {
@@ -108,7 +109,7 @@ jetstream.onCreate(
               time: event.time_us,
               rkey: event.commit.rkey,
               atURI: atURI,
-              check: url,
+              text: url,
               cid: event.commit.cid,
             },
           ];
@@ -122,7 +123,7 @@ jetstream.onCreate(
           time: event.time_us,
           rkey: event.commit.rkey,
           atURI: atURI,
-          check: event.commit.record.text,
+          text: event.commit.record.text,
           cid: event.commit.cid,
         },
       ];

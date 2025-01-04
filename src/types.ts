@@ -1,9 +1,20 @@
+export interface Checks {
+  label: string;
+  comment: string;
+  description?: boolean;
+  displayName?: boolean;
+  reportOnly: boolean;
+  check: RegExp;
+  whitelist?: RegExp;
+  ignoredDIDs?: string[];
+}
+
 export interface Post {
   did: string;
   time: number;
   rkey: string;
   atURI: string;
-  check: string;
+  text: string;
   cid: string;
 }
 
