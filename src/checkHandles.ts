@@ -1,7 +1,11 @@
 import { HANDLE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
 import { Handle } from "./types.js";
-import { createAccountReport, createAccountLabel } from "./moderation.js";
+import {
+  createAccountReport,
+  createAccountLabel,
+  createAccountComment,
+} from "./moderation.js";
 
 export const checkHandle = async (handle: Handle[]) => {
   // Get a list of labels
@@ -38,6 +42,7 @@ export const checkHandle = async (handle: Handle[]) => {
             handle[0].did,
             `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
           );
+          return;
         } else {
           createAccountLabel(
             handle[0].did,

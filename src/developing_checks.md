@@ -13,6 +13,7 @@ export const HANDLE_CHECKS: Checks[] = [
     description: true, // Optional, only used in handle checks
     displayName: true, // Optional, only used in handle checks
     reportOnly: false, // it true, the check will only report the content against the account, not label.
+    commentOnly: false, // Poorly named, if true, will generate an account level comment from flagged posts, rather than a report. Intended for use when reportOnly is false, and on posts only where the flag may generate a high volume of reports..
     check: new RegExp("example", "i"), // Regular expression to match against the content
     whitelist: new RegExp("example.com", "i"), // Optional, regular expression to whitelist content
     ignoredDIDs: ["did:plc:example"] // Optional, array of DIDs to ignore if they match the check. Useful for folks who reclaim words.

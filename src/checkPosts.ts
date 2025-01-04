@@ -1,7 +1,11 @@
 import { POST_CHECKS } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
-import { createPostLabel, createAccountReport } from "./moderation.js";
+import {
+  createPostLabel,
+  createAccountReport,
+  createAccountComment,
+} from "./moderation.js";
 
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
@@ -46,7 +50,15 @@ export const checkPosts = async (post: Post[]) => {
               `${checkPost!.label}`,
               `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
             );
-            if (checkPost?.label !== "fundraising-link") {
+
+            if (checkPost!.commentOnly === true) {
+              logger.info(`Comment only: ${post[0].did}`);
+              createAccountReport(
+                post[0].did,
+                `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+              );
+            } else if (checkPost?.label !== "fundraising-link") {
+              // skip fundraising links—hardcoded because of the insane volume by spammers.
               createAccountReport(
                 post[0].did,
                 ` ${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
