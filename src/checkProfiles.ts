@@ -1,6 +1,10 @@
 import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import { createAccountReport, createAccountLabel } from "./moderation.js";
+import {
+  createAccountReport,
+  createAccountLabel,
+  createAccountComment,
+} from "./moderation.js";
 
 export const checkProfile = async (
   did: string,
@@ -65,6 +69,7 @@ export const checkProfile = async (
           did,
           `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
         );
+        return;
       } else {
         createAccountLabel(
           did,
