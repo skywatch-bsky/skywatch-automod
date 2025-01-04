@@ -13,7 +13,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ),
     whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "i"),
     ignoredDIDs: [
-      "did:plc:lmuoejh44euyubyxynofwavg", //Has "Anti-Groyper" in their profile and this is getting flagged.
+      "did:plc:lmuoejh44euyubyxynofwavg", //Has "Anti-Groyper" in their profile and this was getting flagged before I refactored the whitelist regex.
     ],
   },
   {
