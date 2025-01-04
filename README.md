@@ -27,7 +27,9 @@ docker run -d -p 4101:4101 skywatch-autolabeler
 
 Currently this tooling does one thing. It monitors the bluesky firehose and analyzes content for phrases which fit Skywatch's criteria for moderation. If the criteria is met, it can automatically label the content with the appropriate label.
 
-In certain cases, where regexp will create too many false positives, it will flag content as a comment related to the account, so that it can be reviewed later.
+In certain cases, where regexp will create too many false positives, it will flag content as a report against related to the account, so that it can be reviewed later.
+
+For information on how to set-up your own checks, please see the [developing_checks.md](./src/developing_checks.md) file.
 
 _TODO_:
 
