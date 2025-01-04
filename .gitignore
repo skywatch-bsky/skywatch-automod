@@ -1,0 +1,7 @@
+.env
+node_modules
+cursor.txt
+*.log
+labels.db*
+.DS_Store
+src/constants.ts

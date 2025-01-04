@@ -1,0 +1,60 @@
+import { Checks } from "./types.js";
+
+// rename this to constants.ts
+
+export const PROFILE_CHECKS: Checks[] = [
+  {
+    label: "skub",
+    comment: "Pro-skub language found in profile",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "(only|pro)[ -]skub|we love skub|skub is (good|god|king)|\\bskub\\b",
+      "i",
+    ),
+    whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?skub", "i"),
+    ignoredDIDs: [
+      "did:plc:example", //Parody account
+    ],
+  },
+  {
+    label: "skub-adjacent",
+    comment: "skub-adjacent language found in profile",
+    description: true,
+    displayName: true,
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp(
+      "skubbe",
+      "i",
+    ),
+  },
+];
+
+export const HANDLE_CHECKS: Checks[] = [
+  {
+    label: "skub",
+    comment: "Pro-skub language found in handle",
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "(only|pro)[-]skub|we love skub|skub[-]?is[-]?(good|god|king)|skub\\.(pro|com|org)",
+      "i",
+    ),
+  },
+];
+
+export const POST_CHECKS: Checks[] = [
+  {
+    label: "pro-skub-link",
+    comment: "Pro Skub link found in post",
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp(
+      "skubbe\\.com|skub\\.(me|pro|tech)",
+      "i",
+    ),
+  },
+];
