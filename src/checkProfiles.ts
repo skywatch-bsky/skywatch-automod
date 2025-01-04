@@ -1,21 +1,6 @@
-import {
-  magaTrumpProfile,
-  trollProfile,
-  nazism,
-  elonMusk,
-  swastika,
-  hammerAndSickle,
-  slur,
-  slurWhiteList,
-  terf,
-} from "./constants.js";
-import { IGNORED_DIDS } from "./whitelist.js";
+import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import {
-  addToList,
-  createAccountComment,
-  createAccountLabel,
-} from "./moderation.js";
+import { createAccountReport, createAccountLabel } from "./moderation.js";
 
 export const checkProfile = async (
   did: string,
@@ -23,128 +8,70 @@ export const checkProfile = async (
   displayName: string,
   description: string,
 ) => {
-  if (IGNORED_DIDS.includes(did)) {
-    return logger.info(`Ignoring DID: ${did}`);
-  } else {
-    /*const displayName = normalizeUnicode(displayName);*/
+  // Get a list of labels
+  const labels: string[] = Array.from(
+    PROFILE_CHECKS,
+    (profileCheck) => profileCheck.label,
+  );
 
-    /*if (
-      magaTrumpProfile.test(displayName) ||
-      magaTrumpProfile.test(description)
-    ) {
-      logger.info("Trump in profile");
-      createAccountLabel(
-        did,
-        "maga-trump",
-        `${time}: MAGA/Trump in profile: ${displayName} - ${description}`,
-      );
+  // iterate through the labels
+  labels.forEach((label) => {
+    const checkProfiles = PROFILE_CHECKS.find(
+      (profileCheck) => profileCheck.label === label,
+    );
 
-      // addToList("maga-trump", did);
-    }*/
-    if (trollProfile.test(displayName) || trollProfile.test(description)) {
-      logger.info("Troll reference in profile");
-      createAccountLabel(
-        did,
-        "troll",
-        `${time}: Troll in profile: ${displayName} - ${description}`,
-      );
-
-      // addToList("troll", did);
-    }
-    if (elonMusk.test(displayName)) {
-      logger.info("Elon Musk in profile");
-      createAccountLabel(
-        did,
-        "elon-musk",
-        `${time}: Elon Musk in profile: ${displayName}`,
-      );
-
-      // addToList("elon-musk", did);
-    }
-    if (swastika.test(displayName) || swastika.test(description)) {
-      logger.info("Swastika in profile");
-      createAccountLabel(
-        did,
-        "nazi-symbolism",
-        `${time}: Swastika in profile: ${displayName} - ${description}`,
-      );
-
-      // addToList("nazi-symbolism", did);
-    }
-    if (terf.test(displayName) || terf.test(description)) {
-      logger.info("Terf language in profile");
-      createAccountLabel(
-        did,
-        "terf-gc",
-        `${time}: Terf language: ${displayName} - ${description}`,
-      );
-
-      // addToList("nazi-symbolism", did);
-    }
-    if (slurWhiteList.test(displayName) || slurWhiteList.test(description)) {
-      logger.info(
-        "User is probably Scottish, a golfer, or works for the vineyard in Oregon",
-      ); // I swear to god.
-      createAccountComment(
-        did,
-        `${time}: User is Scottish: ${displayName} - ${description}`,
-      );
+    // Check if DID is whitelisted
+    if (checkProfiles?.ignoredDIDs) {
+      if (checkProfiles.ignoredDIDs.includes(did)) {
+        return logger.info(`Whitelisted DID: ${did}`);
+      }
     } else {
-      if (slur.test(displayName) || slur.test(description)) {
-        logger.info("slur in profile");
+      let checkCount: number = 0; // Counter for checking if any checks are found
+
+      // Check if description is enabled
+      if (checkProfiles?.description === true) {
+        if (checkProfiles!.check.test(description)) {
+          if (checkProfiles?.whitelist) {
+            if (checkProfiles?.whitelist.test(description)) {
+              logger.info(`Whitelisted phrase found.`);
+            }
+          } else {
+            logger.info(`${checkProfiles!.label} in description.`);
+            checkCount++;
+          }
+        }
+      }
+
+      if (checkProfiles?.displayName === true) {
+        if (checkProfiles!.check.test(displayName)) {
+          if (checkProfiles?.whitelist) {
+            if (checkProfiles?.whitelist.test(displayName)) {
+              logger.info(`Whitelisted phrase found for: ${displayName}`);
+            }
+          } else {
+            logger.info(
+              `${checkProfiles!.label} in display name: ${displayName}`,
+            );
+            checkCount++;
+          }
+        }
+      }
+
+      if (checkCount === 0) return;
+
+      if (checkProfiles.reportOnly === true) {
+        logger.info(`Report only: ${did}`);
+        createAccountReport(
+          did,
+          `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+        );
+      } else {
         createAccountLabel(
           did,
-          "contains-slur",
-          `${time}: Slur in profile: ${displayName} - ${description}`,
+          `${checkProfiles!.label}`,
+          `${time}: ${checkProfiles!.comment}`,
         );
       }
     }
-    if (
-      hammerAndSickle.test(displayName) ||
-      hammerAndSickle.test(description)
-    ) {
-      logger.info("Hammer and sickle in profile");
-      createAccountLabel(
-        did,
-        "hammer-sickle",
-        `${time}: Hammer and sickle in profile: ${displayName} - ${description}`,
-      );
-
-      // addToList("hammer-sickle", did);
-    }
-  }
-
-  /*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
-  function normalizeUnicode(text: string): string {
-    // First decompose the characters (NFD)
-    const decomposed = text.normalize("NFD");
-
-    // Remove diacritics and combining marks
-    const withoutDiacritics = decomposed.replace(/[\u0300-\u036f]/g, "");
-
-    // Remove mathematical alphanumeric symbols
-    const withoutMath = withoutDiacritics.replace(
-      /[\uD835][\uDC00-\uDFFF]/g,
-      (char) => {
-        // Get the base character from the mathematical symbol
-        const code = char.codePointAt(0);
-        if (code >= 0x1d400 && code <= 0x1d433)
-          // Mathematical bold
-          return String.fromCharCode(code - 0x1d400 + 0x41);
-        if (code >= 0x1d434 && code <= 0x1d467)
-          // Mathematical italic
-          return String.fromCharCode(code - 0x1d434 + 0x61);
-        if (code >= 0x1d468 && code <= 0x1d49b)
-          // Mathematical bold italic
-          return String.fromCharCode(code - 0x1d468 + 0x41);
-        if (code >= 0x1d49c && code <= 0x1d4cf)
-          // Mathematical script
-          return String.fromCharCode(code - 0x1d49c + 0x61);
-        return char;
-      },
-    );
-
-    // Final NFKC normalization to handle any remaining special characters
-    return withoutMath.normalize("NFKC");
-  }
+  });
 };
