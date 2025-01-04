@@ -1,168 +1,60 @@
-import {
-  fundraising,
-  altTech,
-  fringeMedia,
-  disinfoNetwork,
-  sportsBetting,
-  slur,
-  slurWhiteList,
-  swastika,
-  trollPosts,
-  gore,
-  followBackSpam,
-  followfarming,
-} from "./constants.js";
+import { POST_CHECKS } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
-import { createPostLabel, createAccountComment } from "./moderation.js";
+import { createPostLabel, createAccountReport } from "./moderation.js";
 
 export const checkPosts = async (post: Post[]) => {
-  if (fundraising.test(post[0].check)) {
-    logger.info("Fundraising link found");
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "fundraising-link",
-      `${post[0].time}: Fundraising link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (fringeMedia.test(post[0].check)) {
-    logger.info("Fringe media link found");
+  // Get a list of labels
+  const labels: string[] = Array.from(
+    POST_CHECKS,
+    (postCheck) => postCheck.label,
+  );
 
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "fringe-media",
-      `${post[0].time}: Fringe media link found in post at ${post[0].atURI} - ${post[0].check}`,
+  // iterate through the labels
+  labels.forEach((label) => {
+    const checkPost = POST_CHECKS.find(
+      (postCheck) => postCheck.label === label,
     );
 
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Fringe media link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (altTech.test(post[0].check)) {
-    logger.info("Alt-tech link found");
-
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "alt-tech",
-      `${post[0].time}: Alt-tech link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Alt-tech link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (disinfoNetwork.test(post[0].check)) {
-    logger.info("Disinfo network link");
-
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "disinformation-network",
-      `${post[0].time}: Disinfo network link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Disinfo network link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (sportsBetting.test(post[0].check)) {
-    logger.info("Sports betting link found");
-
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "sports-betting-link",
-      `${post[0].time}: Sports betting link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Sports betting link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (slur.test(post[0].check)) {
-    logger.info("Slur found");
-
-    // Check for false positives
-    if (slurWhiteList.test(post[0].check)) {
-      logger.info("User is scottish");
+    if (checkPost?.ignoredDIDs) {
+      if (checkPost.ignoredDIDs.includes(post[0].did)) {
+        return logger.info(`Whitelisted DID: ${post[0].did}`);
+      }
     } else {
-      createPostLabel(
-        post[0].atURI,
-        post[0].cid,
-        "contains-slur",
-        `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
-      );
+      if (checkPost!.check.test(post[0].text)) {
+        if (checkPost?.whitelist) {
+          if (checkPost?.whitelist.test(post[0].text)) {
+            logger.info(`Whitelisted phrase found"`);
+            return;
+          }
+        } else {
+          logger.info(`${checkPost!.label} in post at ${post[0].atURI}`);
 
-      createAccountComment(
-        post[0].did,
-        `${post[0].time}: Slur found in post at ${post[0].atURI} - ${post[0].check}`,
-      );
+          if (checkPost!.reportOnly === true) {
+            logger.info(`Report only: ${post[0].did}`);
+            createAccountReport(
+              post[0].did,
+              `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+            );
+            return;
+          } else {
+            logger.info(`Labeling post: ${post[0].atURI}`);
+
+            createPostLabel(
+              post[0].atURI,
+              post[0].cid,
+              `${checkPost!.label}`,
+              `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+            );
+            if (checkPost?.label !== "fundraising-link") {
+              createAccountReport(
+                post[0].did,
+                ` ${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+              );
+            }
+          }
+        }
+      }
     }
-  }
-  if (swastika.test(post[0].check)) {
-    logger.info("Swastika found");
-
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "nazi-symbolism",
-      `${post[0].time}: Swastika found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Swastika found in found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (gore.test(post[0].check)) {
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "!hide",
-      `${post[0].time}: Gore link found in ${post[0].atURI} - ${post[0].check}`,
-    );
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Gore link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-
-  // These will result in too many false positives but are useful signals.
-  if (trollPosts.test(post[0].check)) {
-    logger.info("Troll reference in post");
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Possible Troll reference in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (followBackSpam.test(post[0].check)) {
-    logger.info("Follow back post detected");
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Possible Follow Back Scam in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
-  if (followfarming.test(post[0].check)) {
-    createPostLabel(
-      post[0].atURI,
-      post[0].cid,
-      "follow-farming",
-      `${post[0].time}: Follow farming link found ${post[0].atURI} - ${post[0].check}`,
-    );
-
-    createAccountComment(
-      post[0].did,
-      `${post[0].time}: Follow farming link found in post at ${post[0].atURI} - ${post[0].check}`,
-    );
-  }
+  });
 };

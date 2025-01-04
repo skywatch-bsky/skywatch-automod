@@ -1,53 +1,51 @@
-import { magaTrump, troll, nazism, elonMusk } from "./constants.js";
+import { HANDLE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
 import { Handle } from "./types.js";
-import { addToList, createAccountLabel } from "./moderation.js";
-import { IGNORED_DIDS } from "./whitelist.js";
+import { createAccountReport, createAccountLabel } from "./moderation.js";
 
 export const checkHandle = async (handle: Handle[]) => {
-  if (IGNORED_DIDS.includes(handle[0].did)) {
-    return logger.info(`Ignoring DID: ${handle[0].did}`);
-  } else {
-    if (magaTrump.test(handle[0].handle)) {
-      logger.info(`MAGA/Trump handle found: ${handle[0].handle}`);
+  // Get a list of labels
+  const labels: string[] = Array.from(
+    HANDLE_CHECKS,
+    (handleCheck) => handleCheck.label,
+  );
 
-      createAccountLabel(
-        handle[0].did,
-        "maga-trump",
-        `${handle[0].time}: MAGA/Trump handle found: ${handle[0].handle}`,
-      );
+  // iterate through the labels
+  labels.forEach((label) => {
+    const checkList = HANDLE_CHECKS.find(
+      (handleCheck) => handleCheck.label === label,
+    );
 
-      // addToList("maga-trump", handle[0].did);
+    if (checkList?.ignoredDIDs) {
+      if (checkList.ignoredDIDs.includes(handle[0].did)) {
+        return logger.info(`Whitelisted DID: ${handle[0].did}`);
+      }
+    } else {
+      if (checkList!.check.test(handle[0].handle)) {
+        if (checkList?.whitelist) {
+          // False-positive checks
+          if (checkList?.whitelist.test(handle[0].handle)) {
+            logger.info(`Whitelisted phrase found for: ${handle[0].handle}`);
+            return;
+          }
+        } else {
+          logger.info(`${checkList!.label} in handle: ${handle[0].handle}`);
+        }
+
+        if (checkList?.reportOnly === true) {
+          logger.info(`Report only: ${handle[0].handle}`);
+          createAccountReport(
+            handle[0].did,
+            `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
+          );
+        } else {
+          createAccountLabel(
+            handle[0].did,
+            `${checkList!.label}`,
+            `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
+          );
+        }
+      }
     }
-    if (troll.test(handle[0].handle)) {
-      logger.info(`Troll handle found: ${handle[0].handle}`);
-      createAccountLabel(
-        handle[0].did,
-        "troll",
-        `${handle[0].time}: Troll handle found: ${handle[0].handle}`,
-      );
-
-      // addToList("troll", handle[0].did);
-    }
-    if (nazism.test(handle[0].handle)) {
-      logger.info(`Nazi reference handle found: ${handle[0].handle}`);
-      createAccountLabel(
-        handle[0].did,
-        "nazi-symbolism",
-        `${handle[0].time}: Nazism handle found: ${handle[0].handle}`,
-      );
-
-      // addToList("nazi-symbolism", handle[0].did);
-    }
-    if (elonMusk.test(handle[0].handle)) {
-      logger.info(`Elon Musk handle found: ${handle[0].handle}`);
-      createAccountLabel(
-        handle[0].did,
-        "elon-musk",
-        `${handle[0].time}: Elon Musk handle found: ${handle[0].handle}`,
-      );
-
-      // addToList("elon-musk", handle[0].did);
-    }
-  }
+  });
 };
