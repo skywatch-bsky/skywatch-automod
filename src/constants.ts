@@ -9,7 +9,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: true,
     check: new RegExp(
-      "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans|onlyfans\\.com",
+      "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans",
       "i",
     ),
   },
@@ -66,7 +66,10 @@ export const PROFILE_CHECKS: Checks[] = [
       "(h[i1]tl[e3]r|goebbels|göring|himmler|\\bführer\\b|reichskanzler|HWABAG|nazigamingclan\.com|卐|\\bHH ?1488\\b)",
       "i",
     ),
-    ignoredDIDs: ["did:plc:f4bb6sbdilvedzkdhqcxsmau"], //camwhitler.bsky.social - Cam Whitler
+    ignoredDIDs: [
+      "did:plc:f4bb6sbdilvedzkdhqcxsmau", //camwhitler.bsky.social - Cam Whitler
+      "did:plc:tl4m3mk2rrz2ewe27umm3ay4", // some NAFO guy with RU卐卐IA in his bio
+    ],
   },
   {
     label: "hammer-sickle",
