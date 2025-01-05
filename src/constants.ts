@@ -2,6 +2,15 @@ import { Checks } from "./types.js";
 
 export const PROFILE_CHECKS: Checks[] = [
   {
+    label: "report-to-bsky",
+    comment: "Profile is being reported too frequently",
+    description: true,
+    displayName: false,
+    reportOnly: false,
+    commentOnly: true,
+    check: new RegExp("dobolen\\.eu\\.org|getallmylinks\\.com", "i"),
+  },
+  {
     label: "troll",
     comment: "Troll language found in profile",
     description: true,
