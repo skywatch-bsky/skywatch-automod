@@ -5,10 +5,13 @@ export const PROFILE_CHECKS: Checks[] = [
     label: "report-to-bsky",
     comment: "Profile is being reported too frequently",
     description: true,
-    displayName: false,
+    displayName: true,
     reportOnly: false,
     commentOnly: true,
-    check: new RegExp("dobolen\\.eu\\.org|getallmylinks\\.com", "i"),
+    check: new RegExp(
+      "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans|onlyfans\\.com",
+      "i",
+    ),
   },
   {
     label: "troll",
