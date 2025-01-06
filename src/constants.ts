@@ -36,7 +36,10 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp("#MAGA\\b|#Trump ?2024🇺🇸?", "i"),
+    check: new RegExp(
+      "#MAGA\\b|#Trump ?2024🇺🇸?|(barron|donald|eric)(trump|.*trump|jtrump|.*trumpjr)",
+      "i",
+    ),
     ignoredDIDs: [
       "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
       "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
@@ -285,6 +288,26 @@ export const POST_CHECKS: Checks[] = [
     check: new RegExp(
       "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts",
       "iu",
+    ),
+  },
+  {
+    label: "suspected-inauthentic",
+    comment: "Suspected inauthentic behavior found in post",
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp(
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|luxuryhousezone\\.com|3sblog\\.com",
+      "i",
+    ),
+  },
+  {
+    label: "troll",
+    comment: "Trolling found in post",
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp(
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|luxuryhousezone\\.com|3sblog\\.com",
+      "i",
     ),
   },
 ];
