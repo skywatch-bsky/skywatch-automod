@@ -13,6 +13,10 @@ export const PROFILE_CHECKS: Checks[] = [
       "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans|dobolen\\.eu\\.org|Eve [🍬🪐] Free Onlyfans|Onlyfans ➡️ INSERT LINK|20(yo| )?(and|&)? Blonde,? (let's|drop|chat|hit me|DM)|Blonde, 20, (let's|drop|chat|hit me|DM)|18.*?(Single).*?FREE ([0O]F|[0O]nlyFans).*?(([http]+s?\\.)?(getallmylinks\\.com|onlyfans\\.com))",
       "i",
     ),
+    whitelist: new RegExp(
+      "getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy)",
+      "i",
+    ),
   },
   {
     label: "suspect-inauthentic",
@@ -22,7 +26,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social",
+      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy)|snipfeed\\.co/(jaxtravis)",
       "iu",
     ),
   },
