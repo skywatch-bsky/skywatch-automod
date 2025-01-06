@@ -3,7 +3,8 @@ import { Checks } from "./types.js";
 export const PROFILE_CHECKS: Checks[] = [
   {
     label: "report-to-bsky",
-    comment: "Profile is being reported too frequently",
+    comment:
+      "Profile is being reported too frequently and likely out of scope.",
     description: true,
     displayName: true,
     reportOnly: false,
@@ -37,7 +38,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "#MAGA\\b|#Trump ?2024🇺🇸?|(barron|donald|eric)(trump|.*trump|jtrump|.*trumpjr)",
+      "#MAGA\\b|#Trump ?2024🇺🇸?|(barron|donald|eric)(trump|.*trump|jtrump|.*trumpjr)|(real|president|king|queen)? ?(donaldj?|ivan|eric|tiffany|barron|melania) ?(trump|.*trump|.*trumpjr)|(proud|king)magat?|trump.*?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4})|potus(45|46|47)|ultramagat?|maga.*?[0-9]{2,4}|trump.*?(king|maga|train|daddy|army|nation|world)",
       "i",
     ),
     ignoredDIDs: [
@@ -129,9 +130,10 @@ export const HANDLE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "l[i4]bt[a4]rd|libs[ -]?of[ -]?(tiktok|x|bsky|bluesky)|liberal.*tears?|lib.*tears|democrat.*tears|end.*woke(ness|ns)|triggering.*libs?|only[ -]?(two|2)[ -]?genders?|genders?[ -]?only[ -]?2|wokemind|woke.*virus|crybabylib|snowflakelib|woke.*snowflake|scaredlib|liberals.*suck|lynch.*?(black|nigger)s?|total[ -]?(nigger|troon|tranny)[ -]?death|(?<!(anti|[🚫]) ?)groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y[ -]?([t7][wvv][o0]|2)[ -]?[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|watchpeopledie\\.tv|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lgb✂️tq|no such thing as trans|rightmemenews\\.com|[nh]ate ?[nh]iggers?",
+      "l[i4]bt[a4]rd|libs[ -]?of[ -]?(tiktok|x|bsky|bluesky)|(liberal|lib|dem|democrat|snowflake).*?tears?|end.*?woke(ness|ns)|triggering.*libs?|only[ -]?(two|2)[ -]?genders?|genders?[ -]?only[ -]?2|wokemind|woke.*?virus|(crybaby|snowflake)lib(eral)?|woke.*snowflake|(snowflake|scared).*?lib|lib(eral)s?.*?suck|lynch.*?(black|nigger)s?|total[ -]?(nigger|troon|tranny)[ -]?death|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y[ -]?([t7][wvv][o0]|2)[ -]?[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.(party|st|tv)|soybooru\\.com|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|(soy|troon)jak|kamalasu(cks|x)|p[e3]d[o0]hunter|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lgb✂️tq|no such thing as trans|rightmemenews\\.com|[nh]ate ?[nh]iggers?",
       "i",
     ),
+    whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "iu"),
   },
   {
     label: "maga-trump",
@@ -139,7 +141,7 @@ export const HANDLE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "(donald(trump|.*trump|jtrump|.*trumpjr)|real(-donald-trump|donaldtrump)|president.*trump|[proud|king]magat?|ivan.*trump|eric.*trump|tiffany.*trump|melania.*trump|trump.*(202[48]|america|won|wins|47|maga|god|jesus|lord|[0-9]{2,4})|potus47|jdvance|marjorietaylorgreen|laura.*loomer|\\bloomered\\b|barron.*(trump|2040)|steve.*bannon|nick.*fuentes|mattgaetz|rfk-?jr|project.*2025|ultramaga|maga.*(202[48]|trump)|catturd|cat-turd|king.*trump|trump.?king|trump.?train|trump.?army|trump.?nation|trump.?world)",
+      "(real|president|king|queen)?-?(donaldj?|ivan|eric|tiffany|barron|melania)-?(trump|.*trump|.*trumpjr)|(proud|king)magat?|trump.*?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4})|potus(45|46|47)|jdvance|marjorietaylorgreen|laura.*loomer|\\bloomered\\b|steve.*bannon|nick.*fuentes|mattgaetz|rfk-?jr|project.*2025|ultramaga|maga.*?[0-9]{2,4}|catturd|cat-turd|trump.*?(king|maga|train|daddy|army|nation|world)",
       "i",
     ),
     whitelist: new RegExp("magazine|stop.*project2025|fucktrump|trumphater"),
@@ -147,7 +149,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:ugtulcml7ptsivphrwpigrb6", //catturd2.bsky.social - Tom Mckay
       "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
       "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
-      "did:plc:56bp6c77m2hlpa2deyi3cofa", //Parody Account]
+      "did:plc:56bp6c77m2hlpa2deyi3cofa", //Parody Account
     ],
   },
   {
@@ -276,7 +278,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: true,
     commentOnly: false,
     check: new RegExp(
-      "blueskyfollower\\.com|#MEGABOOST|#NoDemUnder5k|#NoDemUnder1k|#FBR|#BlueCrew|#DonkParty|#ifbap",
+      "blueskyfollower\\.com|#MEGABOOST|#NoDemUnder5k|#NoDemUnder1k|#FBR|#BlueCrew|#DonkParty|#ifbap|#socialistsunday",
       "i",
     ),
   },
@@ -306,7 +308,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: true,
     commentOnly: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|luxuryhousezone\\.com|3sblog\\.com",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|luxuryhousezone\\.com|3sblog\\.com|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders",
       "i",
     ),
   },
