@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "npx tsx src/main.ts",
+    "autoack": "npx tsx src/autoack/main.ts",
     "dev": "npx tsx --watch src/main.ts",
     "format": "bunx prettier --write .",
     "lint": "bunx eslint .",
