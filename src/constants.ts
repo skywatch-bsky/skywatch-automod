@@ -9,7 +9,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: true,
     check: new RegExp(
-      "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans",
+      "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans|dobolen\\.eu\\.org|Eve [🍬🪐] Free Onlyfans|Onlyfans ➡️ INSERT LINK|20(yo| )?(and|&)? Blonde,? (let's|drop|chat|hit me|DM)|Blonde, 20, (let's|drop|chat|hit me|DM)|18.*?(Single).*?FREE ([0O]F|[0O]nlyFans).*?(([http]+s?\\.)?(getallmylinks\\.com|onlyfans\\.com)",
       "i",
     ),
   },
