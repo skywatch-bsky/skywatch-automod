@@ -15,6 +15,18 @@ export const PROFILE_CHECKS: Checks[] = [
     ),
   },
   {
+    label: "suspect-inauthentic",
+    comment: "Account is suspected to be inauthentic or spammy. Please review.",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social",
+      "iu",
+    ),
+  },
+  {
     label: "troll",
     comment: "Troll language found in profile",
     description: true,
@@ -134,6 +146,18 @@ export const HANDLE_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "iu"),
+  },
+  {
+    label: "suspect-inauthentic",
+    comment: "Account is suspected to be inauthentic or spammy. Please review.",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social",
+      "i",
+    ),
   },
   {
     label: "maga-trump",
@@ -293,7 +317,7 @@ export const POST_CHECKS: Checks[] = [
     ),
   },
   {
-    label: "suspected-inauthentic",
+    label: "suspect-inauthentic",
     comment: "Suspected inauthentic behavior found in post",
     reportOnly: true,
     commentOnly: false,
