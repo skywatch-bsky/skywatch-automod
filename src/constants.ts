@@ -9,7 +9,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs)|instagram\\.com/(pixiexbelle)",
+      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream|amberbunnyxx|anatoom|cutexjaney|arianaslavens1sb|eviepie)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs)|instagram\\.com/(pixiexbelle)|planoly\\.store/(chloeeadams[0-9]*?)|(didunddkjd|alycemi|alessakiss83)\\.bsky\\.social|beacons\\.ai/(dianadicksy)",
       "iu",
     ),
   },
@@ -289,20 +289,20 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "follow-farming",
     comment: "Follow farming hashtags found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportOnly: false,
+    commentOnly: true,
     check: new RegExp(
-      "blueskyfollower\\.com|#MEGABOOST|#NoDemUnder5k|#NoDemUnder1k|#FBR|#BlueCrew|#DonkParty|#ifbap|#socialistsunday",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty",
       "i",
     ),
   },
   {
     label: "follow-back-spam",
     comment: "Follow back spam found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportOnly: false,
+    commentOnly: true,
     check: new RegExp(
-      "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts",
+      "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts|#Strongertogether|#meidasmighty|#resist|#resistance|#Theresistance|#Resisters|#Wearetheresistance|#bluedotredstate|#Blueunderground|#NAFO|#fellas",
       "iu",
     ),
   },
