@@ -1,7 +1,7 @@
 import { Checks } from "./types.js";
 
 export const PROFILE_CHECKS: Checks[] = [
-  {
+  /*{
     label: "report-to-bsky",
     comment:
       "Profile is being reported too frequently and likely out of scope.",
@@ -17,7 +17,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy)",
       "i",
     ),
-  },
+  },*/
   {
     label: "suspect-inauthentic",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
