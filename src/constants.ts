@@ -1,23 +1,6 @@
 import { Checks } from "./types.js";
 
 export const PROFILE_CHECKS: Checks[] = [
-  /*{
-    label: "report-to-bsky",
-    comment:
-      "Profile is being reported too frequently and likely out of scope.",
-    description: true,
-    displayName: true,
-    reportOnly: false,
-    commentOnly: true,
-    check: new RegExp(
-      "dobolen\\.eu\\.org|getallmylinks\\.com|Eve 🍬 Free Onlyfans|dobolen\\.eu\\.org|Eve [🍬🪐] Free Onlyfans|Onlyfans ➡️ INSERT LINK|20(yo| )?(and|&)? Blonde,? (let's|drop|chat|hit me|DM)|Blonde, 20, (let's|drop|chat|hit me|DM)|18.*?(Single).*?FREE ([0O]F|[0O]nlyFans).*?(([http]+s?\\.)?(getallmylinks\\.com|onlyfans\\.com))",
-      "i",
-    ),
-    whitelist: new RegExp(
-      "getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy)",
-      "i",
-    ),
-  },*/
   {
     label: "suspect-inauthentic",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
@@ -29,15 +12,6 @@ export const PROFILE_CHECKS: Checks[] = [
       "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy4?|lilyscottx|janesworld)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof)|instagram\\.com/(pixiexbelle)",
       "iu",
     ),
-  },
-  {
-    label: "report-to-bsky",
-    comment: "Profile is being reported too frequently",
-    description: true,
-    displayName: false,
-    reportOnly: false,
-    commentOnly: true,
-    check: new RegExp("dobolen\\.eu\\.org|getallmylinks\\.com", "i"),
   },
   {
     label: "troll",
