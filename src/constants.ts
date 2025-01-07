@@ -31,6 +31,15 @@ export const PROFILE_CHECKS: Checks[] = [
     ),
   },
   {
+    label: "report-to-bsky",
+    comment: "Profile is being reported too frequently",
+    description: true,
+    displayName: false,
+    reportOnly: false,
+    commentOnly: true,
+    check: new RegExp("dobolen\\.eu\\.org|getallmylinks\\.com", "i"),
+  },
+  {
     label: "troll",
     comment: "Troll language found in profile",
     description: true,
@@ -232,7 +241,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.app|cash\\.me|paypal\\.com|paypal\\.me|gogetfunding\\.com|winred\\.com|actblue\\.com|givesendgo\\.com|chuffed\\.org ",
+      "gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.app|cash\\.me|paypal\\.com|paypal\\.me|gogetfunding\\.com|winred\\.com|actblue\\.com|givesendgo\\.com|chuffed\\.org",
       "i",
     ),
   },
