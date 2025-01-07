@@ -14,6 +14,9 @@ export const checkPosts = async (post: Post[]) => {
     (postCheck) => postCheck.label,
   );
 
+  // Destructure Post object
+  const { did, time, atURI, text, cid } = post[0];
+
   // iterate through the labels
   labels.forEach((label) => {
     const checkPost = POST_CHECKS.find(
@@ -21,28 +24,28 @@ export const checkPosts = async (post: Post[]) => {
     );
 
     if (checkPost?.ignoredDIDs) {
-      if (checkPost.ignoredDIDs.includes(post[0].did)) {
-        return logger.info(`Whitelisted DID: ${post[0].did}`);
+      if (checkPost.ignoredDIDs.includes(did)) {
+        return logger.info(`Whitelisted DID: ${did}`);
       }
     } else {
-      if (checkPost!.check.test(post[0].text)) {
+      if (checkPost!.check.test(text)) {
         if (checkPost?.whitelist) {
-          if (checkPost?.whitelist.test(post[0].text)) {
+          if (checkPost?.whitelist.test(text)) {
             logger.info(`Whitelisted phrase found"`);
             return;
           }
         } else {
-          logger.info(`${checkPost!.label} in post at ${post[0].atURI}`);
+          logger.info(`${checkPost!.label} in post at ${atURI}`);
 
           if (checkPost!.reportOnly === true) {
-            logger.info(`Report only: ${post[0].did}`);
+            logger.info(`Report only: ${did}`);
             createAccountReport(
-              post[0].did,
-              `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+              did,
+              `${time}: ${checkPost?.comment} at ${atURI} with text "${text}"`,
             );
             return;
           } else {
-            logger.info(`Labeling post: ${post[0].atURI}`);
+            logger.info(`Labeling post: ${atURI}`);
 
             createPostLabel(
               post[0].atURI,
