@@ -74,6 +74,9 @@ export const PROFILE_CHECKS: Checks[] = [
       "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann",
       "i",
     ),
+    ignoredDIDs: [
+      "did:plc:dyf6o6q3rvdrza3xwgpn56gz", // typescript.monster - obvious shitposter
+    ],
   },
   {
     label: "nazi-symbolism",
