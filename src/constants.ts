@@ -122,6 +122,15 @@ export const PROFILE_CHECKS: Checks[] = [
     ],
   },
   {
+    label: "inverted-red-triangle",
+    comment: "🔻 found in profile",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp("🔻", "iu"),
+  },
+  {
     label: "contains-slur",
     comment: "Slur found in profile",
     description: true,
