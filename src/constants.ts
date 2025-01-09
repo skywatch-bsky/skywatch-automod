@@ -10,7 +10,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentOnly: false,
     check: new RegExp("💙🌊|🌊💙|💙{2,}", "u"),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|💛💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|(🤍)?💛💙",
       "u",
     ),
     ignoredDIDs: [
@@ -26,7 +26,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentOnly: false,
     check: new RegExp("💙+?", "u"),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|💛💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|(🤍)?💛💙",
       "u",
     ),
     ignoredDIDs: [
@@ -73,13 +73,18 @@ export const PROFILE_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp(
-      "((anti|[🚫]|DNI)[ -:]?(Trump|MAGA(t)?))|#?(Never|Fuck)[ -:]?Trump[ -]?(hater)?|magazine|stop[ -]?project[ -:]?2025",
+      "(#?((Never|Fuck|anti|[🚫]|DNI)[ -:]?((Donald)?[ -:]?Trump|MAGA(t)?|DJT)))|(Donald)?[ -:]?Trump Hater|magazine|stop[ -]?project[ -:]?2025",
       "iu",
     ),
     ignoredDIDs: [
       "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
       "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
       "did:plc:56bp6c77m2hlpa2deyi3cofa", //Parody Account
+      "did:plc:ivyqb4avgscxb5qemod7sc3v", //Not Easily Handled in RegExp
+      "did:plc:py7rpklh3yq26kx6dnsjsptd", //Not Easily Handled in RegExp
+      "did:plc:zrepwyn5mdnekohyjvdk5ow3", //Not Easily Handled in RegExp
+      "did:plc:4d5vewhn67xvdnzrhbmrqiul", //Not Easily Handled in RegExp
+      "did:plc:iwb2gvhsevkvoj4kyycjudjh", //Not Easily Handled in RegExp
     ],
   },
   {
@@ -204,7 +209,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp(
-      "((anti|[🚫]|DNI)[ -:]?(Trump|MAGA(t)?))|#?(Never|Fuck)[ -:]?Trump[ -]?(hater)?|magazine|stop[ -]?project[ -:]?2025",
+      "(#?((Never|Fuck|anti|[🚫]|DNI)[ -:]?((Donald)?[ -:]?Trump|MAGA(t)?|DJT)))|(Donald)?[ -:]?Trump Hater|magazine|stop[ -]?project[ -:]?2025",
       "iu",
     ),
     ignoredDIDs: [
