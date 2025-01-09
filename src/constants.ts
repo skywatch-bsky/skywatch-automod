@@ -69,8 +69,12 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "#MAGA\\b|#Trump ?2024🇺🇸?|(barron|donald|eric)(trump|.*trump|jtrump|.*trumpjr)|(real|president|king|queen)? ?(donaldj?|ivan|eric|tiffany|barron|melania) ?(trump|.*trump|.*trumpjr)|(proud|king)magat?|trump.*?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4})|potus(45|46|47)|ultramagat?|maga.*?[0-9]{2,4}|trump.*?(king|maga|train|daddy|army|nation|world)",
+      "#(MAGA|MAHA)\\b|#Trump ?2024🇺🇸?|((real|president|king|queen)? ?(barron|donald|eric|ivan(k)?a|tiffany|melenia) ?(john|j)? ?((trump)( |, )?(jr)?))|(proud|king)magat?|(trump ?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga [0-9]{2,4}|(trump ?(is)? ?(my|your)? ?(king|maga|train|daddy|army|nation|world))",
       "i",
+    ),
+    whitelist: new RegExp(
+      "((anti|[🚫]|DNI)[ -:]?(Trump|MAGA(t)?))|#?(Never|Fuck)[ -:]?Trump[ -]?(hater)?|magazine|stop[ -]?project[ -:]?2025",
+      "iu",
     ),
     ignoredDIDs: [
       "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
@@ -196,10 +200,13 @@ export const HANDLE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "(real|president|king|queen)?-?(donaldj?|ivan|eric|tiffany|barron|melania)-?(trump|.*trump|.*trumpjr)|(proud|king)magat?|trump.*?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4})|potus(45|46|47)|jdvance|marjorietaylorgreen|laura.*loomer|\\bloomered\\b|steve.*bannon|nick.*fuentes|mattgaetz|rfk-?jr|project.*2025|ultramaga|maga.*?[0-9]{2,4}|catturd|cat-turd|trump.*?(king|maga|train|daddy|army|nation|world)",
+      "#(MAGA|MAHA)\\b|#Trump-?2024🇺🇸?|((real|president|king|queen)?-?(barron|donald|eric|ivan(k)?a|tiffany|melenia)-?(john|j)?-?((trump)-?(jr)?))|(proud|king)magat?|(trump-?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga-[0-9]{2,4}|(trump-?(is)?-?(my|your)?-?(king|maga|train|daddy|army|nation|world))|jdvance|marjorietaylorgreen|laura-?loomer|\\bloomered\\b|steve-?bannon|nick-?(j)?-?fuentes|mattgaetz|rfk-?jr|project?-2025",
       "i",
     ),
-    whitelist: new RegExp("magazine|stop.*project2025|fucktrump|trumphater"),
+    whitelist: new RegExp(
+      "((anti|[🚫]|DNI)[ -:]?(Trump|MAGA(t)?))|#?(Never|Fuck)[ -:]?Trump[ -]?(hater)?|magazine|stop[ -]?project[ -:]?2025",
+      "iu",
+    ),
     ignoredDIDs: [
       "did:plc:ugtulcml7ptsivphrwpigrb6", //catturd2.bsky.social - Tom Mckay
       "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
