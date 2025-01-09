@@ -2,6 +2,10 @@ import { List } from "./types.js";
 
 export const LISTS: List[] = [
   {
+    label: "blue-heart-emoji",
+    rkey: "3lfbtgosyyi22",
+  },
+  {
     label: "troll",
     rkey: "3lbckxhgu3r2v",
   },
