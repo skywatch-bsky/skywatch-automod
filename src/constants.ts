@@ -8,21 +8,27 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp("💙🌊|🌊💙", "u"),
-    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙", "u"),
+    check: new RegExp("💙🌊|🌊💙|💙💙+?", "u"),
+    whitelist: new RegExp(
+      "(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
+      "u",
+    ),
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
     ],
   },
   {
-    label: "blue-heart-emoji",
+    label: "testing-blue-heart-emoji",
     comment: "Testing: Blue Heart Emoji found in profile",
     description: true,
     displayName: true,
     reportOnly: true,
     commentOnly: false,
     check: new RegExp("💙|💙*?", "u"),
-    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙", "u"),
+    whitelist: new RegExp(
+      "(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
+      "u",
+    ),
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
     ],
