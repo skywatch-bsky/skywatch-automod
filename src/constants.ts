@@ -217,6 +217,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
       "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
       "did:plc:56bp6c77m2hlpa2deyi3cofa", //Parody Account
+      "did:plc:shkwqe63emneooxypi6dpw7f", // eratomag.bsky.social
     ],
   },
   {
