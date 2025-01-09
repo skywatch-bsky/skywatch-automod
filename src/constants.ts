@@ -8,8 +8,8 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp("💙🌊|🌊💙", "i"),
-    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙", "i"),
+    check: new RegExp("💙🌊|🌊💙", "u"),
+    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙", "u"),
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
     ],
@@ -21,8 +21,8 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: true,
     commentOnly: false,
-    check: new RegExp("💙|💙*?", "i"),
-    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙", "i"),
+    check: new RegExp("💙|💙*?", "u"),
+    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙", "u"),
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
     ],
