@@ -8,31 +8,37 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp("💙🌊|🌊💙|💙{2,}", "u"),
+    check: new RegExp(
+      "💙🌊|🌊💙|(?<=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA).*?(💙|💙🌊|🌊💙|💙{2,})|(💙|💙🌊|🌊💙|💙{2,}).*?(?=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA)",
+      "u",
+    ),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|(🤍)?💛💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙",
       "u",
     ),
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
     ],
   },
-  {
+  /*{
     label: "testing-blue-heart-emoji",
     comment: "Testing: 💙 found in profile",
     description: true,
     displayName: true,
     reportOnly: true,
     commentOnly: false,
-    check: new RegExp("💙+?", "u"),
+    check: new RegExp(
+      "💙+?|(?<=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA).*?(💙|💙🌊|🌊💙|💙{2,})|(💙|💙🌊|🌊💙|💙{2,}).*?(?=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA)",
+      "iu",
+      ),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|(🤍)?💛💙",
+      "💙🌊|🌊💙|(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙",
       "u",
     ),
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
     ],
-  },
+  },*/
   {
     label: "suspect-inauthentic",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
