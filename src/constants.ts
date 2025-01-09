@@ -10,7 +10,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentOnly: false,
     check: new RegExp("💙🌊|🌊💙|💙{2,}", "u"),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|💛💙",
       "u",
     ),
     ignoredDIDs: [
@@ -26,7 +26,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentOnly: false,
     check: new RegExp("💙+?", "u"),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷)|💛💙",
       "u",
     ),
     ignoredDIDs: [
