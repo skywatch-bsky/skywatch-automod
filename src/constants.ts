@@ -2,7 +2,7 @@ import { Checks } from "./types.js";
 
 export const PROFILE_CHECKS: Checks[] = [
   {
-    label: "blue-heart",
+    label: "blue-heart-emoji",
     comment: "Blue Heart Emoji found in profile",
     description: true,
     displayName: true,
@@ -12,7 +12,7 @@ export const PROFILE_CHECKS: Checks[] = [
     whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙", "iu"),
   },
   {
-    label: "blue-heart",
+    label: "blue-heart-emoji",
     comment: "Testing: Blue Heart Emoji found in profile",
     description: true,
     displayName: true,
