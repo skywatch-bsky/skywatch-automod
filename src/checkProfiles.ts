@@ -1,10 +1,6 @@
 import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import {
-  createAccountReport,
-  createAccountLabel,
-  createAccountComment,
-} from "./moderation.js";
+import { createAccountReport, createAccountLabel } from "./moderation.js";
 
 export const checkProfile = async (
   did: string,
@@ -35,8 +31,8 @@ export const checkProfile = async (
       // Check if description is enabled
       if (checkProfiles?.description === true) {
         if (checkProfiles!.check.test(description)) {
-          if (checkProfiles?.whitelist) {
-            if (checkProfiles?.whitelist.test(description)) {
+          if (checkProfiles!.whitelist) {
+            if (checkProfiles!.whitelist.test(description)) {
               logger.info(`Whitelisted phrase found.`);
             }
           } else {
@@ -48,8 +44,8 @@ export const checkProfile = async (
 
       if (checkProfiles?.displayName === true) {
         if (checkProfiles!.check.test(displayName)) {
-          if (checkProfiles?.whitelist) {
-            if (checkProfiles?.whitelist.test(displayName)) {
+          if (checkProfiles!.whitelist) {
+            if (checkProfiles!.whitelist.test(displayName)) {
               logger.info(`Whitelisted phrase found for: ${displayName}`);
             }
           } else {
@@ -63,7 +59,7 @@ export const checkProfile = async (
 
       if (checkCount === 0) return;
 
-      if (checkProfiles.reportOnly === true) {
+      if (checkProfiles!.reportOnly === true) {
         logger.info(`Report only: ${did}`);
         createAccountReport(
           did,

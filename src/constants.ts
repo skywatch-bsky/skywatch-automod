@@ -3,14 +3,14 @@ import { Checks } from "./types.js";
 export const PROFILE_CHECKS: Checks[] = [
   {
     label: "blue-heart-emoji",
-    comment: "Blue Heart Emoji found in profile",
+    comment: "💙 found in profile",
     description: true,
     displayName: true,
     reportOnly: false,
     commentOnly: false,
     check: new RegExp("💙🌊|🌊💙|💙💙+?", "u"),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
       "u",
     ),
     ignoredDIDs: [
@@ -19,14 +19,14 @@ export const PROFILE_CHECKS: Checks[] = [
   },
   {
     label: "testing-blue-heart-emoji",
-    comment: "Testing: Blue Heart Emoji found in profile",
+    comment: "Testing: 💙 found in profile",
     description: true,
     displayName: true,
     reportOnly: true,
     commentOnly: false,
     check: new RegExp("💙|💙*?", "u"),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
       "u",
     ),
     ignoredDIDs: [
