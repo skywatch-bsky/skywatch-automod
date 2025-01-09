@@ -18,7 +18,11 @@ import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
-import { checkProfile } from "./checkProfiles.js";
+import {
+  checkDescription,
+  checkDisplayName,
+  checkProfile,
+} from "./checkProfiles.js";
 import {
   AppBskyActorDefs,
   AppBskyActorProfile,
@@ -144,7 +148,13 @@ jetstream.onUpdate(
   async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        const ret = checkProfile(
+        checkDescription(
+          event.did,
+          event.time_us,
+          event.commit.record.displayName,
+          event.commit.record.description,
+        );
+        checkDisplayName(
           event.did,
           event.time_us,
           event.commit.record.displayName,
@@ -165,7 +175,13 @@ jetstream.onCreate(
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        const ret = checkProfile(
+        checkDescription(
+          event.did,
+          event.time_us,
+          event.commit.record.displayName,
+          event.commit.record.description,
+        );
+        checkDisplayName(
           event.did,
           event.time_us,
           event.commit.record.displayName,

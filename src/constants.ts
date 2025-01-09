@@ -8,7 +8,7 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp("💙🌊|🌊💙|💙💙+?", "u"),
+    check: new RegExp("💙🌊|🌊💙|💙{2,}", "u"),
     whitelist: new RegExp(
       "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
       "u",
@@ -24,7 +24,7 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: true,
     commentOnly: false,
-    check: new RegExp("💙|💙*?", "u"),
+    check: new RegExp("💙*?", "u"),
     whitelist: new RegExp(
       "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙",
       "u",
