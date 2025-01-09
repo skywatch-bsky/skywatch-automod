@@ -2,6 +2,26 @@ import { Checks } from "./types.js";
 
 export const PROFILE_CHECKS: Checks[] = [
   {
+    label: "blue-heart",
+    comment: "Blue Heart Emoji found in profile",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp("💙🌊|🌊💙", "iu"),
+    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙", "iu"),
+  },
+  {
+    label: "blue-heart",
+    comment: "Testing: Blue Heart Emoji found in profile",
+    description: true,
+    displayName: true,
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp("💙", "iu"),
+    whitelist: new RegExp("(💖|💗|🩷)💜💙|❤️🧡💛💚💙💜|💚💙", "iu"),
+  },
+  {
     label: "suspect-inauthentic",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
