@@ -47,7 +47,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream|amberbunnyxx|anatoom|cutexjaney|arianaslavens1sb|faykatz|freeliz)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs|diazchat)|instagram\\.com/(pixiexbelle)|planoly\\.store/(chloeeadams[0-9]*?)|(didunddkjd|alycemi|alessakiss83|faykatz|laurenbabygirl|babyalexis|vortexdancer)\\.bsky\\.social|beacons\\.ai/(dianadicksy|dianadickzzy)|(lolizy|liizzyyyy|lizzikissi|janeangel|ALEXsWOrld|CUTeyBELLa|shinyalex).carrd.co|onlyfans\\.com/(aliceeeeeeeeeeeeee|avafiery|kawaiilavina)|bit\\.ly/(norasblueescape|naomitribe)",
+      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream|amberbunnyxx|anatoom|cutexjaney|arianaslavens1sb|faykatz|freeliz)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs|diazchat)|instagram\\.com/(pixiexbelle|thatsmolpotatoxx)|planoly\\.store/(chloeeadams[0-9]*?)|(didunddkjd|alycemi|alessakiss83|faykatz|laurenbabygirl|babyalexis|vortexdancer|aigc-island-?[a-z0-9]+?|maggystn)\\.bsky\\.social|beacons\\.ai/(dianadicksy|dianadickzzy)|(lolizy|liizzyyyy|lizzikissi|janeangel|ALEXsWOrld|CUTeyBELLa|shinyalex).carrd.co|onlyfans\\.com/(aliceeeeeeeeeeeeee|avafiery|kawaiilavina)|bit\\.ly/([a-zA-Z]+?nora[a-zA-Z]+?|[a-zA-Z]+?naomi[a-zA-Z]+?)|t\\.me/(thaliaballard|Goon_mommi)|is\\.gd/((aleksandriaqt|lexieqt|lara)[0-9]{1,4})",
       "i",
     ),
   },
@@ -69,13 +69,40 @@ export const PROFILE_CHECKS: Checks[] = [
   },
   {
     label: "maga-trump",
-    comment: "MAGA/Trump support found in profile",
-    description: true,
+    comment: "MAGA/Trump support found in displayName.",
+    description: false,
     displayName: true,
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
       "#(MAGA|MAHA)\\b|#Trump ?2024🇺🇸?|((real|president|king|queen)? ?(barron|donald|eric|ivan(k)?a|tiffany|melenia) ?(john|j)? ?((trump)( |, )?(jr)?))|(proud|king)magat?|(trump ?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga [0-9]{2,4}|(trump ?(is)? ?(my|your)? ?(king|maga|train|daddy|army|nation|world))",
+      "i",
+    ),
+    whitelist: new RegExp(
+      "(#?(?<=Never|Fuck|anti|🚫|DNI))[ -:]{0,2}((#)?(Donald[ -:]?)?Trump|MAGA(t)?|DJT)|#?((Donald)?[ -:]?Trump[ -:]?Hater|magazine|stop[ -:]?project[ -:]?2025)",
+      "iu",
+    ),
+    ignoredDIDs: [
+      "did:plc:6rah3qput4aol2iu2ecaglhm", //Squirrel Turd
+      "did:plc:6nqex5psu2kg2yzqhzhq6d7b", //Brown Eyed Girl
+      "did:plc:56bp6c77m2hlpa2deyi3cofa", //Parody Account
+      "did:plc:ivyqb4avgscxb5qemod7sc3v", //Not Easily Handled in RegExp
+      "did:plc:py7rpklh3yq26kx6dnsjsptd", //Not Easily Handled in RegExp
+      "did:plc:zrepwyn5mdnekohyjvdk5ow3", //Not Easily Handled in RegExp
+      "did:plc:4d5vewhn67xvdnzrhbmrqiul", //Not Easily Handled in RegExp
+      "did:plc:iwb2gvhsevkvoj4kyycjudjh", //Not Easily Handled in RegExp
+      "did:plc:yrhmtlcffcnpbiw3tx74kwzz", // NC Town Crier cries too much about this shit
+    ],
+  },
+  {
+    label: "maga-trump",
+    comment: "MAGA/Trump support found in description.",
+    description: true,
+    displayName: false,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "#(MAGA|MAHA)\\b|#Trump ?2024🇺🇸?|(proud|king)magat?|(trump ?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga [0-9]{2,4}|(trump ?(is)? ?(my|your)? ?(king|maga|train|daddy|army|nation|world))",
       "i",
     ),
     whitelist: new RegExp(
