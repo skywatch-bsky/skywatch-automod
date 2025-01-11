@@ -255,7 +255,7 @@ export const HANDLE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|(didunddkjd|alycemi|alessakiss83|faykatz|layahheilpern.*?|heyyougay69)\\.bsky\\.social",
+      "[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))[0-9]{2,4}\\.bsky\\.social|(didunddkjd|alycemi|alessakiss83|faykatz|layahheilpern.*?|heyyougay69)\\.bsky\\.social",
       "i",
     ),
   },
@@ -436,7 +436,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: true,
     commentOnly: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|\\bPronouns in bio.\\b",
       "i",
     ),
   },
