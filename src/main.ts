@@ -18,16 +18,8 @@ import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
-import {
-  checkDescription,
-  checkDisplayName,
-  checkProfile,
-} from "./checkProfiles.js";
-import {
-  AppBskyActorDefs,
-  AppBskyActorProfile,
-  ComAtprotoRepoDefs,
-} from "@atproto/api";
+import { checkStarterPack } from "./checkStarterPack.js";
+import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -160,8 +152,14 @@ jetstream.onUpdate(
           event.commit.record.displayName,
           event.commit.record.description,
         );
-      } else {
-        return;
+      }
+
+      if (event.commit.record.joinedViaStarterPack) {
+        checkStarterPack(
+          event.did,
+          event.time_us,
+          event.commit.record.joinedViaStarterPack.uri,
+        );
       }
     } catch (error) {
       logger.error(`Error checking profile:  ${error}`);
@@ -187,6 +185,7 @@ jetstream.onCreate(
           event.commit.record.displayName,
           event.commit.record.description,
         );
+        event.commit.record.joinedViaStarterPack?.uri;
       } else {
         return;
       }
