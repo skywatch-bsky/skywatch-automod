@@ -217,10 +217,7 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: false,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp(
-      "",
-      "i",
-    ),
+    check: new RegExp("", "i"),
     ignoredDIDs: [
       "did:plc:dyf6o6q3rvdrza3xwgpn56gz", // typescript.monster - obvious shitposter
     ],
@@ -233,8 +230,8 @@ export const PROFILE_CHECKS: Checks[] = [
       "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3le64voe2ox2n",
       "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lefoohjmmz2r",
       "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lenan6v4s22r",
-      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3leuvfomkpm26"
-    ]
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3leuvfomkpm26",
+    ],
   },
 ];
 
@@ -444,6 +441,3 @@ export const POST_CHECKS: Checks[] = [
     ),
   },
 ];
-
-
-at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lfgiqyajr723
