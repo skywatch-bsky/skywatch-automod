@@ -47,7 +47,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream|amberbunnyxx|anatoom|cutexjaney|arianaslavens1sb|faykatz|freeliz)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs|diazchat)|instagram\\.com/(pixiexbelle|thatsmolpotatoxx)|planoly\\.store/(chloeeadams[0-9]*?)|(didunddkjd|alycemi|alessakiss83|faykatz|laurenbabygirl|babyalexis|vortexdancer|aigc-island-?[a-z0-9]+?|maggystn)\\.bsky\\.social|beacons\\.ai/(dianadicksy|dianadickzzy)|(lolizy|liizzyyyy|lizzikissi|janeangel|ALEXsWOrld|CUTeyBELLa|shinyalex).carrd.co|onlyfans\\.com/(aliceeeeeeeeeeeeee|avafiery|kawaiilavina)|bit\\.ly/([a-zA-Z]+?nora[a-zA-Z]+?|[a-zA-Z]+?naomi[a-zA-Z]+?)|t\\.me/(thaliaballard|Goon_mommi)|is\\.gd/((aleksandriaqt|lexieqt|lara)[0-9]{1,4})",
+      "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))(20)?25\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream|amberbunnyxx|anatoom|cutexjaney|arianaslavens1sb|faykatz|freeliz)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs|diazchat)|instagram\\.com/(pixiexbelle|thatsmolpotatoxx)|planoly\\.store/(chloeeadams[0-9]*?)|(didunddkjd|alycemi|alessakiss83|faykatz|laurenbabygirl|babyalexis|vortexdancer|aigc-island-?[a-z0-9]+?|maggystn)\\.bsky\\.social|beacons\\.ai/(dianadicksy|dianadickzzy)|(lolizy|liizzyyyy|lizzikissi|janeangel|ALEXsWOrld|CUTeyBELLa|shinyalex).carrd.co|onlyfans\\.com/(aliceeeeeeeeeeeeee|avafiery|kawaiilavina)|bit\\.ly/([a-zA-Z]+?nora[a-zA-Z]+?|[a-zA-Z]+?naomi[a-zA-Z]+?)|t\\.me/(thaliaballard|Goon_mommi)|is\\.gd/((aleksandriaqt|alexithaqt|lexieqt|lara)[0-9]{1,4})",
       "i",
     ),
     starterPacks: [
@@ -209,6 +209,32 @@ export const PROFILE_CHECKS: Checks[] = [
       "[🌈🏳️‍🌈]?lgb(✂️tq|, without the)|#KPSS|Adult Human Female",
       "iu",
     ),
+  },
+  {
+    label: "follow-farming",
+    comment: "Joined via follow-farming starter pack",
+    description: false,
+    displayName: false,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "",
+      "i",
+    ),
+    ignoredDIDs: [
+      "did:plc:dyf6o6q3rvdrza3xwgpn56gz", // typescript.monster - obvious shitposter
+    ],
+    starterPacks: [
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lfgiqyajr723",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lazctjtlhn2n",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lcgshabq4s2b",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3ldbk3qwzlp2h",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3ldt2cm2wpl24",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3le64voe2ox2n",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lefoohjmmz2r",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lenan6v4s22r",
+      "at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3leuvfomkpm26"
+    ]
   },
 ];
 
@@ -418,3 +444,6 @@ export const POST_CHECKS: Checks[] = [
     ),
   },
 ];
+
+
+at://did:plc:dyq4pzcipzmy6fq7th5xpwqu/app.bsky.graph.starterpack/3lfgiqyajr723
