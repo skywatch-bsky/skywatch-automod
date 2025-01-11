@@ -50,7 +50,7 @@ export const checkDescription = async (
             createAccountLabel(
               did,
               `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
           }
         }
