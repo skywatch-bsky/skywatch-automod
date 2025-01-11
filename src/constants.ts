@@ -79,7 +79,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp(
-      "(#?((Never|Fuck|anti|[🚫]|DNI)[ -:]?((Donald)?[ -:]?Trump|MAGA(t)?|DJT)))|(Donald)?[ -:]?Trump Hater|magazine|stop[ -]?project[ -:]?2025",
+      "(#?((Never|Fuck|anti|[🚫]|DNI)[ -:]?#?((Donald)?[ -:]?Trump|MAGA(t)?|DJT)))|(Donald)?[ -:]?Trump Hater|magazine|stop[ -]?project[ -:]?2025",
       "iu",
     ),
     ignoredDIDs: [
@@ -91,6 +91,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:zrepwyn5mdnekohyjvdk5ow3", //Not Easily Handled in RegExp
       "did:plc:4d5vewhn67xvdnzrhbmrqiul", //Not Easily Handled in RegExp
       "did:plc:iwb2gvhsevkvoj4kyycjudjh", //Not Easily Handled in RegExp
+      "did:plc:yrhmtlcffcnpbiw3tx74kwzz", // NC Town Crier cries too much about this shit
     ],
   },
   {
