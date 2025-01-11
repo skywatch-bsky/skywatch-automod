@@ -143,14 +143,14 @@ jetstream.onUpdate(
         checkDescription(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
         checkDisplayName(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
       }
 

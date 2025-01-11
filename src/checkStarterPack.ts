@@ -29,7 +29,7 @@ export const checkStarterPack = async (
     if (atURI) {
       if (checkProfiles?.starterPacks) {
         if (checkProfiles?.starterPacks.includes(atURI)) {
-          logger.info(`Starter pack found.`);
+          logger.info(`Account joined via starter pack at: ${atURI}`);
           createAccountLabel(
             did,
             `${checkProfiles!.label}`,
