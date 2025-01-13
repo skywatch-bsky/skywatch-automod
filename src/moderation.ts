@@ -185,3 +185,31 @@ export const addToList = async (label: string, did: string) => {
     }
   });
 };
+
+export async function checkAccountLabels(did: string) {
+  try {
+    const repo = await limit(() =>
+      agent.tools.ozone.moderation.getRepo(
+        {
+          did: did,
+        },
+        {
+          headers: {
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      ),
+    );
+
+    if (!repo.data.labels) {
+      return null;
+    }
+
+    return repo.data.labels.map((label) => label.label);
+  } catch (e) {
+    logger.info("Error retrieving repo for account.");
+    return null;
+  }
+}

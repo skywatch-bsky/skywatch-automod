@@ -4,10 +4,11 @@ import { Handle } from "./types.js";
 import {
   createAccountReport,
   createAccountLabel,
-  createAccountComment,
+  checkAccountLabels,
 } from "./moderation.js";
 
 export const checkHandle = async (handle: Handle[]) => {
+  const ActLabelChk = await checkAccountLabels(handle[0].did);
   // Get a list of labels
   const labels: string[] = Array.from(
     HANDLE_CHECKS,
@@ -44,11 +45,20 @@ export const checkHandle = async (handle: Handle[]) => {
           );
           return;
         } else {
-          createAccountLabel(
-            handle[0].did,
-            `${checkList!.label}`,
-            `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
-          );
+          if (ActLabelChk) {
+            if (ActLabelChk.includes(checkList!.label)) {
+              logger.info(
+                `Label ${checkList!.label} already exists for ${did}`,
+              );
+              return;
+            } else {
+              createAccountLabel(
+                handle[0].did,
+                `${checkList!.label}`,
+                `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
+              );
+            }
+          }
         }
       }
     }
