@@ -6,9 +6,10 @@ import {
   createAccountLabel,
   checkAccountLabels,
 } from "./moderation.js";
+import { limit } from "./limits.js";
 
 export const checkHandle = async (handle: Handle[]) => {
-  const ActLabelChk = await checkAccountLabels(handle[0].did);
+  const ActLabelChk = await limit(() => checkAccountLabels(handle[0].did));
   // Get a list of labels
   const labels: string[] = Array.from(
     HANDLE_CHECKS,

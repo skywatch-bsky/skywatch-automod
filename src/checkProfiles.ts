@@ -6,6 +6,7 @@ import {
   createAccountLabel,
   checkAccountLabels,
 } from "./moderation.js";
+import { limit } from "./limits.js";
 
 export const checkDescription = async (
   did: string,
@@ -13,7 +14,7 @@ export const checkDescription = async (
   displayName: string,
   description: string,
 ) => {
-  const ActLabelChk = await checkAccountLabels(did);
+  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
@@ -79,7 +80,7 @@ export const checkDisplayName = async (
   displayName: string,
   description: string,
 ) => {
-  const ActLabelChk = await checkAccountLabels(did);
+  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
