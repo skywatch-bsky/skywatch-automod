@@ -1,7 +1,12 @@
 import { describe } from "node:test";
 import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import { createAccountReport, createAccountLabel } from "./moderation.js";
+import {
+  createAccountReport,
+  createAccountLabel,
+  checkAccountLabels,
+} from "./moderation.js";
+import { limit } from "./limits.js";
 
 export const checkDescription = async (
   did: string,
@@ -9,6 +14,7 @@ export const checkDescription = async (
   displayName: string,
   description: string,
 ) => {
+  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
@@ -47,11 +53,20 @@ export const checkDescription = async (
             );
             return;
           } else {
-            createAccountLabel(
-              did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
-            );
+            if (ActLabelChk) {
+              if (ActLabelChk.includes(checkProfiles!.label)) {
+                logger.info(
+                  `Label ${checkProfiles!.label} already exists for ${did}`,
+                );
+                return;
+              }
+            } else {
+              createAccountLabel(
+                did,
+                `${checkProfiles!.label}`,
+                `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              );
+            }
           }
         }
       }
@@ -65,6 +80,7 @@ export const checkDisplayName = async (
   displayName: string,
   description: string,
 ) => {
+  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
@@ -103,11 +119,20 @@ export const checkDisplayName = async (
             );
             return;
           } else {
-            createAccountLabel(
-              did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
-            );
+            if (ActLabelChk) {
+              if (ActLabelChk.includes(checkProfiles!.label)) {
+                logger.info(
+                  `Label ${checkProfiles!.label} already exists for ${did}`,
+                );
+                return;
+              }
+            } else {
+              createAccountLabel(
+                did,
+                `${checkProfiles!.label}`,
+                `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              );
+            }
           }
         }
       }
