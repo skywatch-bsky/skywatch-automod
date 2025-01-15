@@ -187,7 +187,7 @@ export const addToList = async (label: string, did: string) => {
 };
 
 export async function checkAccountLabels(did: string) {
-  try {
+  /* try {
     const repo = await limit(() =>
       agent.tools.ozone.moderation.getRepo(
         {
@@ -211,5 +211,6 @@ export async function checkAccountLabels(did: string) {
   } catch (e) {
     logger.info("Error retrieving repo for account.");
     return null;
-  }
+    } */
+  return null;
 }
