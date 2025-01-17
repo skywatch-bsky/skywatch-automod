@@ -133,11 +133,13 @@ export const PROFILE_CHECKS: Checks[] = [
       "h[i1]tl[e3]r|goebbels|göring|himmler|\\bführer\\b|reichskanzler|HWABAG|nazigamingclan\.com|卐|\\bHH ?1488\\b",
       "i",
     ),
+    whitelist: new RegExp("shitler", "i"),
     ignoredDIDs: [
       "did:plc:f4bb6sbdilvedzkdhqcxsmau", //camwhitler.bsky.social - Cam Whitler
       "did:plc:tl4m3mk2rrz2ewe27umm3ay4", // some NAFO guy with RU卐卐IA in his bio
       "did:plc:mxjv45hjx6hwrc5icb4oh7fy", // some dumbass calling trump Hitler 2.0
       "did:plc:sckedie5upvd7xpm5xzochw2", // Using shitler
+      "did:plc:vchmnkezcmaixgo7hlsav2ix", // some dumbass calling trump Hitler 2.0
     ],
   },
   {
