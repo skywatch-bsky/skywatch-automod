@@ -129,10 +129,7 @@ export const PROFILE_CHECKS: Checks[] = [
     displayName: true,
     reportOnly: false,
     commentOnly: false,
-    check: new RegExp(
-      "h[i1]tl[e3]r|goebbels|göring|himmler|\\bführer\\b|reichskanzler|HWABAG|nazigamingclan\.com|卐|\\bHH ?1488\\b",
-      "i",
-    ),
+    check: new RegExp("nazigamingclan\.com|卐|\\bHH ?1488\\b", "i"),
     whitelist: new RegExp("shitler", "i"),
     ignoredDIDs: [
       "did:plc:f4bb6sbdilvedzkdhqcxsmau", //camwhitler.bsky.social - Cam Whitler
