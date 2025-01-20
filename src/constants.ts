@@ -125,7 +125,7 @@ export const PROFILE_CHECKS: Checks[] = [
   {
     label: "nazi-symbolism",
     comment: "Nazi symbolism found in profile",
-    description: false,
+    description: true,
     displayName: true,
     reportOnly: false,
     commentOnly: false,
