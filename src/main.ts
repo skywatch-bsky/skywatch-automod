@@ -1,5 +1,6 @@
 import {
   CommitCreateEvent,
+  CommitUpdate,
   CommitUpdateEvent,
   IdentityEvent,
   Jetstream,
@@ -17,7 +18,8 @@ import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
-import { checkProfile } from "./checkProfiles.js";
+import { checkStarterPack } from "./checkStarterPack.js";
+import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -78,7 +80,7 @@ jetstream.on("error", (error) => {
 
 jetstream.onCreate(
   "app.bsky.feed.post",
-  (event: CommitCreateEvent<typeof WANTED_COLLECTION>) => {
+  (event: CommitCreateEvent<"app.bsky.feed.post">) => {
     const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
     const hasFacets = event.commit.record.hasOwnProperty("facets");
     const hasText = event.commit.record.hasOwnProperty("text");
@@ -135,14 +137,58 @@ jetstream.onCreate(
 // Check for profile updates
 jetstream.onUpdate(
   "app.bsky.actor.profile",
-  (event: CommitUpdateEvent<typeof WANTED_COLLECTION>) => {
+  async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
-      const ret = checkProfile(
-        event.did,
-        event.time_us,
-        event.commit.record.displayName,
-        event.commit.record.description,
-      );
+      if (event.commit.record.displayName || event.commit.record.description) {
+        checkDescription(
+          event.did,
+          event.time_us,
+          event.commit.record.displayName,
+          event.commit.record.description,
+        );
+        checkDisplayName(
+          event.did,
+          event.time_us,
+          event.commit.record.displayName,
+          event.commit.record.description,
+        );
+      }
+
+      if (event.commit.record.joinedViaStarterPack) {
+        checkStarterPack(
+          event.did,
+          event.time_us,
+          event.commit.record.joinedViaStarterPack.uri,
+        );
+      }
+    } catch (error) {
+      logger.error(`Error checking profile:  ${error}`);
+    }
+  },
+);
+
+// Check for profile updates
+jetstream.onCreate(
+  "app.bsky.actor.profile",
+  async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
+    try {
+      if (event.commit.record.displayName || event.commit.record.description) {
+        checkDescription(
+          event.did,
+          event.time_us,
+          event.commit.record.displayName,
+          event.commit.record.description,
+        );
+        checkDisplayName(
+          event.did,
+          event.time_us,
+          event.commit.record.displayName,
+          event.commit.record.description,
+        );
+        event.commit.record.joinedViaStarterPack?.uri;
+      } else {
+        return;
+      }
     } catch (error) {
       logger.error(`Error checking profile:  ${error}`);
     }
