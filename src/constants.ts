@@ -324,7 +324,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "twitter\\.com|x\\.com",
+      "(\\.|\\b)twitter\\.com|(\\.|\\b)x\\.com",
       "i",
     ),
   },
