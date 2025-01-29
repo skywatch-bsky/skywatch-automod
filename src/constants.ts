@@ -322,7 +322,7 @@ export const POST_CHECKS: Checks[] = [
     label: "twitter-x",
     comment: "Twitter found in post",
     reportOnly: false,
-    commentOnly: false,
+    commentOnly: true,
     check: new RegExp(
       "(\\.|\\b)twitter\\.com|(\\.|\\b)x\\.com",
       "i",
