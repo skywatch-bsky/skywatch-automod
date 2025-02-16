@@ -8,6 +8,7 @@ export interface Checks {
   check: RegExp;
   whitelist?: RegExp;
   ignoredDIDs?: string[];
+  starterPacks?: string[];
 }
 
 export interface Post {
