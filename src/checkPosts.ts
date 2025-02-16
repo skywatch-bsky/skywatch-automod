@@ -61,7 +61,7 @@ export const checkPosts = async (post: Post[]) => {
                 `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
               );
               return;
-            } else if (checkPost?.label === "fundraising-link") {
+            } else if (checkPost?.label === "fundraising-link" || checkPost?.label === "twitter-x") {
               return; // skip fundraising links—hardcoded because of the insane volume by spammers.
             } else if (checkPost!.commentOnly === false) {
               logger.info(
