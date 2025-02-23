@@ -187,6 +187,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:kv2twqy5didztis6w4hvjn5t", //Scot from Troon, Ayrshire
       "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
+      "did:plc:izmavvmqfvm7je4l6aacfwlr", // Last name is troon
     ],
   },
   {
@@ -200,6 +201,9 @@ export const PROFILE_CHECKS: Checks[] = [
       "[🌈🏳️‍🌈]?lgb(✂️tq|, without the)|#KPSS|Adult Human Female",
       "iu",
     ),
+    ignoredDIDs: [
+      "did:plc:bt7e7hihbqebuo3csczl6vcf", // trans woman getting flagged for "Adult Human Female" in profile
+    ],
   },
   {
     label: "follow-farming",
