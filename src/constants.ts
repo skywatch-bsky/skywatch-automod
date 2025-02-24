@@ -80,6 +80,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:iwb2gvhsevkvoj4kyycjudjh", //Not Easily Handled in RegExp
       "did:plc:yrhmtlcffcnpbiw3tx74kwzz", // NC Town Crier cries too much about this shit
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
+      "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
     ],
   },
   {
@@ -108,6 +109,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:iwb2gvhsevkvoj4kyycjudjh", //Not Easily Handled in RegExp
       "did:plc:yrhmtlcffcnpbiw3tx74kwzz", // NC Town Crier cries too much about this shit
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
+      "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
     ],
   },
   {
@@ -253,6 +255,9 @@ export const HANDLE_CHECKS: Checks[] = [
       "[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))[0-9]{2,4}\\.bsky\\.social|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))[0-9]{2,4}[a-z]+\\.bsky\\.social|(didunddkjd|alycemi|alessakiss83|faykatz|layahheilpern.*?|heyyougay69)\\.bsky\\.social",
       "i",
     ),
+    ignoredDIDs: [
+      "did:plc:k6iz3efpj4prqkincrejjkew", // Keeps getting flagged for no discernable reason"
+    ],
   },
   {
     label: "maga-trump",
@@ -275,6 +280,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:shkwqe63emneooxypi6dpw7f", // eratomag.bsky.social
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
       "did:plc:k6iz3efpj4prqkincrejjkew", // Keeps getting flagged for no discernable reason
+      "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
     ],
   },
   {
