@@ -168,6 +168,9 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp("🔻", "iu"),
+    ignoredDIDs: [
+      "did:plc:xbewv2ksis5wk3rts6nvbpfh", // is already labeled, but keeps getting relabeled for some reason
+    ],
   },
   {
     label: "contains-slur",
