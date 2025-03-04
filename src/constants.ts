@@ -2,6 +2,18 @@ import { Checks } from "./types.js";
 
 export const PROFILE_CHECKS: Checks[] = [
   {
+    label: "follow-farming",
+    comment: "Follow farming hashtags found profile",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|#ifollowback|#followback",
+      "i",
+    ),
+  },
+  {
     label: "blue-heart-emoji",
     comment: "💙 found in profile",
     description: true,
@@ -419,7 +431,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: true,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|#ifollowback|#followback",
       "i",
     ),
   },
