@@ -31,6 +31,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ignoredDIDs: [
       "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
       "did:plc:nostcgoz3uy27lco4gqr62io", // Not using hearts for political reasons
+      "did:plc:eh7qf2qmtt4kv54evponoo6n", // Used as part of a large bi-flag
     ],
   },
   {
@@ -170,6 +171,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp("☭", "i"),
+    whitelist: new RegExp("☭⃠ ", "i"),
     ignoredDIDs: [
       "did:plc:stu4unkwieyt5suhyfl6u5e4", //marlo.ooo
     ],
