@@ -220,7 +220,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: true,
     commentOnly: false,
     check: new RegExp(
-      "[🌈🏳️‍🌈]?lgb(✂️tq|, without the)|#KPSS|Adult Human Female",
+      "[🌈🏳️‍🌈]?lgb(✂️tq|, without the)|#KPSS|Adult Human Female|protect women's sports",
       "iu"
     ),
     ignoredDIDs: [
@@ -468,6 +468,16 @@ export const POST_CHECKS: Checks[] = [
     commentOnly: false,
     check: new RegExp(
       "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|\\bPronouns in bio.\\b|Colony of New Twitter|bluecry",
+      "i"
+    ),
+  },
+  {
+    label: "terf-gc",
+    comment: "TERF rhetoric found in post",
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp(
+      "protect women's sports|protect womens sports",
       "i"
     ),
   },
