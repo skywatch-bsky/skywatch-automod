@@ -370,7 +370,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: true,
     check: new RegExp(
-      "\\b(([^.]+\\.)?(allstaredge\\.info|americanactionnews\\.com|thepoliticalinsider\\.com|americadaily\\.com|bles\\.com|dkn\\.tv|theepochtimes\\.(com|de|fr|gr)|genuinenewspaper\\.com|tierrapura\\.org|truthandtradition\\.news|visiontimes\\.com|bigleaguepolitics\\.com|cnsnews\\.com|mrctv\\.org|newsbusters\\.org|flvoicenews\\.com|breitbart\\.com|americasvoice\\.news|gnews\\.org|dailycaller\\.com|thefederalist\\.com|lewrockwell\\.com|loomered\\.com|newsmax\\.com|oann\\.com|patriotpost\\.us|prageru\\.com|truthfeed\\.com|thegatewaypundit\\.com|westernjournal\\.com|townhall\\.com|zerohedge\\.com|dailywire\\.com|washingtontimes\\.com|texasscorecard\\.com|babylonbee\\.com|revolver\\.news|thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|hotair\\.com|pjmedia\\.com|redstate\\.com|thepostmillenial\\.com|rightmemenews\\.com|rebelnews\\.com))",
+      "\\b(([^.]+\\.)?(allstaredge\\.info|americanactionnews\\.com|thepoliticalinsider\\.com|americadaily\\.com|bles\\.com|dkn\\.tv|theepochtimes\\.(com|de|fr|gr)|genuinenewspaper\\.com|tierrapura\\.org|truthandtradition\\.news|visiontimes\\.com|bigleaguepolitics\\.com|cnsnews\\.com|mrctv\\.org|newsbusters\\.org|flvoicenews\\.com|breitbart\\.com|americasvoice\\.news|gnews\\.org|dailycaller\\.com|thefederalist\\.com|lewrockwell\\.com|loomered\\.com|newsmax\\.com|oann\\.com|patriotpost\\.us|prageru\\.com|truthfeed\\.com|thegatewaypundit\\.com|westernjournal\\.com|townhall\\.com|zerohedge\\.com|dailywire\\.com|washingtontimes\\.com|texasscorecard\\.com|babylonbee\\.com|revolver\\.news|thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|hotair\\.com|pjmedia\\.com|redstate\\.com|thepostmillenial\\.com|rightmemenews\\.com|rebelnews\\.com|westernstandard.news))",
       "i"
     ),
   },
@@ -434,8 +434,8 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "follow-farming",
     comment: "Follow farming hashtags found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportOnly: true,
+    commentOnly: false,
     check: new RegExp(
       "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|#ifollowback|#followback|#nodemsunder1k|#FreeDonk|Follow Party",
       "i"
@@ -444,8 +444,8 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "follow-farming",
     comment: "Follow back spam found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportOnly: true,
+    commentOnly: false,
     check: new RegExp(
       "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts|#Strongertogether|#meidasmighty|#resist|#resistance|#Theresistance|#Resisters|#Wearetheresistance|#bluedotredstate|#Blueunderground",
       "iu"
