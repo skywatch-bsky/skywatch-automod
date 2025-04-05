@@ -25,7 +25,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "u"
     ),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙|💙📚",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙|💙📚|💙⚾️|⚾️💙",
       "u"
     ),
     ignoredDIDs: [
@@ -33,6 +33,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:nostcgoz3uy27lco4gqr62io", // Not using hearts for political reasons
       "did:plc:eh7qf2qmtt4kv54evponoo6n", // Used as part of a large bi-flag
       "did:plc:5sxudf4p3inc7zwecaivoiwu", // Bailey is not the type we need to label
+      "did:plc:pb55xcxhvzkpbjxh4blel63z", // KCRoyals Fan
     ],
   },
   {
