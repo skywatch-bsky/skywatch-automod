@@ -203,7 +203,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "i"
     ),
     whitelist: new RegExp(
-      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard",
+      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard|\\bsnigger(s)?",
       "i"
     ),
     ignoredDIDs: [
@@ -212,6 +212,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
       "did:plc:izmavvmqfvm7je4l6aacfwlr", // Last name is troon
+      "did:plc:e2ud5if7wvdhp2kysdwgz2l6", // Uses word "snigger"
     ],
   },
   {
@@ -423,7 +424,7 @@ export const POST_CHECKS: Checks[] = [
       "i"
     ),
     whitelist: new RegExp(
-      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard",
+      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard|\\bsnigger(s)?",
       "i"
     ),
     ignoredDIDs: [
