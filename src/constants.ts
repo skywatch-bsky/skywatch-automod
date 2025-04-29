@@ -9,7 +9,7 @@ export const PROFILE_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|#ifollowback|#followback|#nodemsunder1k|#FreeDonk",
+      "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack",
       "i",
     ),
   },
@@ -440,17 +440,7 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: true,
     commentOnly: false,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|#ifollowback|#followback|#nodemsunder1k|#FreeDonk|Follow Party",
-      "i",
-    ),
-  },
-  {
-    label: "follow-farming",
-    comment: "Follow back spam found in post",
-    reportOnly: true,
-    commentOnly: false,
-    check: new RegExp(
-      "💙Vetted RESISTERS🦋|Follow Back Pack|💙Amazing Blue Accounts|#Strongertogether|#meidasmighty|#resist|#resistance|#Theresistance|#Resisters|#Wearetheresistance|#bluedotredstate|#Blueunderground",
+      "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack",
       "iu",
     ),
   },
