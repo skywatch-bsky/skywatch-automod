@@ -30,7 +30,8 @@ export const checkDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`);
+        return;
       }
     }
 
@@ -53,20 +54,11 @@ export const checkDescription = async (
             );
             return;
           } else {
-            if (ActLabelChk) {
-              if (ActLabelChk.includes(checkProfiles!.label)) {
-                logger.info(
-                  `Label ${checkProfiles!.label} already exists for ${did}`,
-                );
-                return;
-              }
-            } else {
-              createAccountLabel(
-                did,
-                `${checkProfiles!.label}`,
-                `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
-              );
-            }
+            createAccountLabel(
+              did,
+              `${checkProfiles!.label}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+            );
           }
         }
       }
@@ -96,7 +88,8 @@ export const checkDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`);
+        return;
       }
     }
 
@@ -119,20 +112,11 @@ export const checkDisplayName = async (
             );
             return;
           } else {
-            if (ActLabelChk) {
-              if (ActLabelChk.includes(checkProfiles!.label)) {
-                logger.info(
-                  `Label ${checkProfiles!.label} already exists for ${did}`,
-                );
-                return;
-              }
-            } else {
-              createAccountLabel(
-                did,
-                `${checkProfiles!.label}`,
-                `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
-              );
-            }
+            createAccountLabel(
+              did,
+              `${checkProfiles!.label}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+            );
           }
         }
       }
