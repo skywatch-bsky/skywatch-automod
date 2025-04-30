@@ -45,36 +45,23 @@ export const checkPosts = async (post: Post[]) => {
             `${time}: ${checkPost?.comment} at ${atURI} with text "${text}"`,
           );
           return;
-        } else {
-          logger.info(`Labeling post: ${atURI}`);
+        }
 
-          createPostLabel(
-            post[0].atURI,
-            post[0].cid,
-            `${checkPost!.label}`,
-            `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        // Label Posts
+        logger.info(`Labeling post: ${atURI}`);
+        createPostLabel(
+          atURI,
+          cid,
+          `${checkPost!.label}`,
+          `${time}: ${checkPost!.comment} at ${atURI} with text "${text}"`,
+        );
+        if (checkPost!.commentOnly === true) {
+          logger.info(`Comment only: ${did}`);
+          createAccountComment(
+            did,
+            `${time}: ${checkPost?.comment} at ${atURI} with text "${text}"`,
           );
-          if (checkPost!.commentOnly === true) {
-            logger.info(`Comment only: ${post[0].did}`);
-            createAccountComment(
-              post[0].did,
-              `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-            );
-            return;
-          } else if (
-            checkPost?.label === "fundraising-link" ||
-            checkPost?.label === "twitter-x"
-          ) {
-            return; // skip fundraising links—hardcoded because of the insane volume by spammers.
-          } else if (checkPost!.commentOnly === false) {
-            logger.info(
-              `Creating report for post ${post[0].atURI} on ${post[0].did}`,
-            );
-            createAccountReport(
-              post[0].did,
-              ` ${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-            );
-          }
+          return;
         }
       }
     }
