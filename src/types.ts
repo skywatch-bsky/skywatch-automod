@@ -9,6 +9,7 @@ export interface Checks {
   whitelist?: RegExp;
   ignoredDIDs?: string[];
   starterPacks?: string[];
+  knownVectors?: string[];
 }
 
 export interface Post {

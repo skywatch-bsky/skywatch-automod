@@ -360,13 +360,6 @@ export const POST_CHECKS: Checks[] = [
       "i",
     ),
   },
-  /*{
-    label: "twitter-x",
-    comment: "Twitter found in post",
-    reportOnly: false,
-    commentOnly: false,
-    check: new RegExp("(^|\\.|\\b)twitter\\.com|(^|\\.|\\b)x\\.com", "i"),
-  },*/
   {
     label: "fringe-media",
     comment: "Fringe media source found in post",
@@ -470,5 +463,74 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: true,
     commentOnly: false,
     check: new RegExp("protect women's sports|protect womens sports", "i"),
+  },
+];
+
+export const STARTERPACK_CHECKS: Checks[] = [
+  {
+    label: "follow-farming",
+    comment: "Follow farming hashtags found Starter Pack",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|(#)?blue ?crew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack",
+      "i",
+    ),
+    knownVectors: [
+      "did:plc:t4q27bc5gswob4zskgcqi4b6",
+      "did:plc:sw7f3v37hcnxj3424mxg5iqc",
+      "did:plc:ac2ouzqymr32xttu35cszvyh",
+      "did:plc:tvhxyyebhdhkwywry3gxgnl3",
+    ],
+  },
+  {
+    label: "blue-heart-emoji",
+    comment: "💙 found in Starter Pack",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: false,
+    check: new RegExp(
+      "💙🌊|🌊💙|💙{2,}|(?<=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA).*?💙|💙.*?(?=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA)",
+      "u",
+    ),
+    whitelist: new RegExp(
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙|💙📚|💙⚾️|⚾️💙",
+      "u",
+    ),
+    ignoredDIDs: [
+      "did:plc:knoepjiqknech5vqiht4bqu6", // buffer.com
+      "did:plc:nostcgoz3uy27lco4gqr62io", // Not using hearts for political reasons
+      "did:plc:eh7qf2qmtt4kv54evponoo6n", // Used as part of a large bi-flag
+      "did:plc:5sxudf4p3inc7zwecaivoiwu", // Bailey is not the type we need to label
+      "did:plc:pb55xcxhvzkpbjxh4blel63z", // KCRoyals Fan
+    ],
+  },
+  {
+    label: "contains-slur",
+    comment: "Slur found in Starter Pack",
+    description: true,
+    displayName: true,
+    reportOnly: false,
+    commentOnly: true,
+    check: new RegExp(
+      "\\b(retarded|[tŤťṪṫŢţṬṭȚțṰṱṮṯŦŧȾⱦƬƭƮʈT̈ẗᵵƫȶ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ][ÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöȪȫŐőÕõṌṍṎṏȬȭȮȯO͘o͘ȰȱØøǾǿǪǫǬǭŌōṒṓṐṑỎỏȌȍȎȏƠơỚớỜờỠỡỞởỢợỌọỘộO̩o̩Ò̩ò̩Ó̩ó̩ƟɵꝊꝋꝌꝍⱺＯｏ0]{2,}[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ]|[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][gǴǵĞğĜĝǦǧĠġG̃g̃ĢģḠḡǤǥꞠꞡƓɠᶃꬶＧｇqꝖꝗꝘꝙɋʠ]{2,}[e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ]|w[e3]tb[a4]ck|[kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]|nate ?higger)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
+      "i",
+    ),
+    whitelist: new RegExp(
+      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard|\\bsnigger(s)?",
+      "i",
+    ),
+  },
+  {
+    label: "troll",
+    comment: "Trolling found in Starter Pack",
+    description: true,
+    displayName: true,
+    reportOnly: true,
+    commentOnly: false,
+    check: new RegExp("Colony of New Twitter|bluecry", "i"),
   },
 ];

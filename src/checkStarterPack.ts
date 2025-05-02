@@ -1,6 +1,10 @@
-import { PROFILE_CHECKS } from "./constants.js";
+import { PROFILE_CHECKS, STARTERPACK_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import { createAccountLabel } from "./moderation.js";
+import {
+  createAccountLabel,
+  createAccountReport,
+  createPostLabel,
+} from "./moderation.js";
 
 export const checkStarterPack = async (
   did: string,
@@ -36,6 +40,76 @@ export const checkStarterPack = async (
             `${time}: ${checkProfiles!.comment} - Account joined via starter pack at: ${atURI}`,
           );
         }
+      }
+    }
+  });
+};
+
+export const checkNewStarterPack = async (
+  did: string,
+  time: number,
+  atURI: string,
+  listURI: string | undefined,
+  cid: string,
+  packName: string | undefined,
+  description: string | undefined,
+) => {
+  const labels: string[] = Array.from(
+    STARTERPACK_CHECKS,
+    (SPCheck) => SPCheck.label,
+  );
+
+  labels.forEach((label) => {
+    const checkList = PROFILE_CHECKS.find((SPCheck) => SPCheck.label === label);
+
+    if (checkList?.knownVectors?.includes(did)) {
+      createPostLabel(
+        atURI,
+        cid,
+        "follow-farming",
+        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
+      );
+      createPostLabel(
+        atURI,
+        cid,
+        "!warn",
+        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
+      );
+      createAccountReport(
+        did,
+        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
+      );
+    }
+
+    if (description) {
+      if (checkList!.check.test(description)) {
+        logger.info(`Labeling post: ${atURI}`);
+        createPostLabel(
+          atURI,
+          cid,
+          `${checkList!.label}`,
+          `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+        );
+        createAccountReport(
+          did,
+          `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+        );
+      }
+    }
+
+    if (packName) {
+      if (checkList!.check.test(packName)) {
+        logger.info(`Labeling post: ${atURI}`);
+        createPostLabel(
+          atURI,
+          cid,
+          `${checkList!.label}`,
+          `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
+        );
+        createAccountReport(
+          did,
+          `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
+        );
       }
     }
   });
