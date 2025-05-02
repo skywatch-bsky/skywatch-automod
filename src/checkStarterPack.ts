@@ -49,7 +49,6 @@ export const checkNewStarterPack = async (
   did: string,
   time: number,
   atURI: string,
-  listURI: string | undefined,
   cid: string,
   packName: string | undefined,
   description: string | undefined,
@@ -66,13 +65,7 @@ export const checkNewStarterPack = async (
       createPostLabel(
         atURI,
         cid,
-        "follow-farming",
-        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
-      );
-      createPostLabel(
-        atURI,
-        cid,
-        "!warn",
+        `${checkList!.label}`,
         `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
       );
       createAccountReport(
