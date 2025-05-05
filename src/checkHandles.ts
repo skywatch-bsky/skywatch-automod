@@ -3,6 +3,7 @@ import logger from "./logger.js";
 import { Handle } from "./types.js";
 import {
   createAccountReport,
+  createAccountComment,
   createAccountLabel,
   checkAccountLabels,
 } from "./moderation.js";
@@ -30,25 +31,36 @@ export const checkHandle = async (handle: Handle[]) => {
     }
 
     if (checkList!.check.test(handle[0].handle)) {
+      // False-positive checks
       if (checkList?.whitelist) {
-        // False-positive checks
         if (checkList?.whitelist.test(handle[0].handle)) {
           logger.info(`Whitelisted phrase found for: ${handle[0].handle}`);
           return;
         }
       }
 
-      if (checkList?.reportOnly === true) {
+      if (checkList?.toLabel === true) {
+        {
+          createAccountLabel(
+            handle[0].did,
+            `${checkList!.label}`,
+            `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
+          );
+        }
+      }
+
+      if (checkList?.reportAcct === true) {
         logger.info(`Report only: ${handle[0].handle}`);
         createAccountReport(
           handle[0].did,
           `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
         );
-        return;
-      } else {
-        createAccountLabel(
+      }
+
+      if (checkList?.commentAcct === true) {
+        logger.info(`Comment only: ${handle[0].handle}`);
+        createAccountComment(
           handle[0].did,
-          `${checkList!.label}`,
           `${handle[0].time}: ${checkList!.comment} - ${handle[0].handle}`,
         );
       }
