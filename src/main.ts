@@ -134,7 +134,7 @@ jetstream.onCreate(
 );
 
 // Check for profile updates
-/*jetstream.onUpdate(
+jetstream.onUpdate(
   "app.bsky.actor.profile",
   async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
@@ -236,7 +236,7 @@ jetstream.onUpdate(
   },
 );
 
-// Check for handle updates
+/* Check for handle updates
 jetstream.on("identity", async (event: IdentityEvent) => {
   const handle: Handle[] = [
     { did: event.did, handle: event.identity.handle, time: event.time_us },
