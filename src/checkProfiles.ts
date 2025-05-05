@@ -31,7 +31,7 @@ export const checkDescription = async (
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
         logger.info(`Whitelisted DID: ${did}`);
-        return;
+        continue;
       }
     }
 
@@ -41,7 +41,7 @@ export const checkDescription = async (
           if (checkProfiles!.whitelist) {
             if (checkProfiles!.whitelist.test(description)) {
               logger.info(`Whitelisted phrase found.`);
-              return;
+              continue;
             }
           } else {
             logger.info(`${checkProfiles!.label} in description for ${did}`);
@@ -52,7 +52,7 @@ export const checkDescription = async (
               did,
               `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
-            return;
+            continue;
           } else {
             createAccountLabel(
               did,
@@ -89,7 +89,7 @@ export const checkDisplayName = async (
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
         logger.info(`Whitelisted DID: ${did}`);
-        return;
+        continue;
       }
     }
 
@@ -99,7 +99,7 @@ export const checkDisplayName = async (
           if (checkProfiles!.whitelist) {
             if (checkProfiles!.whitelist.test(displayName)) {
               logger.info(`Whitelisted phrase found.`);
-              return;
+              continue;
             }
           } else {
             logger.info(`${checkProfiles!.label} in displayName for ${did}`);
@@ -110,7 +110,7 @@ export const checkDisplayName = async (
               did,
               `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
-            return;
+            continue;
           } else {
             createAccountLabel(
               did,

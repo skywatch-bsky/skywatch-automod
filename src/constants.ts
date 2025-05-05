@@ -357,9 +357,14 @@ export const POST_CHECKS: Checks[] = [
     reportOnly: false,
     commentOnly: false,
     check: new RegExp(
-      "gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.app|cash\\.me|paypal\\.com|paypal\\.me|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org",
+      "gofundme\\.(com|me)|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org",
       "i",
     ),
+    ignoredDIDs: [
+      "did:plc:u2nzeo2hgx3ckofwx6zklvvl",
+      "did:plc:zljlg7cgdfsl7maqvjjpp7i4",
+      "did:plc:l7buhragfpktqopl7wdojhi3",
+    ],
   },
   {
     label: "fringe-media",
