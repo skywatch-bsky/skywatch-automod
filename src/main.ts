@@ -77,6 +77,7 @@ jetstream.on("error", (error) => {
 });
 
 // Check for post updates
+
 jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<"app.bsky.feed.post">) => {
@@ -167,6 +168,7 @@ jetstream.onUpdate(
 );
 
 // Check for profile updates
+
 jetstream.onCreate(
   "app.bsky.actor.profile",
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
@@ -175,16 +177,23 @@ jetstream.onCreate(
         checkDescription(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
         checkDisplayName(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
-        event.commit.record.joinedViaStarterPack?.uri;
+
+        if (event.commit.record.joinedViaStarterPack) {
+          checkStarterPack(
+            event.did,
+            event.time_us,
+            event.commit.record.joinedViaStarterPack.uri,
+          );
+        }
       } else {
         return;
       }
@@ -204,7 +213,6 @@ jetstream.onCreate(
         event.did,
         event.time_us,
         atURI,
-        event.commit.record.list,
         event.commit.cid,
         event.commit.record.name,
         event.commit.record.description,
@@ -225,7 +233,6 @@ jetstream.onUpdate(
         event.did,
         event.time_us,
         atURI,
-        event.commit.record.list,
         event.commit.cid,
         event.commit.record.name,
         event.commit.record.description,
@@ -236,18 +243,12 @@ jetstream.onUpdate(
   },
 );
 
-/* Check for handle updates
+// Check for handle updates
 jetstream.on("identity", async (event: IdentityEvent) => {
-  const handle: Handle[] = [
-    { did: event.did, handle: event.identity.handle, time: event.time_us },
-  ];
-
-  try {
-    const ret = await checkHandle(handle);
-  } catch (error) {
-    logger.error(`Error checking handle: ${error}`);
+  if (event.identity.handle) {
+    checkHandle(event.identity.did, event.identity.handle, event.time_us);
   }
-});*/
+});
 
 const metricsServer = startMetricsServer(METRICS_PORT);
 
