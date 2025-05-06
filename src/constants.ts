@@ -6,8 +6,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Follow farming hashtags found profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack",
       "i",
@@ -18,8 +19,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "💙 found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "💙🌊|🌊💙|💙{2,}|(?<=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA).*?💙|💙.*?(?=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA)",
       "u",
@@ -42,8 +44,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "💘📲 👉👌|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))[0-9]{2,4}\\.bsky\\.social|getallmylinks\\.com/(alexxmini|eviepie|camisosa|cuteyalex|alexiaarmaniii|janeyy|yourbella|urjane|onlylara|lliiyy[0-9]*?|lilyscottx|janesworld|sarahheree[0-9]*?|bellasdream|amberbunnyxx|anatoom|cutexjaney|arianaslavens1sb|faykatz|freeliz)|snipfeed\\.co/(jaxtravis)|hoo\\.be/(marcroseonly)|saweria\\.co/(coltliqekajaya)|linktr\\.ee/(marcroseof|yourfavlegs|diazchat|dianadickzzy)|instagram\\.com/(pixiexbelle|thatsmolpotatoxx|lizz.mlst)|planoly\\.store/(chloeeadams[0-9]*?)|(didunddkjd|alycemi|alessakiss83|faykatz|laurenbabygirl|babyalexis|vortexdancer|aigc-island-?[a-z0-9]+?|maggystn)\\.bsky\\.social|beacons\\.ai/(dianadicksy|dianadickzzy)|(lolizy|liizzyyyy|lizzikissi|janeangel|ALEXsWOrld|CUTeyBELLa|shinyalex).carrd.co|onlyfans\\.com/(aliceeeeeeeeeeeeee|avafiery|kawaiilavina)|bit\\.ly/([a-zA-Z]+?nora[a-zA-Z]+?|[a-zA-Z]+?naomi[a-zA-Z]+?)|t\\.me/(thaliaballard|Goon_mommi)|is\\.gd/((aleksandriaqt|alexithaqt|lexieqt|lara)[0-9]{1,4}|19 💕 your dream girl 🍓 spicy|alexx.crd.co|18 🌷 Your lil dream girl 😇 FREE OF ⤵️|Blessica Blimpton|tiny\\.cc/jessica[0-9]{3,}|tinyurl\\.com/xsarahCM8N)|ishortn\\.ink/(Princes{1,3}Lily{1,3})[0-9]{1,4}|mypages\\.life/(Arianna-try-[0-9]{1,4})|lilyslittlesecret\\.life|lilyspicypage\\.life|lizzyyy\\.short\\.gy|sasoa\\.short\\.gy|linktomy\\.site/onlyfans/georgia|38d.gs/.+|antimagaclub\\.com",
       "i",
@@ -61,8 +64,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Troll language found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "only[ -]?(two|2)[ -]?genders?|genders?[ -]?only[ -]?2|[o0]n[l1]y ?([t7][wvv][o0]|2) ?[g9][e3][n][d][e3][r][s5]?|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|watchpeopledie\\.tv|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lgb✂️tq|rightmemenews\\.com|[nh]ate ?[nh]iggers?|MAGA Colony|Bluecry",
       "i",
@@ -77,8 +81,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "MAGA/Trump support found in displayName.",
     description: false,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "#(MAGA|MAHA)\\b|#Trump ?2024🇺🇸?|((real|president|king|queen)? ?(barron|donald|eric|ivan(k)?a|tiffany|melenia) ?(john|j)? ?((trump)( |, )?(jr)?))|(proud|king)magat?|(trump ?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga [0-9]{2,4}|(trump ?(is)? ?(my|your)? ?(king|maga|train|daddy|army|nation|world))",
       "i",
@@ -106,8 +111,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "MAGA/Trump support found in description.",
     description: true,
     displayName: false,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "#(MAGA|MAHA)\\b|#Trump ?2024🇺🇸?|#Trump20(24|28|32|36|48)|(proud|king)magat?|(trump ?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga [0-9]{2,4}|(trump ?(is)? ?(my|your)? ?(king|maga|train|daddy|army|nation|world))",
       "i",
@@ -135,8 +141,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Elon Musk found in profile",
     description: false,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann",
       "i",
@@ -154,8 +161,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Nazi symbolism found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp("nazigamingclan\.com|卐|\\bHH ?1488\\b", "i"),
     whitelist: new RegExp("shitler", "i"),
     ignoredDIDs: [
@@ -171,8 +179,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Hammer and sickle found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp("☭", "i"),
     whitelist: new RegExp("☭⃠ ", "i"),
     ignoredDIDs: [
@@ -184,8 +193,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "🔻 found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp("🔻", "iu"),
     ignoredDIDs: [
       "did:plc:xbewv2ksis5wk3rts6nvbpfh", // is already labeled, but keeps getting relabeled for some reason
@@ -197,8 +207,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Slur found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "\\b(retarded|[tŤťṪṫŢţṬṭȚțṰṱṮṯŦŧȾⱦƬƭƮʈT̈ẗᵵƫȶ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ][ÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöȪȫŐőÕõṌṍṎṏȬȭȮȯO͘o͘ȰȱØøǾǿǪǫǬǭŌōṒṓṐṑỎỏȌȍȎȏƠơỚớỜờỠỡỞởỢợỌọỘộO̩o̩Ò̩ò̩Ó̩ó̩ƟɵꝊꝋꝌꝍⱺＯｏ0]{2,}[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ]|[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][gǴǵĞğĜĝǦǧĠġG̃g̃ĢģḠḡǤǥꞠꞡƓɠᶃꬶＧｇqꝖꝗꝘꝙɋʠ]{2,}[e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ]|w[e3]tb[a4]ck|[kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]|nate ?higger)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
       "i",
@@ -221,8 +232,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "TERF language found in profile",
     description: true,
     displayName: true,
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: false,
     check: new RegExp(
       "[🌈🏳️‍🌈]?lgb(✂️tq|, without the)|#KPSS|Adult Human Female|protect women's sports",
       "iu",
@@ -236,8 +248,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Joined via follow-farming starter pack",
     description: false,
     displayName: false,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp("", "i"),
     ignoredDIDs: [
       "did:plc:dyf6o6q3rvdrza3xwgpn56gz", // typescript.monster - obvious shitposter
@@ -260,8 +273,9 @@ export const HANDLE_CHECKS: Checks[] = [
   {
     label: "troll",
     comment: "Troll language found in handle",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "l[i4]bt[a4]rd|libs[ -]?of[ -]?(tiktok|x|bsky|bluesky)|(liberal|lib|dem|democrat|snowflake).*?tears?|end.*?woke(ness|ns)|triggering.*libs?|only[ -]?(two|2)[ -]?genders?|genders?[ -]?only[ -]?2|wokemind|woke.*?virus|(crybaby|snowflake)lib(eral)?|woke.*snowflake|(snowflake|scared).*?lib|lib(eral)s?.*?suck|lynch.*?(black|nigger)s?|total[ -]?(nigger|troon|tranny)[ -]?death|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y[ -]?([t7][wvv][o0]|2)[ -]?[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.(party|st|tv)|soybooru\\.com|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|(soy|troon)jak|kamalasu(cks|x)|p[e3]d[o0]hunter|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lgb✂️tq|no such thing as trans|rightmemenews\\.com|[nh]ate ?[nh]iggers?",
       "i",
@@ -273,8 +287,9 @@ export const HANDLE_CHECKS: Checks[] = [
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))[0-9]{2,4}\\.bsky\\.social|[0-9]{1,2}((jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)|(j|f|m|a|s|o|n|d))[0-9]{2,4}[a-z]+\\.bsky\\.social|(didunddkjd|alycemi|alessakiss83|faykatz|layahheilpern.*?|heyyougay69)\\.bsky\\.social",
       "i",
@@ -287,8 +302,9 @@ export const HANDLE_CHECKS: Checks[] = [
   {
     label: "maga-trump",
     comment: "MAGA/Trump support found in handle",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "#(MAGA|MAHA)\\b|#Trump-?2024🇺🇸?|((real|president|king|queen)?-?(barron|donald|eric|ivan(k)?a|tiffany|melenia)-?(john|j)?-?((trump)-?(jr)?))|(proud|king)magat?|(trump-?(20(24|28|32|36|48)|(45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(45|46|47)|ultramagat?|maga-[0-9]{2,4}|(trump-?(is)?-?(my|your)?-?(king|maga|train|daddy|army|nation|world))|jdvance|marjorietaylorgreen|laura-?loomer|\\bloomered\\b|steve-?bannon|nick-?(j)?-?fuentes|mattgaetz|rfk-?jr|project?-2025",
       "i",
@@ -311,8 +327,9 @@ export const HANDLE_CHECKS: Checks[] = [
   {
     label: "elon-musk",
     comment: "Elon Musk found in handle",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann",
       "i",
@@ -321,8 +338,9 @@ export const HANDLE_CHECKS: Checks[] = [
   {
     label: "nazi-symbolism",
     comment: "Nazi symbolism found in handle",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "h[i1]tl[e3]r|goebbels|göring|himmler|\\bführer\\b|reichskanzler|HWABAG|nazigamingclan\.com",
       "i",
@@ -331,8 +349,9 @@ export const HANDLE_CHECKS: Checks[] = [
   {
     label: "contains-slur",
     comment: "Slur found in handle",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "\\b(retarded|[tŤťṪṫŢţṬṭȚțṰṱṮṯŦŧȾⱦƬƭƮʈT̈ẗᵵƫȶ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ][ÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöȪȫŐőÕõṌṍṎṏȬȭȮȯO͘o͘ȰȱØøǾǿǪǫǬǭŌōṒṓṐṑỎỏȌȍȎȏƠơỚớỜờỠỡỞởỢợỌọỘộO̩o̩Ò̩ò̩Ó̩ó̩ƟɵꝊꝋꝌꝍⱺＯｏ0]{2,}[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ]|[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][gǴǵĞğĜĝǦǧĠġG̃g̃ĢģḠḡǤǥꞠꞡƓɠᶃꬶＧｇqꝖꝗꝘꝙɋʠ]{2,}[e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ]|w[e3]tb[a4]ck|[kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]|nate ?higger)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
       "i",
@@ -354,8 +373,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "fundraising-link",
     comment: "Fundraising link found in post",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "gofundme\\.(com|me)|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org",
       "i",
@@ -369,8 +389,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "fringe-media",
     comment: "Fringe media source found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
     check: new RegExp(
       "\\b(([^.]+\\.)?(allstaredge\\.info|americanactionnews\\.com|thepoliticalinsider\\.com|americadaily\\.com|bles\\.com|dkn\\.tv|theepochtimes\\.(com|de|fr|gr)|genuinenewspaper\\.com|tierrapura\\.org|truthandtradition\\.news|visiontimes\\.com|bigleaguepolitics\\.com|cnsnews\\.com|mrctv\\.org|newsbusters\\.org|flvoicenews\\.com|breitbart\\.com|americasvoice\\.news|gnews\\.org|dailycaller\\.com|thefederalist\\.com|lewrockwell\\.com|loomered\\.com|newsmax\\.com|oann\\.com|patriotpost\\.us|prageru\\.com|truthfeed\\.com|thegatewaypundit\\.com|westernjournal\\.com|townhall\\.com|zerohedge\\.com|dailywire\\.com|washingtontimes\\.com|texasscorecard\\.com|babylonbee\\.com|revolver\\.news|thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|theduran\\.com|\\.unz\\.com|hotair\\.com|pjmedia\\.com|redstate\\.com|thepostmillenial\\.com|rightmemenews\\.com|rebelnews\\.com|westernstandard.news|redice\\.tv|tnc\\.news|junonews\\.com|smalldeadanimals\\.com|mercola\\.com|infowars\\.com|prisonplanet\\.com|endgamethemovie\\.com|healthrangerreport\\.com|healthranger\\.com|naturalnews\\.com|mikeadams\\.me|newstarget\\.com|beforeitsnews\\.com|lifesitenews\\.com|buffalochronicle\\.com|dailysceptic\\.org|disclose\\.tv|expose-news\\.com|dolcacatalunya\\.com|FactCheckArmenia\\.com|wnd\\.com|voltairenet\\.org|trunews\\.com|truepundit\\.com|thepeoplesvoice\\.tv|southfront\\.press|russia-insider\\.com|	realrawnews\\.com|projectveritas\\.com|politicususa\\.com|peacedata\\.net|opindia\\.com|news-front\\.info|libertywritersnews\\.com|theleadingreport\\.com|americanactionnews\\.com|AmericanUpdate\\.com|ThePoliticalInsider\\.com|tellmenow\\.com|tmn\\.today|cnsnews\\.com|mrctv\\.org|newsbusters\\.org|100percentfedup\\.com|bigleaguepolitics\\.com|conservativefiringline\\.com|comicallyincorrect\\.com|conservativetribune\\.com|rightwingnews\\.com|rightwing\\.news|tpnn\\.com|westernjournalism\\.com|stonecoldtruth\\.com|gnews\\.org|americasvoice\\.news|1819news\\.com|altoday\\.com|alphanewsmn\\.com|alphanews\\.org|amgreatness\\.com|american-herald\\.com|arizonamonitor\\.com|dangerandplay\\.com|freetelegraph\\.com|granitegrok\\.com|intelligencer\\.today|liveaction\\.org|eviemagazine\\.com|voz\\.us|blazetv\\.com|imprimis\\.hillsdale\\.edu|thepoliticalcesspool\\.org|ilovemyfreedom\\.org|ijr\\.com|KAGfeed\\.com|lifezette\\.com|occupydemocrats\\.com|PatriotPost\\.us|factcheckarmenia\\.com|factcheckingturkey\\.com|voxnews\\.info|banned\\.video|Brighteon\\.com|Gellerreport\\.com|hoggwatch\\.com|nationalfile\\.com|nextnewsnetwork\\.com|returnofkings\\.com|childrenshealthdefense\\.org|collective-evolution\\.com|foodbabe\\.com|geoengineeringwatch\\.org|goop\\.com|greenmedinfo\\.com|stopmandatoryvaccination\\.com|technocracy\\.news|dailysceptic\\.org|unherd\\.com|gbnews\\.com|^(?:.*\\.)?twitchy\\.com|palmerreport\\.com|news-watch\\.co\\.uk|unitynewsnetwork\\.co\\.uk))",
       "i",
@@ -379,8 +400,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "alt-tech",
     comment: "Alt-tech platform found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
     check: new RegExp(
       "givesendgo\\.com|^(?:.*\\.)?rumble\\.com|gab\\.com|truthsocial\\.com|^(?:.*\\.)?gettr\\.com",
       "i",
@@ -389,8 +411,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "disinformation-network",
     comment: "Disinformation network found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
     check: new RegExp(
       "thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|\\.rt\\.com|sputniknews\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|presstv\\.ir|www\\.presstv\\.ir|x\\.com\\/Partisangirl|sputnikglobe\\.com",
       "i",
@@ -399,25 +422,28 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "sports-betting",
     comment: "Sports betting site found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
     check: new RegExp(
       "(^|.*\\.)fanduel\\.com|(^|.*\\.)draftkings\\.com|draftkings\\.com|fanduel\\.com|betmgm\\.com|(^|.*\\.)betmgm\\.com|sportsbook\\.caesars\\.com|(^|.*\\.)caesars\\.com\\/sportsbook-and-casino|(^|.*\\.)espnbet\\.com|espnbet\\.com",
       "i",
     ),
   },
   {
-    label: "gore",
+    label: "!warn",
     comment: "Gore content found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp("watchpeopledie\\.tv", "i"),
   },
   {
     label: "contains-slur",
     comment: "Slur found in post",
-    reportOnly: false,
-    commentOnly: true,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "\\b(retarded|[tŤťṪṫŢţṬṭȚțṰṱṮṯŦŧȾⱦƬƭƮʈT̈ẗᵵƫȶ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ][ÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöȪȫŐőÕõṌṍṎṏȬȭȮȯO͘o͘ȰȱØøǾǿǪǫǬǭŌōṒṓṐṑỎỏȌȍȎȏƠơỚớỜờỠỡỞởỢợỌọỘộO̩o̩Ò̩ò̩Ó̩ó̩ƟɵꝊꝋꝌꝍⱺＯｏ0]{2,}[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ]|[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][gǴǵĞğĜĝǦǧĠġG̃g̃ĢģḠḡǤǥꞠꞡƓɠᶃꬶＧｇqꝖꝗꝘꝙɋʠ]{2,}[e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ]|w[e3]tb[a4]ck|[kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]|nate ?higger)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
       "i",
@@ -436,8 +462,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "follow-farming",
     comment: "Follow farming hashtags found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties",
       "iu",
@@ -446,18 +473,17 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "suspect-inauthentic",
     comment: "Suspected inauthentic behavior found in post",
-    reportOnly: true,
-    commentOnly: false,
-    check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|luxuryhousezone\\.com|3sblog\\.com|38d\\.gs/.+|antimagaclub\\.com",
-      "i",
-    ),
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
+    check: new RegExp("antimagaclub\\.com", "i"),
   },
   {
     label: "troll",
     comment: "Trolling found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: false,
     check: new RegExp(
       "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|\\bPronouns in bio.\\b|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)",
       "i",
@@ -466,8 +492,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "terf-gc",
     comment: "TERF rhetoric found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: false,
     check: new RegExp("protect women's sports|protect womens sports", "i"),
   },
 ];
@@ -478,8 +505,9 @@ export const STARTERPACK_CHECKS: Checks[] = [
     comment: "Follow farming hashtags found Starter Pack",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|bluecrew|Blue Crew",
       "i",
@@ -496,8 +524,9 @@ export const STARTERPACK_CHECKS: Checks[] = [
     comment: "💙 found in Starter Pack",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "💙🌊|🌊💙|💙{2,}|(?<=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA).*?💙|💙.*?(?=#Resist|#Bluecrew|#bluecrew|#donksfriends|#socialistsunday|#nodemunder1k|#nodemunder5k|#nodemunder10k|#megaboost|#donkpack|#donkparty|#bluestormboosts|#fbr|#fbpe|#bluestormfriends|#fbrparty|#fbarmy|#donkconnects|#fbrparty|🚫 MAGA)",
       "u",
@@ -519,8 +548,9 @@ export const STARTERPACK_CHECKS: Checks[] = [
     comment: "Slur found in Starter Pack",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: true,
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
     check: new RegExp(
       "\\b(retarded|[tŤťṪṫŢţṬṭȚțṰṱṮṯŦŧȾⱦƬƭƮʈT̈ẗᵵƫȶ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ][ÓóÒòŎŏÔôỐốỒồỖỗỔổǑǒÖöȪȫŐőÕõṌṍṎṏȬȭȮȯO͘o͘ȰȱØøǾǿǪǫǬǭŌōṒṓṐṑỎỏȌȍȎȏƠơỚớỜờỠỡỞởỢợỌọỘộO̩o̩Ò̩ò̩Ó̩ó̩ƟɵꝊꝋꝌꝍⱺＯｏ0]{2,}[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ]|[nŃńǸǹŇňÑñṄṅŅņṆṇṊṋṈṉN̈n̈ƝɲŊŋꞐꞑꞤꞥᵰᶇɳȵꬻꬼИиПпＮｎ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][gǴǵĞğĜĝǦǧĠġG̃g̃ĢģḠḡǤǥꞠꞡƓɠᶃꬶＧｇqꝖꝗꝘꝙɋʠ]{2,}[e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][rŔŕŘřṘṙŖŗȐȑȒȓṚṛṜṝṞṟR̃r̃ɌɍꞦꞧⱤɽᵲᶉꭉ]|w[e3]tb[a4]ck|[kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][iÍíi̇́Ììi̇̀ĬĭÎîǏǐÏïḮḯĨĩi̇̃ĮįĮ́į̇́Į̃į̇̃ĪīĪ̀ī̀ỈỉȈȉI̋i̋ȊȋỊịꞼꞽḬḭƗɨᶖİiIıＩｉ1lĺľļḷḹl̃ḽḻłŀƚꝉⱡɫɬꞎꬷꬸꬹᶅɭȴＬｌ][kḰḱǨǩĶķḲḳḴḵƘƙⱩⱪᶄꝀꝁꝂꝃꝄꝅꞢꞣ][e3ЄєЕеÉéÈèĔĕÊêẾếỀềỄễỂểÊ̄ê̄Ê̌ê̌ĚěËëẼẽĖėĖ́ė́Ė̃ė̃ȨȩḜḝĘęĘ́ę́Ę̃ę̃ĒēḖḗḔḕẺẻȄȅE̋e̋ȆȇẸẹỆệḘḙḚḛɆɇE̩e̩È̩è̩É̩é̩ᶒⱸꬴꬳＥｅ][sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]|nate ?higger)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
       "i",
@@ -535,8 +565,9 @@ export const STARTERPACK_CHECKS: Checks[] = [
     comment: "Trolling found in Starter Pack",
     description: true,
     displayName: true,
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp("Colony of New Twitter|bluecry", "i"),
   },
 ];
