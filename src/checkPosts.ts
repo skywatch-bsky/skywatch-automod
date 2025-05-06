@@ -14,9 +14,6 @@ export const checkPosts = async (post: Post[]) => {
     (postCheck) => postCheck.label,
   );
 
-  // Destructure Post object
-  const { did, time, atURI, text, cid } = post[0];
-
   // iterate through the labels
   labels.forEach((label) => {
     const checkPost = POST_CHECKS.find(
@@ -31,6 +28,7 @@ export const checkPosts = async (post: Post[]) => {
     }
 
     if (checkPost!.check.test(post[0].text)) {
+      // Check if post is whitelisted
       if (checkPost?.whitelist) {
         if (checkPost?.whitelist.test(post[0].text)) {
           logger.info(`Whitelisted phrase found"`);
@@ -38,18 +36,7 @@ export const checkPosts = async (post: Post[]) => {
         }
       }
 
-      if (checkPost!.reportOnly === true) {
-        logger.info(`${checkPost!.label} in post at ${post[0].atURI}`);
-        logger.info(`Report only: ${post[0].did}`);
-        createAccountReport(
-          did,
-          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-        );
-        return;
-      }
-
-      // Label Posts
-      if (checkPost!.reportOnly === false) {
+      if (checkPost!.toLabel === true) {
         logger.info(`Labeling post: ${post[0].atURI} for ${checkPost!.label}`);
         createPostLabel(
           post[0].atURI,
@@ -57,14 +44,23 @@ export const checkPosts = async (post: Post[]) => {
           `${checkPost!.label}`,
           `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
-        if (checkPost!.commentOnly === true) {
-          logger.info(`Comment only: ${did}`);
-          createAccountComment(
-            post[0].did,
-            `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-          );
-          return;
-        }
+      }
+
+      if (checkPost!.reportAcct === true) {
+        logger.info(`${checkPost!.label} in post at ${post[0].atURI}`);
+        logger.info(`Report only: ${post[0].did}`);
+        createAccountReport(
+          post[0].did,
+          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        );
+      }
+
+      if (checkPost!.commentAcct === true) {
+        logger.info(`Comment on account: ${post[0].did}`);
+        createAccountComment(
+          post[0].did,
+          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        );
       }
     }
   });
