@@ -225,6 +225,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
       "did:plc:izmavvmqfvm7je4l6aacfwlr", // Last name is troon
       "did:plc:e2ud5if7wvdhp2kysdwgz2l6", // Uses word "snigger"
+      "did:plc:66hjw7i6p2ay4z75n5cj4siy", // Troon Vineyards
     ],
   },
   {
@@ -365,6 +366,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:kv2twqy5didztis6w4hvjn5t", //Scot from Troon, Ayrshire
       "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
+      "did:plc:66hjw7i6p2ay4z75n5cj4siy", // Troon Vineyards
     ],
   },
 ];
@@ -457,6 +459,7 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:kv2twqy5didztis6w4hvjn5t", //Scot from Troon, Ayrshire
       "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
+      "did:plc:66hjw7i6p2ay4z75n5cj4siy", //Troon Vineyards
     ],
   },
   {
