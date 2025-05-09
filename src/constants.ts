@@ -379,7 +379,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "gofundme\\.(com|me)|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org",
+      "gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org",
       "i",
     ),
     ignoredDIDs: [
