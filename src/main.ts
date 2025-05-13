@@ -18,7 +18,7 @@ import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
-import { checkStarterPack } from "./checkStarterPack.js";
+import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 
 let cursor = 0;
@@ -143,14 +143,14 @@ jetstream.onUpdate(
         checkDescription(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
         checkDisplayName(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
       }
 
@@ -168,6 +168,7 @@ jetstream.onUpdate(
 );
 
 // Check for profile updates
+
 jetstream.onCreate(
   "app.bsky.actor.profile",
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
@@ -176,16 +177,23 @@ jetstream.onCreate(
         checkDescription(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
         checkDisplayName(
           event.did,
           event.time_us,
-          event.commit.record.displayName,
-          event.commit.record.description,
+          event.commit.record.displayName as string,
+          event.commit.record.description as string,
         );
-        event.commit.record.joinedViaStarterPack?.uri;
+
+        if (event.commit.record.joinedViaStarterPack) {
+          checkStarterPack(
+            event.did,
+            event.time_us,
+            event.commit.record.joinedViaStarterPack.uri,
+          );
+        }
       } else {
         return;
       }
@@ -195,16 +203,50 @@ jetstream.onCreate(
   },
 );
 
+jetstream.onCreate(
+  "app.bsky.graph.starterpack",
+  async (event: CommitCreateEvent<"app.bsky.graph.starterpack">) => {
+    try {
+      const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
+
+      checkNewStarterPack(
+        event.did,
+        event.time_us,
+        atURI,
+        event.commit.cid,
+        event.commit.record.name,
+        event.commit.record.description,
+      );
+    } catch (error) {
+      logger.error(`Error checking starterpack:  ${error}`);
+    }
+  },
+);
+
+jetstream.onUpdate(
+  "app.bsky.graph.starterpack",
+  async (event: CommitUpdateEvent<"app.bsky.graph.starterpack">) => {
+    try {
+      const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
+
+      checkNewStarterPack(
+        event.did,
+        event.time_us,
+        atURI,
+        event.commit.cid,
+        event.commit.record.name,
+        event.commit.record.description,
+      );
+    } catch (error) {
+      logger.error(`Error checking starterpack:  ${error}`);
+    }
+  },
+);
+
 // Check for handle updates
 jetstream.on("identity", async (event: IdentityEvent) => {
-  const handle: Handle[] = [
-    { did: event.did, handle: event.identity.handle, time: event.time_us },
-  ];
-
-  try {
-    const ret = await checkHandle(handle);
-  } catch (error) {
-    logger.error(`Error checking handle: ${error}`);
+  if (event.identity.handle) {
+    checkHandle(event.identity.did, event.identity.handle, event.time_us);
   }
 });
 

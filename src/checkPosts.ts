@@ -14,9 +14,6 @@ export const checkPosts = async (post: Post[]) => {
     (postCheck) => postCheck.label,
   );
 
-  // Destructure Post object
-  const { did, time, atURI, text, cid } = post[0];
-
   // iterate through the labels
   labels.forEach((label) => {
     const checkPost = POST_CHECKS.find(
@@ -24,56 +21,46 @@ export const checkPosts = async (post: Post[]) => {
     );
 
     if (checkPost?.ignoredDIDs) {
-      if (checkPost.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+      if (checkPost?.ignoredDIDs.includes(post[0].did)) {
+        logger.info(`Whitelisted DID: ${post[0].did}`);
+        return;
       }
-    } else {
-      if (checkPost!.check.test(text)) {
-        if (checkPost?.whitelist) {
-          if (checkPost?.whitelist.test(text)) {
-            logger.info(`Whitelisted phrase found"`);
-            return;
-          }
-        } else {
-          logger.info(`${checkPost!.label} in post at ${atURI}`);
+    }
 
-          if (checkPost!.reportOnly === true) {
-            logger.info(`Report only: ${did}`);
-            createAccountReport(
-              did,
-              `${time}: ${checkPost?.comment} at ${atURI} with text "${text}"`,
-            );
-            return;
-          } else {
-            logger.info(`Labeling post: ${atURI}`);
-
-            createPostLabel(
-              post[0].atURI,
-              post[0].cid,
-              `${checkPost!.label}`,
-              `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-            );
-
-            if (checkPost!.commentOnly === true) {
-              logger.info(`Comment only: ${post[0].did}`);
-              createAccountComment(
-                post[0].did,
-                `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-              );
-              return;
-            } else if (checkPost?.label === "fundraising-link") {
-              return; // skip fundraising links—hardcoded because of the insane volume by spammers.
-            } else if (checkPost!.commentOnly === false) {
-              logger.info(
-                `Creating report for post ${post[0].atURI} on ${post[0].did}`,
-              );
-              createAccountReport(
-                post[0].did,
-                ` ${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-              );
-            }
-          }
+    if (checkPost!.check.test(post[0].text)) {
+      // Check if post is whitelisted
+      if (checkPost?.whitelist) {
+        if (checkPost?.whitelist.test(post[0].text)) {
+          logger.info(`Whitelisted phrase found"`);
+          return;
         }
+      }
+
+      if (checkPost!.toLabel === true) {
+        logger.info(`Labeling post: ${post[0].atURI} for ${checkPost!.label}`);
+        createPostLabel(
+          post[0].atURI,
+          post[0].cid,
+          `${checkPost!.label}`,
+          `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        );
+      }
+
+      if (checkPost!.reportAcct === true) {
+        logger.info(`${checkPost!.label} in post at ${post[0].atURI}`);
+        logger.info(`Report only: ${post[0].did}`);
+        createAccountReport(
+          post[0].did,
+          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        );
+      }
+
+      if (checkPost!.commentAcct === true) {
+        logger.info(`Comment on account: ${post[0].did}`);
+        createAccountComment(
+          post[0].did,
+          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        );
       }
     }
   });

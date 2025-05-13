@@ -12,11 +12,12 @@ export const HANDLE_CHECKS: Checks[] = [
     comment: "Example found in handle",
     description: true, // Optional, only used in handle checks
     displayName: true, // Optional, only used in handle checks
-    reportOnly: false, // it true, the check will only report the content against the account, not label.
-    commentOnly: false, // Poorly named, if true, will generate an account level comment from flagged posts, rather than a report. Intended for use when reportOnly is false, and on posts only where the flag may generate a high volume of reports..
+    reportAcct: false, // it true, the check will only report the content against the account, not label.
+    commentOnly: false, // if true, will generate an account level comment from flagged posts, rather than a report. Intended for use when reportAcct is false, and on posts only where the flag may generate a high volume of reports.
+    toLabel: true, // Should the handle in question be labeled if check evaluates to true.
     check: new RegExp("example", "i"), // Regular expression to match against the content
     whitelist: new RegExp("example.com", "i"), // Optional, regular expression to whitelist content
-    ignoredDIDs: ["did:plc:example"] // Optional, array of DIDs to ignore if they match the check. Useful for folks who reclaim words.
+    ignoredDIDs: ["did:plc:example"] // Optional, array of DIDs to ignore if they match the check. Useful for folks who reclaim words or accounts which may be false positives.
   }
 ];
 ```
