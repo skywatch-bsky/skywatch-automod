@@ -8,8 +8,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Pro-skub language found in profile",
     description: true,
     displayName: true,
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "(only|pro)[ -]skub|we love skub|skub is (good|god|king)|\\bskub\\b",
       "i",
@@ -24,8 +25,9 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "skub-adjacent language found in profile",
     description: true,
     displayName: true,
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "skubbe",
       "i",
@@ -37,8 +39,9 @@ export const HANDLE_CHECKS: Checks[] = [
   {
     label: "skub",
     comment: "Pro-skub language found in handle",
-    reportOnly: false,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
     check: new RegExp(
       "(only|pro)[-]skub|we love skub|skub[-]?is[-]?(good|god|king)|skub\\.(pro|com|org)",
       "i",
@@ -50,8 +53,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "pro-skub-link",
     comment: "Pro Skub link found in post",
-    reportOnly: true,
-    commentOnly: false,
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
     check: new RegExp(
       "skubbe\\.com|skub\\.(me|pro|tech)",
       "i",
