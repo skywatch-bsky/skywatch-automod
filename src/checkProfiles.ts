@@ -5,6 +5,7 @@ import {
   createAccountReport,
   createAccountLabel,
   checkAccountLabels,
+  createAccountComment,
 } from "./moderation.js";
 import { limit } from "./limits.js";
 
@@ -14,8 +15,6 @@ export const checkDescription = async (
   displayName: string,
   description: string,
 ) => {
-  const ActLabelChk = await limit(() => checkAccountLabels(did));
-  // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
     (profileCheck) => profileCheck.label,
@@ -30,43 +29,44 @@ export const checkDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`);
+        return;
       }
     }
 
     if (description) {
       if (checkProfiles?.description === true) {
         if (checkProfiles!.check.test(description)) {
+          // Check if description is whitelisted
           if (checkProfiles!.whitelist) {
             if (checkProfiles!.whitelist.test(description)) {
               logger.info(`Whitelisted phrase found.`);
               return;
             }
-          } else {
-            logger.info(`${checkProfiles!.label} in description for ${did}`);
           }
 
-          if (checkProfiles!.reportOnly === true) {
+          if (checkProfiles!.toLabel === true) {
+            logger.info(`Creating label for ${did}`);
+            createAccountLabel(
+              did,
+              `${checkProfiles!.label}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+            );
+          }
+
+          if (checkProfiles!.reportAcct === true) {
             createAccountReport(
               did,
               `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
-            return;
-          } else {
-            if (ActLabelChk) {
-              if (ActLabelChk.includes(checkProfiles!.label)) {
-                logger.info(
-                  `Label ${checkProfiles!.label} already exists for ${did}`,
-                );
-                return;
-              }
-            } else {
-              createAccountLabel(
-                did,
-                `${checkProfiles!.label}`,
-                `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
-              );
-            }
+          }
+
+          if (checkProfiles!.commentAcct === true) {
+            logger.info(`Commenting on account for ${did}`);
+            createAccountComment(
+              did,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+            );
           }
         }
       }
@@ -80,7 +80,6 @@ export const checkDisplayName = async (
   displayName: string,
   description: string,
 ) => {
-  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
@@ -96,43 +95,42 @@ export const checkDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`);
+        return;
       }
     }
 
     if (displayName) {
       if (checkProfiles?.displayName === true) {
         if (checkProfiles!.check.test(displayName)) {
+          // Check if displayName is whitelisted
           if (checkProfiles!.whitelist) {
             if (checkProfiles!.whitelist.test(displayName)) {
               logger.info(`Whitelisted phrase found.`);
               return;
             }
-          } else {
-            logger.info(`${checkProfiles!.label} in displayName for ${did}`);
           }
 
-          if (checkProfiles!.reportOnly === true) {
+          if (checkProfiles!.toLabel === true) {
+            createAccountLabel(
+              did,
+              `${checkProfiles!.label}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+            );
+          }
+
+          if (checkProfiles!.reportAcct === true) {
             createAccountReport(
               did,
               `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
-            return;
-          } else {
-            if (ActLabelChk) {
-              if (ActLabelChk.includes(checkProfiles!.label)) {
-                logger.info(
-                  `Label ${checkProfiles!.label} already exists for ${did}`,
-                );
-                return;
-              }
-            } else {
-              createAccountLabel(
-                did,
-                `${checkProfiles!.label}`,
-                `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
-              );
-            }
+          }
+
+          if (checkProfiles!.commentAcct === true) {
+            createAccountComment(
+              did,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+            );
           }
         }
       }
