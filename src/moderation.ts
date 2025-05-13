@@ -86,6 +86,46 @@ export const createAccountLabel = async (
   });
 };
 
+export const createPostReport = async (
+  uri: string,
+  cid: string,
+  comment: string,
+) => {
+  await isLoggedIn;
+  await limit(async () => {
+    try {
+      return agent.tools.ozone.moderation.emitEvent(
+        {
+          event: {
+            $type: "tools.ozone.moderation.defs#modEventReport",
+            comment: comment,
+            reportType: "com.atproto.moderation.defs#reasonOther",
+          },
+          // specify the labeled post by strongRef
+          subject: {
+            $type: "com.atproto.repo.strongRef",
+            uri: uri,
+            cid: cid,
+          },
+          // put in the rest of the metadata
+          createdBy: `${agent.did}`,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          encoding: "application/json",
+          headers: {
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  });
+};
+
 export const createAccountComment = async (did: string, comment: string) => {
   await isLoggedIn;
   await limit(async () => {
