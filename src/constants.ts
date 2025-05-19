@@ -390,6 +390,7 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:u2nzeo2hgx3ckofwx6zklvvl",
       "did:plc:zljlg7cgdfsl7maqvjjpp7i4",
       "did:plc:l7buhragfpktqopl7wdojhi3",
+      "did:plc:5zdbkilvq75qym4t3fa5tsgk",
     ],
   },
   {
