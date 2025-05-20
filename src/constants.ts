@@ -27,7 +27,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "u",
     ),
     whitelist: new RegExp(
-      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙|💙📚|💙⚾️|⚾️💙",
+      "(💖|💗|🩷)💜💙|💚💙|💙🤍🕊|☂💙|🩵🩷🤍🩷🩵|💙🩷🤍🩷💙|💙💜(💖|💗|🩷|❤️)|(🤍)?💛💙|💙💛|💙📚|💙⚾️|⚾️💙",
       "u",
     ),
     ignoredDIDs: [
@@ -383,7 +383,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org",
+      "\\b(([^.]+\\.)?(gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org))",
       "i",
     ),
     ignoredDIDs: [
@@ -422,7 +422,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|\\.rt\\.com|sputniknews\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|presstv\\.ir|www\\.presstv\\.ir|x\\.com\\/Partisangirl|sputnikglobe\\.com",
+      "\\b(([^.]+\\.)?(thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|\\.rt\\.com|sputniknews\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|presstv\\.ir|www\\.presstv\\.ir|x\\.com\\/Partisangirl|sputnikglobe\\.com))",
       "i",
     ),
   },
@@ -456,7 +456,7 @@ export const POST_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp(
-      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard|\\bsnigger(s)?",
+      "Troon,? (Ayrshire|Scotland|🏴󠁧󠁢󠁳󠁣󠁴󠁿)|(?<=Royal )Troon|Troon Vineyard|\\bsnigger(s)?|Operation(-| )Wetback",
       "i",
     ),
     ignoredDIDs: [
@@ -465,6 +465,7 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", //Troon Vineyards
+      "did:plc:lsmcyezwzoxq46gw2fj3w7fr", // Scotish Government
     ],
   },
   {
