@@ -413,7 +413,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "\\b(([^.]+\\.)?(givesendgo\\.com|rumble\\.com|gab\\.com|truthsocial\\.com|gettr\\.com)",
+      "\\b(([^.]+\\.)?(givesendgo\\.com|rumble\\.com|gab\\.com|truthsocial\\.com|gettr\\.com))",
       "i"
     ),
   },
