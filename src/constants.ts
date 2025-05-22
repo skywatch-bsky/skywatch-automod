@@ -413,7 +413,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "givesendgo\\.com|^(?:.*\\.)?rumble\\.com|gab\\.com|truthsocial\\.com|^(?:.*\\.)?gettr\\.com",
+      "\\b(([^.]+\\.)?(givesendgo\\.com|rumble\\.com|gab\\.com|truthsocial\\.com|gettr\\.com)",
       "i"
     ),
   },
@@ -469,6 +469,17 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", //Troon Vineyards
       "did:plc:lsmcyezwzoxq46gw2fj3w7fr", // Scotish Government
     ],
+  },
+  {
+    label: "monitor-slur",
+    comment: "Slur found in post",
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: false,
+    check: new RegExp(
+      "\\b(ZOG|kike|zio|towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
+      "i"
+    )
   },
   {
     label: "follow-farming",
