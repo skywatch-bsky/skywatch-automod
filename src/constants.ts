@@ -228,6 +228,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:izmavvmqfvm7je4l6aacfwlr", // Last name is troon
       "did:plc:e2ud5if7wvdhp2kysdwgz2l6", // Uses word "snigger"
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", // Troon Vineyards
+      "did:plc:nbyonvtuc7l5onssae2as3ns", // Uses the word troon
     ],
   },
   {
