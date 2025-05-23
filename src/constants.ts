@@ -503,6 +503,7 @@ export const POST_CHECKS: Checks[] = [
       "\\b(([^.]+\\.)?(antimagaclub\\.com|pleniiixa\\.blogspot\\.com))",
       "i"
     ),
+    ignoredDIDs: ["did:plc:m6k7ju4wcwnwa67mnhgjc2vc"], // Labeled already but hasn't been taken down
   },
   {
     label: "troll",
