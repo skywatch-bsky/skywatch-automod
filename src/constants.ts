@@ -398,11 +398,15 @@ export const POST_CHECKS: Checks[] = [
   },
   {
     label: "fundraising-link",
-    comment: "Fundraising link found in post",
-    reportAcct: true,
+    comment: "Suspected fundraising link found in post. Please review",
+    reportAcct: false,
     commentAcct: false,
+    reportPost: true,
     toLabel: false,
-    check: new RegExp("help.*family.*tinyurl.com", "i"),
+    check: new RegExp(
+      "help.*family.*tinyurl.com|family.*help.*tinyurl.com",
+      "i",
+    ),
     ignoredDIDs: [
       "did:plc:u2nzeo2hgx3ckofwx6zklvvl",
       "did:plc:zljlg7cgdfsl7maqvjjpp7i4",

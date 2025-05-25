@@ -5,6 +5,7 @@ import {
   createPostLabel,
   createAccountReport,
   createAccountComment,
+  createPostReport,
 } from "./moderation.js";
 
 export const checkPosts = async (post: Post[]) => {
@@ -42,6 +43,18 @@ export const checkPosts = async (post: Post[]) => {
           post[0].atURI,
           post[0].cid,
           `${checkPost!.label}`,
+          `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+        );
+      }
+
+      if (checkPost!.reportPost === true) {
+        logger.info(
+          `Suspected ${checkPost!.label} in post at ${post[0].atURI}`,
+        );
+        logger.info(`Reporting: ${post[0].atURI}`);
+        createPostReport(
+          post[0].atURI,
+          post[0].cid,
           `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
