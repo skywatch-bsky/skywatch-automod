@@ -397,7 +397,7 @@ export const POST_CHECKS: Checks[] = [
     ],
   },
   {
-    label: "fundraising-link",
+    label: "fundraising-link-check",
     comment: "Suspected fundraising link found in post. Please review",
     reportAcct: false,
     commentAcct: false,
