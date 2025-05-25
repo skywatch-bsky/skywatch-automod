@@ -31,3 +31,17 @@ export function normalizeUnicode(text: string): string {
   // Final NFKC normalization to handle any remaining special characters
   return withoutMath.normalize("NFKC");
 }
+
+export async function getFinalUrl(url: string): Promise<string> {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+      redirect: "follow", // This will follow redirects automatically
+    });
+
+    return response.url; // This will be the final URL after redirects
+  } catch (error) {
+    console.error("Error fetching URL:", error);
+    throw error;
+  }
+}

@@ -7,6 +7,8 @@ import {
   createAccountComment,
   createPostReport,
 } from "./moderation.js";
+import { LINK_SHORTENER } from "./constants.js";
+import { getFinalUrl } from "./utils.js";
 
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
@@ -14,6 +16,26 @@ export const checkPosts = async (post: Post[]) => {
     POST_CHECKS,
     (postCheck) => postCheck.label,
   );
+
+  const urlRegex = /https?:\/\/[^\s]+/g;
+
+  // Check for link shorteners
+  if (LINK_SHORTENER.test(post[0].text)) {
+    try {
+      const url = post[0].text.match(urlRegex);
+      if (url) {
+        const finalUrl = await getFinalUrl(url[0]);
+        if (finalUrl) {
+          const originalUrl = post[0].text;
+          post[0].text = finalUrl;
+          logger.info(`Shortened URL resolved: ${originalUrl} -> ${finalUrl}`);
+        }
+      }
+    } catch (error) {
+      logger.error(`Failed to resolve shortened URL: ${post[0].text}`, error);
+      // Keep the original URL if resolution fails
+    }
+  }
 
   // iterate through the labels
   labels.forEach((label) => {

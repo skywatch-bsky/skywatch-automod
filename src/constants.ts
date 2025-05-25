@@ -1,5 +1,10 @@
 import { Checks } from "./types.js";
 
+export const LINK_SHORTENER = new RegExp(
+  "\\b(([^.]+\\.)?(tinyurl.com|bit.ly|goo.gl|g.co|ow.ly))",
+  "i",
+);
+
 export const PROFILE_CHECKS: Checks[] = [
   {
     label: "follow-farming",
