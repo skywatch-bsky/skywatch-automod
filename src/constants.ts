@@ -397,6 +397,20 @@ export const POST_CHECKS: Checks[] = [
     ],
   },
   {
+    label: "fundraising-link",
+    comment: "Fundraising link found in post",
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: false,
+    check: new RegExp("help.*family.*tinyurl.com", "i"),
+    ignoredDIDs: [
+      "did:plc:u2nzeo2hgx3ckofwx6zklvvl",
+      "did:plc:zljlg7cgdfsl7maqvjjpp7i4",
+      "did:plc:l7buhragfpktqopl7wdojhi3",
+      "did:plc:5zdbkilvq75qym4t3fa5tsgk",
+    ],
+  },
+  {
     label: "fringe-media",
     comment: "Fringe media source found in post",
     reportAcct: false,
