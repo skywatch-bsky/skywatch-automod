@@ -535,7 +535,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Fentanyl|Floyd.*convicted|All lives matter",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|[Ff]entanyl|Floyd.*convicted|All lives matter|[Gg]eorge.*[Ff]entanyl",
       "i",
     ),
   },
