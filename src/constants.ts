@@ -1,7 +1,7 @@
 import { Checks } from "./types.js";
 
 export const LINK_SHORTENER = new RegExp(
-  "\\b(([^.]+\\.)?(tinyurl.com|bit.ly|goo.gl|g.co|ow.ly))",
+  "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly|goo\\.gl|g\\.co|ow\\.ly|shorturl\\.at)",
   "i",
 );
 
@@ -15,7 +15,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "blueskyfollower\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#UnitedBlueCrew",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#UnitedBlueCrew",
       "i",
     ),
   },
@@ -437,7 +437,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "\\b(([^.]+\\.)?(givesendgo\\.com|rumble\\.com|gab\\.com|truthsocial\\.com|gettr\\.com))",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:givesendgo\\.com|rumble\\.com|gab\\.com|truthsocial\\.com|gettr\\.com)",
       "i",
     ),
   },
@@ -448,7 +448,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "\\b(([^.]+\\.)?(thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|\\.rt\\.com|sputniknews\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|presstv\\.ir|www\\.presstv\\.ir|x\\.com\\/Partisangirl|sputnikglobe\\.com))",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:thegrayzone\\.com|grayzoneproject\\.com|mintpressnews\\.com|21stcenturywire\\.com|www\\.globalresearch\\.ca|globalresearch\\.ca|journal-neo\\.su|theWallWillFall\\.org|beeley\\.substack\\.com|\\.rt\\.com|sputniknews\\.com|zerohedge\\.com|theduran\\.com|\\.unz\\.com|presstv\\.ir|www\\.presstv\\.ir|x\\.com\\/Partisangirl|sputnikglobe\\.com)",
       "i",
     ),
   },
@@ -459,7 +459,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "(^|.*\\.)fanduel\\.com|(^|.*\\.)draftkings\\.com|draftkings\\.com|fanduel\\.com|betmgm\\.com|(^|.*\\.)betmgm\\.com|sportsbook\\.caesars\\.com|(^|.*\\.)caesars\\.com\\/sportsbook-and-casino|(^|.*\\.)espnbet\\.com|espnbet\\.com",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:fanduel\\.com|draftkings\\.com|draftkings\\.com|fanduel\\.com|betmgm\\.com|betmgm\\.com|sportsbook\\.caesars\\.com|caesars\\.com\\/sportsbook-and-casino|espnbet\\.com|espnbet\\.com)",
       "i",
     ),
   },
@@ -469,7 +469,10 @@ export const POST_CHECKS: Checks[] = [
     reportAcct: true,
     commentAcct: false,
     toLabel: true,
-    check: new RegExp("watchpeopledie\\.tv", "i"),
+    check: new RegExp(
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:watchpeopledie\\.tv)\\b",
+      "i",
+    ),
   },
   {
     label: "contains-slur",
@@ -501,7 +504,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "\\b(ZOG|kike|zio|towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
+      "\\b(?:ZOG|kike|zio|towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
       "i",
     ),
   },
@@ -523,7 +526,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "\\b(([^.]+\\.)?(antimagaclub\\.com|pleniiixa\\.blogspot\\.com))",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:antimagaclub\\.com|pleniiixa\\.blogspot\\.com)",
       "i",
     ),
     ignoredDIDs: ["did:plc:m6k7ju4wcwnwa67mnhgjc2vc"], // Labeled already but hasn't been taken down
@@ -535,7 +538,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|[Ff]entanyl|Floyd.*convicted|All lives matter|[Gg]eorge.*[Ff]entanyl",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|All lives matter|[Gg]eorge.*[Ff]entanyl",
       "i",
     ),
   },
