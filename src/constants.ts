@@ -73,7 +73,10 @@ export const PROFILE_CHECKS: Checks[] = [
     reportAcct: true,
     commentAcct: false,
     toLabel: false,
-    check: new RegExp("Verified by (Molly (Shah|Shane)|@mommunism)", "i"),
+    check: new RegExp(
+      "Verified by (Molly (Shah|Shane)|@mommunism)|Verified by Molly",
+      "i",
+    ),
   },
   {
     label: "troll",
