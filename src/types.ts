@@ -5,6 +5,7 @@ export interface Checks {
   displayName?: boolean;
   reportAcct: boolean;
   commentAcct: boolean;
+  reportPost?: boolean;
   toLabel: boolean;
   check: RegExp;
   whitelist?: RegExp;
