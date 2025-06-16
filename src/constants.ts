@@ -521,6 +521,7 @@ export const POST_CHECKS: Checks[] = [
       "(\\s(?:ZOG|kike|zio|towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|(?:-zio|zio-))",
       "i",
     ),
+    whitelist: new RegExp("zionist|zionism", "i"),
   },
   {
     label: "follow-farming",
