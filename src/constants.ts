@@ -533,7 +533,6 @@ export const POST_CHECKS: Checks[] = [
       "(\\b(?:towelhead)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
       "i",
     ),
-    whitelist: new RegExp("zionist|zionism", "i"),
   },
   {
     label: "follow-farming",
