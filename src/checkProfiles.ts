@@ -5,8 +5,8 @@ import {
   createAccountLabel,
   createAccountComment,
 } from "./moderation.js";
-import { limit } from "./limits.js";
 import { getLanguage } from "./utils.js";
+import { langs } from "./constants.js";
 
 export const checkDescription = async (
   did: string,
@@ -16,7 +16,7 @@ export const checkDescription = async (
 ) => {
   const lang = await getLanguage(description);
 
-  if (lang !== "eng") {
+  if (langs.includes(lang)) {
     logger.info(`Non-English description found.`);
     return;
   }
@@ -88,7 +88,7 @@ export const checkDisplayName = async (
 ) => {
   const lang = await getLanguage(description);
 
-  if (lang !== "eng") {
+  if (langs.includes(lang)) {
     logger.info(`Non-English description found.`);
     return;
   }

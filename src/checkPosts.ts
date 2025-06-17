@@ -8,7 +8,7 @@ import {
   createPostReport,
 } from "./moderation.js";
 import { LINK_SHORTENER } from "./constants.js";
-import { getFinalUrl } from "./utils.js";
+import { getFinalUrl, getLanguage } from "./utils.js";
 
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
@@ -36,6 +36,9 @@ export const checkPosts = async (post: Post[]) => {
       // Keep the original URL if resolution fails
     }
   }
+
+  // Get the post's language
+  // const lang = await getLanguage(description);
 
   // iterate through the labels
   labels.forEach((label) => {
