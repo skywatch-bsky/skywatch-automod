@@ -14,7 +14,6 @@ export const checkHandle = async (
   handle: string,
   time: number,
 ) => {
-  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     HANDLE_CHECKS,

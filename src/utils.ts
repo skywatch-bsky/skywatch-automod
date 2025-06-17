@@ -1,3 +1,5 @@
+import logger from "./logger.js";
+
 /*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
 export function normalizeUnicode(text: string): string {
   // First decompose the characters (NFD)
@@ -44,4 +46,19 @@ export async function getFinalUrl(url: string): Promise<string> {
     console.error("Error fetching URL:", error);
     throw error;
   }
+}
+
+export async function getLanguage(profile: string): Promise<string> {
+  const profileText = profile.trim();
+
+  const lande = (await import("lande")).default;
+  let langsProbabilityMap = lande(profileText);
+
+  // Sort by probability in descending order
+  langsProbabilityMap.sort(
+    (a: [string, number], b: [string, number]) => b[1] - a[1],
+  );
+
+  // Return the language code with the highest probability
+  return langsProbabilityMap[0][0];
 }
