@@ -1,4 +1,4 @@
-import { POST_CHECKS } from "./constants.js";
+import { LINK_SHORTENER, POST_CHECKS, langs } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
 import {
@@ -7,9 +7,7 @@ import {
   createAccountComment,
   createPostReport,
 } from "./moderation.js";
-import { LINK_SHORTENER } from "./constants.js";
 import { getFinalUrl, getLanguage } from "./utils.js";
-
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
   const labels: string[] = Array.from(
@@ -38,13 +36,20 @@ export const checkPosts = async (post: Post[]) => {
   }
 
   // Get the post's language
-  // const lang = await getLanguage(description);
+  const lang = await getLanguage(post[0].text);
 
   // iterate through the labels
   labels.forEach((label) => {
     const checkPost = POST_CHECKS.find(
       (postCheck) => postCheck.label === label,
     );
+
+    if (label === "contains-slur") {
+      if (!langs.includes(lang)) {
+        logger.info(`Non-English post found.`);
+        return;
+      }
+    }
 
     if (checkPost?.ignoredDIDs) {
       if (checkPost?.ignoredDIDs.includes(post[0].did)) {
