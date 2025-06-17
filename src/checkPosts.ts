@@ -46,7 +46,6 @@ export const checkPosts = async (post: Post[]) => {
 
     if (label === "contains-slur" || label === "monitor-slur") {
       if (!langs.includes(lang)) {
-        logger.info(`Non-English post found.`);
         return;
       }
     }

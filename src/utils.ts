@@ -35,21 +35,35 @@ export function normalizeUnicode(text: string): string {
 }
 
 export async function getFinalUrl(url: string): Promise<string> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+
   try {
     const response = await fetch(url, {
       method: "HEAD",
       redirect: "follow", // This will follow redirects automatically
+      signal: controller.signal, // Pass the abort signal to fetch
     });
-
+    clearTimeout(timeoutId); // Clear the timeout if fetch completes
     return response.url; // This will be the final URL after redirects
   } catch (error) {
-    console.error("Error fetching URL:", error);
-    throw error;
+    clearTimeout(timeoutId); // Clear the timeout if fetch fails
+    // Log the error with more specific information if it's a timeout
+    if (error instanceof Error && error.name === "AbortError") {
+      logger.error(`Timeout fetching URL: ${url}`, error);
+    } else {
+      logger.error(`Error fetching URL: ${url}`, error);
+    }
+    throw error; // Re-throw the error to be caught by the caller
   }
 }
 
 export async function getLanguage(profile: string): Promise<string> {
   const profileText = profile.trim();
+
+  if (profileText.length === 0) {
+    return "eng";
+  }
 
   const lande = (await import("lande")).default;
   let langsProbabilityMap = lande(profileText);
