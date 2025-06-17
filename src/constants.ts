@@ -43,6 +43,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:pb55xcxhvzkpbjxh4blel63z", // KCRoyals Fan
       "did:plc:ujxivyygagxhi72ximqsne2h", // Seems to be real
       "did:plc:aqe5xsdhbnzupirabkd4de2r", // Some edge case here
+      "did:plc:lf32xdw4jez2vkxbcl2wbncu", // Michigan
     ],
   },
   {
