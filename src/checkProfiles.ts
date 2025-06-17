@@ -1,13 +1,12 @@
-import { describe } from "node:test";
 import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
 import {
   createAccountReport,
   createAccountLabel,
-  checkAccountLabels,
   createAccountComment,
 } from "./moderation.js";
 import { limit } from "./limits.js";
+import { getLanguage } from "./utils.js";
 
 export const checkDescription = async (
   did: string,
@@ -15,6 +14,13 @@ export const checkDescription = async (
   displayName: string,
   description: string,
 ) => {
+  const lang = await getLanguage(description);
+
+  if (lang !== "eng") {
+    logger.info(`Non-English description found.`);
+    return;
+  }
+
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
     (profileCheck) => profileCheck.label,
@@ -80,6 +86,13 @@ export const checkDisplayName = async (
   displayName: string,
   description: string,
 ) => {
+  const lang = await getLanguage(description);
+
+  if (lang !== "eng") {
+    logger.info(`Non-English description found.`);
+    return;
+  }
+
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
