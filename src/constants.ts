@@ -46,6 +46,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:ujxivyygagxhi72ximqsne2h", // Seems to be real
       "did:plc:aqe5xsdhbnzupirabkd4de2r", // Some edge case here
       "did:plc:lf32xdw4jez2vkxbcl2wbncu", // Michigan
+      "did:plc:u5lvtp6ai6mg25xgazc4m7gv", // Random not political vtuber
     ],
   },
   {
