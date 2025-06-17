@@ -1,13 +1,10 @@
 import { HANDLE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import { Handle } from "./types.js";
 import {
   createAccountReport,
   createAccountComment,
   createAccountLabel,
-  checkAccountLabels,
 } from "./moderation.js";
-import { limit } from "./limits.js";
 
 export const checkHandle = async (
   did: string,

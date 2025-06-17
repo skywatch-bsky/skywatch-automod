@@ -5,6 +5,8 @@ export const LINK_SHORTENER = new RegExp(
   "i",
 );
 
+export const langs = ["eng"];
+
 export const PROFILE_CHECKS: Checks[] = [
   {
     label: "follow-farming",
