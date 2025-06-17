@@ -1,4 +1,4 @@
-import { PROFILE_CHECKS } from "./constants.js";
+import { langs, PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
 import {
   createAccountReport,
@@ -6,7 +6,6 @@ import {
   createAccountComment,
 } from "./moderation.js";
 import { getLanguage } from "./utils.js";
-import { langs } from "./constants.js";
 
 export const checkDescription = async (
   did: string,
@@ -16,7 +15,7 @@ export const checkDescription = async (
 ) => {
   const lang = await getLanguage(description);
 
-  if (langs.includes(lang)) {
+  if (!langs.includes(lang)) {
     logger.info(`Non-English description found.`);
     return;
   }
@@ -88,7 +87,7 @@ export const checkDisplayName = async (
 ) => {
   const lang = await getLanguage(description);
 
-  if (langs.includes(lang)) {
+  if (!langs.includes(lang)) {
     logger.info(`Non-English description found.`);
     return;
   }
