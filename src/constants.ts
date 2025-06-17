@@ -518,7 +518,19 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "(\\s(?:ZOG|kike|zio|towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|(?:-zio\\b|\\bzio-))",
+      "(\\s(?:ZOG|kike|zio)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|(?:-zio\\b|\\bzio-)|\\b(?:towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
+      "i",
+    ),
+    whitelist: new RegExp("zionist|zionism", "i"),
+  },
+  {
+    label: "dehumanizing-rhetoric",
+    comment: "Dehumanizing rhetoric found in post",
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
+    check: new RegExp(
+      "(\\b(?:towelhead)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
       "i",
     ),
     whitelist: new RegExp("zionist|zionism", "i"),
