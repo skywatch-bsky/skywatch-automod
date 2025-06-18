@@ -310,6 +310,14 @@ export const HANDLE_CHECKS: Checks[] = [
     whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "iu"),
   },
   {
+    label: "alt-gov",
+    comment: "Alt Gov Handle Found",
+    reportAcct: false,
+    commentAcct: false,
+    toLabel: true,
+    check: new RegExp("(?:(?:[a-zA-Z]+\\.)?altgov\\.info)", "i"),
+  },
+  {
     label: "suspect-inauthentic",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
