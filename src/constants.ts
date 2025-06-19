@@ -341,7 +341,7 @@ export const HANDLE_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "#(?:MAGA|MAHA)\\b|#Trump-?2024|(?:(?:real|president|king|queen)?-?(?:barron|donald|eric|ivan(?:k)?a|tiffany|melenia)-?(?:john|j)?-?(?:(?:trump)-?(?:jr)?))|(?:proud|king)magat?|(?:trump-?(?:20(?:24|28|32|36|48)|(?:45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(?:45|46|47)|ultramagat?|maga-[0-9]{2,4}|(?:trump-?(?:is)?-?(?:my|your)?-?(?:king|maga|train|daddy|army|nation|world))|marjorie-?taylor-?green|laura-?loomer|\\bloomered\\b|steve-?bannon|nick-?(?:j)?-?fuentes|matt=?gaetz|rfk-?jr|project?-2025|(?:thomas|tom)-?homan|(?:pam|pamala)-?bondi|kash-?patel|jd-?vance",
+      "#(?:MAGA|MAHA)\\b|#Trump-?2024|(?:(?:real|president|king|queen)?-?(?:barron|donald|eric|ivan(?:k)?a|tiffany|melenia)-?(?:john|j)?-?(?:(?:trump)-?(?:jr)?))|(?:proud|king)magat?|(?:trump-?(?:20(?:24|28|32|36|48)|(?:45|46|47|4547)|maga|god|jesus|lord|[0-9]{2,4}))|potus(?:45|46|47)|ultramagat?|maga-[0-9]{2,4}|(?:trump-?(?:is)?-?(?:my|your)?-?(?:king|maga|train|daddy|army|nation|world))|marjorie-?taylor-?green|laura-?loomer|\\bloomered\\b|steve-?bannon|nick-?(?:j)?-?fuentes|matt=?gaetz|rfk-?jr|project?-2025|(?:thomas|tom)-?homan|(?:pam|pamala)-?bondi|kash-?patel|jd-?vance|pete-?hegseth|Karoline-?Leavitt|dana-?white|susie-?wiles",
       "i",
     ),
     whitelist: new RegExp(
