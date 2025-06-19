@@ -577,7 +577,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "Trump is your president|Trump is still your president",
+      "Trump is your president|Trump is still your president|#MAGA\\b",
       "i",
     ),
   },
