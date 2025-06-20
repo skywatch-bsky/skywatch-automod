@@ -16,7 +16,7 @@ export const checkDescription = async (
   const lang = await getLanguage(description);
 
   if (!langs.includes(lang)) {
-    logger.info(`Non-English description found.`);
+    logger.info(`Profile language not supported for ${lang}`);
     return;
   }
 
@@ -88,7 +88,7 @@ export const checkDisplayName = async (
   const lang = await getLanguage(description);
 
   if (!langs.includes(lang)) {
-    logger.info(`Non-English description found.`);
+    logger.info(`Profile language not supported for ${lang}`);
     return;
   }
 
