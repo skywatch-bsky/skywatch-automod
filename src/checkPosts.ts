@@ -8,6 +8,7 @@ import {
   createPostReport,
 } from "./moderation.js";
 import { getFinalUrl, getLanguage } from "./utils.js";
+
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
   const labels: string[] = Array.from(
@@ -22,16 +23,21 @@ export const checkPosts = async (post: Post[]) => {
     try {
       const url = post[0].text.match(urlRegex);
       if (url && LINK_SHORTENER.test(url[0])) {
-        logger.info(`Checking shortened URL: ${url[0]}`);
+        logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
         const finalUrl = await getFinalUrl(url[0]);
         if (finalUrl) {
           const originalUrl = post[0].text;
           post[0].text = post[0].text.replace(url[0], finalUrl);
-          logger.info(`Shortened URL resolved: ${originalUrl} -> ${finalUrl}`);
+          logger.info(
+            `[CHECKPOSTS]: Shortened URL resolved: ${originalUrl} -> ${finalUrl}`,
+          );
         }
       }
     } catch (error) {
-      logger.error(`Failed to resolve shortened URL: ${post[0].text}`, error);
+      logger.error(
+        `[CHECKPOSTS]: Failed to resolve shortened URL: ${post[0].text}`,
+        error,
+      );
       // Keep the original URL if resolution fails
     }
   }
@@ -47,14 +53,13 @@ export const checkPosts = async (post: Post[]) => {
 
     if (label === "contains-slur" || label === "monitor-slur") {
       if (!langs.includes(lang)) {
-        logger.info(`Post language not supported for ${label}: ${lang}`);
         return;
       }
     }
 
     if (checkPost?.ignoredDIDs) {
       if (checkPost?.ignoredDIDs.includes(post[0].did)) {
-        logger.info(`Whitelisted DID: ${post[0].did}`);
+        logger.info(`[CHECKPOSTS]: Whitelisted DID: ${post[0].did}`);
         return;
       }
     }
@@ -63,13 +68,15 @@ export const checkPosts = async (post: Post[]) => {
       // Check if post is whitelisted
       if (checkPost?.whitelist) {
         if (checkPost?.whitelist.test(post[0].text)) {
-          logger.info(`Whitelisted phrase found"`);
+          logger.info(`[CHECKPOSTS]: Whitelisted phrase found"`);
           return;
         }
       }
 
       if (checkPost!.toLabel === true) {
-        logger.info(`Labeling post: ${post[0].atURI} for ${checkPost!.label}`);
+        logger.info(
+          `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost!.label}`,
+        );
         createPostLabel(
           post[0].atURI,
           post[0].cid,
@@ -80,7 +87,7 @@ export const checkPosts = async (post: Post[]) => {
 
       if (checkPost!.reportPost === true) {
         logger.info(
-          `Suspected ${checkPost!.label} in post at ${post[0].atURI}`,
+          `[CHECKPOSTS]: Reporting ${post[0].atURI} for ${checkPost!.label}`,
         );
         logger.info(`Reporting: ${post[0].atURI}`);
         createPostReport(
@@ -91,8 +98,9 @@ export const checkPosts = async (post: Post[]) => {
       }
 
       if (checkPost!.reportAcct === true) {
-        logger.info(`${checkPost!.label} in post at ${post[0].atURI}`);
-        logger.info(`Report only: ${post[0].did}`);
+        logger.info(
+          `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
+        );
         createAccountReport(
           post[0].did,
           `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
@@ -100,7 +108,9 @@ export const checkPosts = async (post: Post[]) => {
       }
 
       if (checkPost!.commentAcct === true) {
-        logger.info(`Comment on account: ${post[0].did}`);
+        logger.info(
+          `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
+        );
         createAccountComment(
           post[0].did,
           `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
