@@ -16,10 +16,12 @@ export const checkPosts = async (post: Post[]) => {
     (postCheck) => postCheck.label,
   );
 
+  const urlRegex = /https?:\/\/[^\s]+/g;
+
   // Check for link shorteners
   if (LINK_SHORTENER.test(post[0].text)) {
     try {
-      const url = post[0].text.match(LINK_SHORTENER);
+      const url = post[0].text.match(urlRegex);
       if (url && LINK_SHORTENER.test(url[0])) {
         logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
         const finalUrl = await getFinalUrl(url[0]);
