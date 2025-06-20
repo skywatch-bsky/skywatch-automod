@@ -413,8 +413,8 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "general-monitoring",
     comment: "Content of interest found",
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
     toLabel: false,
     check: new RegExp(
       "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start)",
