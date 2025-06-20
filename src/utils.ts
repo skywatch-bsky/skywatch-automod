@@ -59,8 +59,6 @@ export async function getFinalUrl(url: string): Promise<string> {
 }
 
 export async function getLanguage(profile: string): Promise<string> {
-  const profileText = profile.trim();
-
   if (typeof profile !== "string" || profile === null) {
     logger.warn(
       "[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to 'eng'.",
@@ -68,6 +66,8 @@ export async function getLanguage(profile: string): Promise<string> {
     );
     return "eng"; // Default or throw an error
   }
+
+  const profileText = profile.trim();
 
   if (profileText.length === 0) {
     return "eng";
