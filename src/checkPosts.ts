@@ -1,4 +1,4 @@
-import { POST_CHECKS } from "./constants.js";
+import { LINK_SHORTENER, POST_CHECKS, langs } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
 import {
@@ -7,9 +7,7 @@ import {
   createAccountComment,
   createPostReport,
 } from "./moderation.js";
-import { LINK_SHORTENER } from "./constants.js";
-import { getFinalUrl } from "./utils.js";
-
+import { getFinalUrl, getLanguage } from "./utils.js";
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
   const labels: string[] = Array.from(
@@ -17,44 +15,41 @@ export const checkPosts = async (post: Post[]) => {
     (postCheck) => postCheck.label,
   );
 
+  const urlRegex = /https?:\/\/[^\s]+/g;
+
   // Check for link shorteners
-  try {
-    // Use LINK_SHORTENER to extract the specific shortener URL
-    const shortenerMatch = post[0].text.match(LINK_SHORTENER);
-
-    if (shortenerMatch && shortenerMatch[0]) {
-      // shortenerMatch[0] is the full matched shortener URL
-      const matchedShortUrl = shortenerMatch[0];
-      const finalUrl = await getFinalUrl(matchedShortUrl);
-
-      if (finalUrl && finalUrl !== matchedShortUrl) {
-        // Only replace if different
-        // Replace only the shortened URL, not the entire post text
-        post[0].text = post[0].text.replace(matchedShortUrl, finalUrl);
-        logger.info(
-          `Shortened URL resolved: ${matchedShortUrl} -> ${finalUrl}`,
-        );
-      } else if (finalUrl === matchedShortUrl) {
-        logger.info(
-          `Shortened URL resolved to itself (no change): ${matchedShortUrl}`,
-        );
+  if (LINK_SHORTENER.test(post[0].text)) {
+    try {
+      const url = post[0].text.match(urlRegex);
+      if (url && LINK_SHORTENER.test(url[0])) {
+        logger.info(`Checking shortened URL: ${url[0]}`);
+        const finalUrl = await getFinalUrl(url[0]);
+        if (finalUrl) {
+          const originalUrl = post[0].text;
+          post[0].text = post[0].text.replace(url[0], finalUrl);
+          logger.info(`Shortened URL resolved: ${originalUrl} -> ${finalUrl}`);
+        }
       }
+    } catch (error) {
+      logger.error(`Failed to resolve shortened URL: ${post[0].text}`, error);
+      // Keep the original URL if resolution fails
     }
-  } catch (error) {
-    // It's good to log which URL specifically failed if possible
-    const shortenerMatchForError = post[0].text.match(LINK_SHORTENER);
-    const failedUrl = shortenerMatchForError
-      ? shortenerMatchForError[0]
-      : post[0].text;
-    logger.error(`Failed to resolve shortened URL: ${failedUrl}`, error);
-    // Keep the original URL if resolution fails
   }
+
+  // Get the post's language
+  const lang = await getLanguage(post[0].text);
 
   // iterate through the labels
   labels.forEach((label) => {
     const checkPost = POST_CHECKS.find(
       (postCheck) => postCheck.label === label,
     );
+
+    if (label === "contains-slur" || label === "monitor-slur") {
+      if (!langs.includes(lang)) {
+        return;
+      }
+    }
 
     if (checkPost?.ignoredDIDs) {
       if (checkPost?.ignoredDIDs.includes(post[0].did)) {
