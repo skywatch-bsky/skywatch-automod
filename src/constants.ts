@@ -1,7 +1,7 @@
 import { Checks } from "./types.js";
 
 export const LINK_SHORTENER = new RegExp(
-  "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly|goo\\.gl|g\\.co|ow\\.ly|shorturl\\.at|t\\.co|go\\.bsky\\.app)",
+  "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co/|go\\.bsky\\.app)",
   "i",
 );
 
@@ -546,7 +546,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:antimagaclub\\.com|pleniiixa\\.blogspot\\.com|testyourself\\.now|tinyurl\\.com/stdTestSafe)",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:antimagaclub\\.com|pleniiixa\\.blogspot\\.com|testyourself\\.now|tinyurl\\.com/stdTestSafe|discord\\.me/rabbi|rabbirothschild\\.blogspot\\.com)",
       "i",
     ),
     ignoredDIDs: ["did:plc:m6k7ju4wcwnwa67mnhgjc2vc"], // Labeled already but hasn't been taken down
