@@ -40,6 +40,7 @@ export const checkHandle = async (
       }
 
       if (checkList?.toLabel === true) {
+        logger.info(`[CHECKHANDLE]: Labeling ${did} for ${checkList!.label}`);
         {
           createAccountLabel(
             did,
@@ -50,12 +51,14 @@ export const checkHandle = async (
       }
 
       if (checkList?.reportAcct === true) {
-        logger.info(`Report only: ${handle}`);
+        logger.info(`[CHECKHANDLE]: Reporting ${did} for ${checkList!.label}`);
         createAccountReport(did, `${time}: ${checkList!.comment} - ${handle}`);
       }
 
       if (checkList?.commentAcct === true) {
-        logger.info(`Comment only: ${handle}`);
+        logger.info(
+          `[CHECKHANDLE]: Commenting on ${did} for ${checkList!.label}`,
+        );
         createAccountComment(did, `${time}: ${checkList!.comment} - ${handle}`);
       }
     }
