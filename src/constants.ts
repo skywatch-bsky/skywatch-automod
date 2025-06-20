@@ -411,6 +411,17 @@ export const HANDLE_CHECKS: Checks[] = [
 
 export const POST_CHECKS: Checks[] = [
   {
+    label: "general-monitoring",
+    comment: "Content of interest found",
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: false,
+    check: new RegExp(
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start)",
+      "i",
+    ),
+  },
+  {
     label: "fundraising-link",
     comment: "Fundraising link found in post",
     reportAcct: false,
@@ -530,12 +541,12 @@ export const POST_CHECKS: Checks[] = [
   },
   {
     label: "follow-farming",
-    comment: "Follow farming hashtags found in post",
+    comment: "Follow farming indicators found in post",
     reportAcct: true,
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties|bsky\\.app/start/(did:plc:qqf54fjwyckvjrordaigstkq|did:plc:t4q27bc5gswob4zskgcqi4b6)",
       "iu",
     ),
   },
