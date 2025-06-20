@@ -50,9 +50,9 @@ export async function getFinalUrl(url: string): Promise<string> {
     clearTimeout(timeoutId); // Clear the timeout if fetch fails
     // Log the error with more specific information if it's a timeout
     if (error instanceof Error && error.name === "AbortError") {
-      logger.error(`Timeout fetching URL: ${url}`, error);
+      logger.warn(`Timeout fetching URL: ${url}`, error);
     } else {
-      logger.error(`Error fetching URL: ${url}`, error);
+      logger.warn(`Error fetching URL: ${url}`, error);
     }
     throw error; // Re-throw the error to be caught by the caller
   }
