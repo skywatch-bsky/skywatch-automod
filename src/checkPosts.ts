@@ -17,24 +17,37 @@ export const checkPosts = async (post: Post[]) => {
     (postCheck) => postCheck.label,
   );
 
-  const urlRegex = /https?:\/\/[^\s]+/g;
-
   // Check for link shorteners
-  if (LINK_SHORTENER.test(post[0].text)) {
-    try {
-      const url = post[0].text.match(urlRegex);
-      if (url) {
-        const finalUrl = await getFinalUrl(url[0]);
-        if (finalUrl) {
-          const originalUrl = post[0].text;
-          post[0].text = finalUrl;
-          logger.info(`Shortened URL resolved: ${originalUrl} -> ${finalUrl}`);
-        }
+  try {
+    // Use LINK_SHORTENER to extract the specific shortener URL
+    const shortenerMatch = post[0].text.match(LINK_SHORTENER);
+
+    if (shortenerMatch && shortenerMatch[0]) {
+      // shortenerMatch[0] is the full matched shortener URL
+      const matchedShortUrl = shortenerMatch[0];
+      const finalUrl = await getFinalUrl(matchedShortUrl);
+
+      if (finalUrl && finalUrl !== matchedShortUrl) {
+        // Only replace if different
+        // Replace only the shortened URL, not the entire post text
+        post[0].text = post[0].text.replace(matchedShortUrl, finalUrl);
+        logger.info(
+          `Shortened URL resolved: ${matchedShortUrl} -> ${finalUrl}`,
+        );
+      } else if (finalUrl === matchedShortUrl) {
+        logger.info(
+          `Shortened URL resolved to itself (no change): ${matchedShortUrl}`,
+        );
       }
-    } catch (error) {
-      logger.error(`Failed to resolve shortened URL: ${post[0].text}`, error);
-      // Keep the original URL if resolution fails
     }
+  } catch (error) {
+    // It's good to log which URL specifically failed if possible
+    const shortenerMatchForError = post[0].text.match(LINK_SHORTENER);
+    const failedUrl = shortenerMatchForError
+      ? shortenerMatchForError[0]
+      : post[0].text;
+    logger.error(`Failed to resolve shortened URL: ${failedUrl}`, error);
+    // Keep the original URL if resolution fails
   }
 
   // iterate through the labels
