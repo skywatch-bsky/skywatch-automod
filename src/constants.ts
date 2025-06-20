@@ -526,7 +526,7 @@ export const POST_CHECKS: Checks[] = [
       "(\\s(?:ZOG|kike|zio)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|(?:-zio\\b|\\bzio-)|\\b(?:towelhead|raghead|jihadi|Rapefugee|kafir|kaffir)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
       "i",
     ),
-    whitelist: new RegExp("zionist|zionism", "i"),
+    whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
   },
   {
     label: "dehumanizing-rhetoric",
