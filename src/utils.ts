@@ -1,3 +1,5 @@
+import logger from "./logger.js";
+
 /*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
 export function normalizeUnicode(text: string): string {
   // First decompose the characters (NFD)
@@ -33,15 +35,52 @@ export function normalizeUnicode(text: string): string {
 }
 
 export async function getFinalUrl(url: string): Promise<string> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+
   try {
     const response = await fetch(url, {
       method: "HEAD",
       redirect: "follow", // This will follow redirects automatically
+      signal: controller.signal, // Pass the abort signal to fetch
     });
-
+    clearTimeout(timeoutId); // Clear the timeout if fetch completes
     return response.url; // This will be the final URL after redirects
   } catch (error) {
-    console.error("Error fetching URL:", error);
-    throw error;
+    clearTimeout(timeoutId); // Clear the timeout if fetch fails
+    // Log the error with more specific information if it's a timeout
+    if (error instanceof Error && error.name === "AbortError") {
+      logger.warn(`Timeout fetching URL: ${url}`, error);
+    } else {
+      logger.warn(`Error fetching URL: ${url}`, error);
+    }
+    throw error; // Re-throw the error to be caught by the caller
   }
+}
+
+export async function getLanguage(profile: string): Promise<string> {
+  if (typeof profile !== "string" || profile === null) {
+    logger.warn(
+      "[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to 'eng'.",
+      profile,
+    );
+    return "eng"; // Default or throw an error
+  }
+
+  const profileText = profile.trim();
+
+  if (profileText.length === 0) {
+    return "eng";
+  }
+
+  const lande = (await import("lande")).default;
+  let langsProbabilityMap = lande(profileText);
+
+  // Sort by probability in descending order
+  langsProbabilityMap.sort(
+    (a: [string, number], b: [string, number]) => b[1] - a[1],
+  );
+
+  // Return the language code with the highest probability
+  return langsProbabilityMap[0][0];
 }
