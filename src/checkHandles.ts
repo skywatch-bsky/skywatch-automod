@@ -1,20 +1,16 @@
 import { HANDLE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
-import { Handle } from "./types.js";
 import {
   createAccountReport,
   createAccountComment,
   createAccountLabel,
-  checkAccountLabels,
 } from "./moderation.js";
-import { limit } from "./limits.js";
 
 export const checkHandle = async (
   did: string,
   handle: string,
   time: number,
 ) => {
-  const ActLabelChk = await limit(() => checkAccountLabels(did));
   // Get a list of labels
   const labels: string[] = Array.from(
     HANDLE_CHECKS,
@@ -44,6 +40,7 @@ export const checkHandle = async (
       }
 
       if (checkList?.toLabel === true) {
+        logger.info(`[CHECKHANDLE]: Labeling ${did} for ${checkList!.label}`);
         {
           createAccountLabel(
             did,
@@ -54,12 +51,14 @@ export const checkHandle = async (
       }
 
       if (checkList?.reportAcct === true) {
-        logger.info(`Report only: ${handle}`);
+        logger.info(`[CHECKHANDLE]: Reporting ${did} for ${checkList!.label}`);
         createAccountReport(did, `${time}: ${checkList!.comment} - ${handle}`);
       }
 
       if (checkList?.commentAcct === true) {
-        logger.info(`Comment only: ${handle}`);
+        logger.info(
+          `[CHECKHANDLE]: Commenting on ${did} for ${checkList!.label}`,
+        );
         createAccountComment(did, `${time}: ${checkList!.comment} - ${handle}`);
       }
     }
