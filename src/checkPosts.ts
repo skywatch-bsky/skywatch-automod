@@ -51,10 +51,8 @@ export const checkPosts = async (post: Post[]) => {
       (postCheck) => postCheck.label === label,
     );
 
-    if (label === "contains-slur" || label === "monitor-slur") {
-      if (!langs.includes(lang)) {
-        return;
-      }
+    if (!langs.includes(lang)) {
+      return;
     }
 
     if (checkPost?.ignoredDIDs) {
