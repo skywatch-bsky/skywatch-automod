@@ -1,12 +1,12 @@
 // rename this file to constants.ts
-
-
 import { Checks } from "./types.js";
 
 export const LINK_SHORTENER = new RegExp(
   "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly|goo\\.gl|g\\.co|ow\\.ly|shorturl\\.at|t\\.co)",
   "i",
 );
+
+export const langs = ["eng"];
 
 export const PROFILE_CHECKS: Checks[] = [
   {
