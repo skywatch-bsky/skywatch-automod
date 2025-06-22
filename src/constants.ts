@@ -591,10 +591,7 @@ export const POST_CHECKS: Checks[] = [
     reportAcct: true,
     commentAcct: false,
     toLabel: false,
-    check: new RegExp(
-      "Trump is (still)? your president|#MA[GH]A\\b|(Biden|border)?.*Sleeper cells?.*(Biden|border)?",
-      "i",
-    ),
+    check: new RegExp("Trump is (still)? your president|#MA[GH]A\\b?", "i"),
   },
 ];
 
