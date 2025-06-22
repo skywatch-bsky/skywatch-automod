@@ -19,7 +19,7 @@ services:
 
     # Expose the metrics server port to the host machine.
     ports:
-      - "4101:4101"
+      - "4100:4101"
 
     # Load environment variables from a .env file in the same directory.
     # This is where you should put your BSKY_HANDLE, BSKY_PASSWORD, etc.
