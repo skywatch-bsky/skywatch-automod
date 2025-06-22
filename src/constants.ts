@@ -547,7 +547,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties|bsky\\.app/start/(did:plc:qqf54fjwyckvjrordaigstkq|did:plc:t4q27bc5gswob4zskgcqi4b6|did:plc:cu7qticlrmkvb7p6hq4etklt|did:plc:iokqyt73vzoa4f3mboyyf7go|did:plc:c3at2vzpmyodlsdksad5sqna|did:plc:fb3p4ffutjsf7ju53pvawfoz)",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#bluecrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties|bsky\\.app/start/(did:plc:qqf54fjwyckvjrordaigstkq|did:plc:t4q27bc5gswob4zskgcqi4b6|did:plc:cu7qticlrmkvb7p6hq4etklt|did:plc:iokqyt73vzoa4f3mboyyf7go|did:plc:c3at2vzpmyodlsdksad5sqna|did:plc:fb3p4ffutjsf7ju53pvawfoz|did:plc:soxupumpwgcsbsxhqynil2m2|did:plc:agesb4bpc6iv6fpipw7pybbu)",
       "iu",
     ),
   },
@@ -592,7 +592,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "Trump is your president|Trump is still your president|#MA[GH]A",
+      "Trump is your president|Trump is still your president|#MA[GH]A\\b",
       "i",
     ),
   },
