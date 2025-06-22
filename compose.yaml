@@ -1,0 +1,34 @@
+# This file is for setting up the Skywatch Automod service using Docker Compose.
+#
+# Before running `docker compose up`, you need to:
+# 1. Create a `.env` file with your configuration. See the README.md for details.
+# 2. (Optional but recommended) Create an empty `cursor.txt` file in this directory
+#    to ensure Docker mounts a file, not a directory.
+#    On Linux/macOS: touch cursor.txt
+#
+version: "3.8"
+
+services:
+  automod:
+    # Build the Docker image from the Dockerfile in the current directory.
+    build: .
+    container_name: skywatch-automod
+
+    # Restart the container automatically if it stops unexpectedly.
+    restart: unless-stopped
+
+    # Expose the metrics server port to the host machine.
+    ports:
+      - "4100:4101"
+
+    # Load environment variables from a .env file in the same directory.
+    # This is where you should put your BSKY_HANDLE, BSKY_PASSWORD, etc.
+    env_file:
+      - .env
+
+    # Mount a volume to persist the firehose cursor.
+    # This links the `cursor.txt` file from your host into the container at `/app/cursor.txt`.
+    # Persisting this file allows the automod to resume from where it left off
+    # after a restart, preventing it from reprocessing old events or skipping new ones.
+    volumes:
+      - ./cursor.txt:/app/cursor.txt
