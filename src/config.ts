@@ -11,7 +11,7 @@ export const METRICS_PORT = process.env.METRICS_PORT
   ? Number(process.env.METRICS_PORT)
   : 4101; // Left this intact from the code I adapted this from
 export const FIREHOSE_URL =
-  process.env.FIREHOSE_URL ?? "wss://jetstream.atproto.tools/subscribe";
+  process.env.FIREHOSE_URL ?? "wss://jetstream1.us-east.bsky.network/subscribe";
 export const WANTED_COLLECTION = [
   "app.bsky.feed.post",
   "app.bsky.actor.defs",
