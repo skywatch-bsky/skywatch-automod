@@ -72,14 +72,16 @@ bun run start
 You can also build and run the application as a Docker container.
 
 ```bash
-# Build the container
-docker build -pull -t skywatch-automod .
-
-# Run the container
-docker run -d -p 4101:4101 skywatch-automod
+docker compose up --build
 ```
 
-Make sure your `.env` file is present when building the Docker image, as it will be copied into the container.
+To run it in the background, add the `-d` flag:
+
+```bash
+docker compose up --build -d
+```
+
+Make sure your `.env` file is present when building the Docker image, as it will be copied into the container. We recommend creating an empty `cursor.txt` file in the application root directory as well.
 
 #### Configuration Variables
 
