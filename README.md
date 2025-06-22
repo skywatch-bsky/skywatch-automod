@@ -95,7 +95,7 @@ The following environment variables are used for configuration:
 | `HOST`                   | The host on which the server runs.                               | `127.0.0.1`                               |
 | `PORT`                   | The port for the main application (currently unused).            | `4100`                                    |
 | `METRICS_PORT`           | The port for the Prometheus metrics server.                      | `4101`                                    |
-| `FIREHOSE_URL`           | The WebSocket URL for the Bluesky firehose.                      | `wss://jetstream.atproto.tools/subscribe` |
+| `FIREHOSE_URL`           | The WebSocket URL for the Bluesky firehose.                      | `FIREHOSE_URL=wss://jetstream1.us-east.bsky.network/subscribe` |
 | `CURSOR_UPDATE_INTERVAL` | How often to save the firehose cursor to disk (in milliseconds). | `60000`                                   |
 | `LABEL_LIMIT`            | (Optional) API call limit for labeling.                          | `undefined`                               |
 | `LABEL_LIMIT_WAIT`       | (Optional) Wait time when label limit is hit.                    | `undefined`                               |
