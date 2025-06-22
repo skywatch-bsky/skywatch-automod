@@ -52,9 +52,15 @@ const jetstream = new Jetstream({
 });
 
 jetstream.on("open", () => {
-  logger.info(
-    `Connected to Jetstream at ${FIREHOSE_URL} with cursor ${jetstream.cursor} (${epochUsToDateTime(jetstream.cursor!)})`,
-  );
+  if (jetstream.cursor) {
+    logger.info(
+      `Connected to Jetstream at ${FIREHOSE_URL} with cursor ${jetstream.cursor} (${epochUsToDateTime(jetstream.cursor)})`,
+    );
+  } else {
+    logger.info(
+      `Connected to Jetstream at ${FIREHOSE_URL}, waiting for cursor...`,
+    );
+  }
   cursorUpdateInterval = setInterval(() => {
     if (jetstream.cursor) {
       logger.info(
