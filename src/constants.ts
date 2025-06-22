@@ -587,12 +587,12 @@ export const POST_CHECKS: Checks[] = [
   },
   {
     label: "maga-trump",
-    comment: "Trump support found in post",
+    comment: "Possible trump support found in post",
     reportAcct: true,
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "Trump is your president|Trump is still your president|#MA[GH]A\\b",
+      "Trump is (still)? your president|#MA[GH]A\\b|(Biden|border)?.*Sleeper cells?.*(Biden|border)?",
       "i",
     ),
   },
