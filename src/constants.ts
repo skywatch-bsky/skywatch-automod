@@ -417,7 +417,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: false,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start|thiswillhold\\.substack\\.com|thecommoncoalition\\.com)",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start|thiswillhold\\.substack\\.com|thecommoncoalition\\.com)|88 counties flipped red. None flipped blue.",
       "i",
     ),
   },
