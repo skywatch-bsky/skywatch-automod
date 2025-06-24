@@ -20,6 +20,9 @@ export const PROFILE_CHECKS: Checks[] = [
       "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#i?followback|#blue(crew|wave)|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donk(party|pack|connects)|#donk|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#UnitedBlueCrew",
       "i",
     ),
+    ignoredDIDs: [
+      "did:plc:kyh3c4gpfdxp7xgxy6hodtpu", // Has #bluecrew in bio but not engaged in other behaviors and only follows 600 people.
+    ],
   },
   {
     label: "blue-heart-emoji",
