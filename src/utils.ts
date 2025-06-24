@@ -1,37 +1,43 @@
 import logger from "./logger.js";
 
-/*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
+import { homoglyphMap } from "./homoglyphs";
+
+/**
+ * Normalizes a string by converting it to lowercase, replacing homoglyphs,
+ * and stripping diacritics. This is useful for sanitizing user input
+ * before performing checks for forbidden words.
+ *
+ * The process is as follows:
+ * 1. Convert the entire string to lowercase.
+ * 2. Replace characters that are visually similar to ASCII letters (homoglyphs)
+ *    with their ASCII counterparts based on the `homoglyphMap`.
+ * 3. Apply NFD (Normalization Form D) Unicode normalization to decompose
+ *    characters into their base characters and combining marks.
+ * 4. Remove all Unicode combining diacritical marks.
+ * 5. Apply NFKC (Normalization Form KC) Unicode normalization for a final
+ *    cleanup, which handles compatibility characters.
+ *
+ * @param text The input string to normalize.
+ * @returns The normalized string.
+ */
 export function normalizeUnicode(text: string): string {
-  // First decompose the characters (NFD)
-  const decomposed = text.normalize("NFD");
+  // Convert to lowercase to match the homoglyph map keys
+  const lowercased = text.toLowerCase();
 
-  // Remove diacritics and combining marks
-  const withoutDiacritics = decomposed.replace(/[\u0300-\u036f]/g, "");
+  // Replace characters using the homoglyph map.
+  // This is done before NFD so that pre-composed characters are caught.
+  let replaced = "";
+  for (const char of lowercased) {
+    replaced += homoglyphMap[char] || char;
+  }
 
-  // Remove mathematical alphanumeric symbols
-  const withoutMath = withoutDiacritics.replace(
-    /[\uD835][\uDC00-\uDFFF]/g,
-    (char) => {
-      // Get the base character from the mathematical symbol
-      const code = char.codePointAt(0);
-      if (code >= 0x1d400 && code <= 0x1d433)
-        // Mathematical bold
-        return String.fromCharCode(code - 0x1d400 + 0x41);
-      if (code >= 0x1d434 && code <= 0x1d467)
-        // Mathematical italic
-        return String.fromCharCode(code - 0x1d434 + 0x61);
-      if (code >= 0x1d468 && code <= 0x1d49b)
-        // Mathematical bold italic
-        return String.fromCharCode(code - 0x1d468 + 0x41);
-      if (code >= 0x1d49c && code <= 0x1d4cf)
-        // Mathematical script
-        return String.fromCharCode(code - 0x1d49c + 0x61);
-      return char;
-    },
-  );
+  // First decompose the characters (NFD), then remove diacritics.
+  const withoutDiacritics = replaced
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-  // Final NFKC normalization to handle any remaining special characters
-  return withoutMath.normalize("NFKC");
+  // Final NFKC normalization to handle any remaining special characters.
+  return withoutDiacritics.normalize("NFKC");
 }
 
 export async function getFinalUrl(url: string): Promise<string> {
