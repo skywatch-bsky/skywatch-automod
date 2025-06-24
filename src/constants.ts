@@ -47,6 +47,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:aqe5xsdhbnzupirabkd4de2r", // Some edge case here
       "did:plc:lf32xdw4jez2vkxbcl2wbncu", // Michigan
       "did:plc:u5lvtp6ai6mg25xgazc4m7gv", // Random not political vtuber
+      "did:plc:eqh433fdh2bqhvt455e3tg67", // doing a bit
     ],
   },
   {
@@ -581,7 +582,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: false,
     check: new RegExp(
-      "protect women's sports|protect womens sports|Genital Mutilation",
+      "protect women's sports|protect womens sports|Genital Mutilation|(trans)?gender ideology",
       "i",
     ),
   },
