@@ -665,6 +665,6 @@ export const STARTERPACK_CHECKS: Checks[] = [
     reportAcct: true,
     commentAcct: false,
     toLabel: true,
-    check: new RegExp("Colony of New Twitter|bluecry", "i"),
+    check: new RegExp("Colony of New Twitter|bluecry\\b", "i"),
   },
 ];
