@@ -419,6 +419,7 @@ export const POST_CHECKS: Checks[] = [
     comment: "Content of interest found",
     reportAcct: false,
     commentAcct: true,
+    reportPost: true,
     toLabel: false,
     check: new RegExp(
       "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start|thiswillhold\\.substack\\.com|thecommoncoalition\\.com)|88 counties flipped red. None flipped blue.",
@@ -524,8 +525,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "monitor-slur",
     comment: "Possible slur found in post",
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
+    reportPost: true,
     toLabel: false,
     check: new RegExp(
       "(\\s(?:Z(O|0)G|k[i1]k[e3])[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|\\b(?:t[0o]w[e3]lh[e3][a4]d|r[a4]gh[e3][a4]d|j[i1]h[a4]d[i1]|R[a4]p[e3]fug[e3][e3]|k[a4]f{1,2}[i1]r)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
@@ -570,8 +572,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "troll",
     comment: "Trolling found in post",
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
+    reportPost: true,
     toLabel: false,
     check: new RegExp(
       "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st",
@@ -581,8 +584,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "terf-gc",
     comment: "TERF rhetoric found in post",
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
+    reportPost: true,
     toLabel: false,
     check: new RegExp(
       "protect women's sports|protect womens sports|Genital Mutilation|(trans)?gender ideology",
@@ -592,8 +596,9 @@ export const POST_CHECKS: Checks[] = [
   {
     label: "maga-trump",
     comment: "Possible trump support found in post",
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
+    reportPost: true,
     toLabel: false,
     check: new RegExp("Trump is (still)? your president|#MA[GH]A\\b", "i"),
   },
