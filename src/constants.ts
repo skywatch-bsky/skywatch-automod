@@ -172,7 +172,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann",
+      "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann|Doge-?Father",
       "i",
     ),
     whitelist: new RegExp(
@@ -370,7 +370,7 @@ export const HANDLE_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann",
+      "elon([r0-9]?musk|.*musk|reevesmusk)|Adrian[ -]?Dittmann|Doge-?Father",
       "i",
     ),
     ignoredDIDs: [
@@ -577,7 +577,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists",
       "i",
     ),
   },
