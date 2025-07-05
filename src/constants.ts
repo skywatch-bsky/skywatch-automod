@@ -419,7 +419,7 @@ export const POST_CHECKS: Checks[] = [
     comment: "Content of interest found",
     reportAcct: false,
     commentAcct: true,
-    reportPost: true,
+    reportPost: false,
     toLabel: false,
     check: new RegExp(
       "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start)|88 counties flipped red. None flipped blue.",
@@ -430,7 +430,7 @@ export const POST_CHECKS: Checks[] = [
     label: "fundraising-link",
     comment: "Fundraising link found in post",
     reportAcct: false,
-    commentAcct: false,
+    commentAcct: true,
     toLabel: true,
     check: new RegExp(
       "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.(?:app|me)|paypal\\.(?:com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org)",
