@@ -422,7 +422,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: false,
     toLabel: false,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start)|88 counties flipped red. None flipped blue.",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start)|88 counties flipped red. None flipped blue.|Alligator Alcatraz Shirt",
       "i",
     ),
   },
