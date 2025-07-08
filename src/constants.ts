@@ -87,6 +87,16 @@ export const PROFILE_CHECKS: Checks[] = [
     ),
   },
   {
+    label: "suspect-inauthentic",
+    comment: "Link in bio correlated with multiple accounts",
+    description: true,
+    displayName: true,
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
+    check: new RegExp("gofund\\.me/fec526f5", "i"),
+  },
+  {
     label: "troll",
     comment: "Troll language found in profile",
     description: true,
