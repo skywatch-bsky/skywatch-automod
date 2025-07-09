@@ -51,12 +51,11 @@ export const checkPosts = async (post: Post[]) => {
       (postCheck) => postCheck.label === label,
     );
 
-    if (checkPost.language || checkPost.language === undefined) {
+    if (checkPost?.language || checkPost?.language !== undefined) {
       if (!checkPost?.language.includes(lang)) {
-        logger.info(
-          `[CHECKPOSTS]: ${checkPost!.label} not supported in ${lang}`,
-        );
         return;
+      } else {
+        logger.info(`[CHECKPOSTS]: ${checkPost!.label} supported for ${lang}`);
       }
     }
 
