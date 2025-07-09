@@ -590,7 +590,6 @@ export const POST_CHECKS: Checks[] = [
     ),
   },
   {
-    language: ["eng"],
     label: "follow-farming",
     comment: "Follow farming indicators found in post",
     reportAcct: false,
