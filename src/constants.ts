@@ -144,6 +144,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:yrhmtlcffcnpbiw3tx74kwzz", // NC Town Crier cries too much about this shit
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
+      "did:plc:rxfutzaujbo5tv3nsrzfgvqe", // Not MAGA
     ],
   },
   {
@@ -174,6 +175,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:yrhmtlcffcnpbiw3tx74kwzz", // NC Town Crier cries too much about this shit
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
+      "did:plc:rxfutzaujbo5tv3nsrzfgvqe", // Not MAGA
     ],
   },
   {
