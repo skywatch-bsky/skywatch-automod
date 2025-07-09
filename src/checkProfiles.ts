@@ -27,7 +27,7 @@ export const checkDescription = async (
       (profileCheck) => profileCheck.label === label,
     );
 
-    if (checkProfiles.language) {
+    if (checkProfiles.language || checkProfiles.language === undefined) {
       if (!checkProfiles?.language.includes(lang)) {
         logger.info(
           `[CHECKDESCRIPTION]: ${checkProfiles!.label} not supported for ${lang}`,
@@ -111,7 +111,7 @@ export const checkDisplayName = async (
       (profileCheck) => profileCheck.label === label,
     );
 
-    if (checkProfiles.language) {
+    if (checkProfiles.language || checkProfiles.language === undefined) {
       if (!checkProfiles?.language.includes(lang)) {
         logger.info(
           `[CHECKDESCRIPTION]: ${checkProfiles!.label} not supported for ${lang}`,
