@@ -5,10 +5,9 @@ export const LINK_SHORTENER = new RegExp(
   "i",
 );
 
-export const langs = ["eng"];
-
 export const PROFILE_CHECKS: Checks[] = [
   {
+    language: ["eng"],
     label: "follow-farming",
     comment: "Follow farming hashtags found in profile",
     description: true,
@@ -25,6 +24,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ],
   },
   {
+    language: ["eng"],
     label: "blue-heart-emoji",
     comment: "💙 found in profile",
     description: true,
@@ -78,8 +78,8 @@ export const PROFILE_CHECKS: Checks[] = [
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
     displayName: true,
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
     toLabel: false,
     check: new RegExp(
       "Verified by (Molly (Shah|Shane)|@mommunism)|Verified by Molly",
@@ -94,7 +94,10 @@ export const PROFILE_CHECKS: Checks[] = [
     reportAcct: true,
     commentAcct: false,
     toLabel: true,
-    check: new RegExp("gofund\\.me/fec526f5", "i"),
+    check: new RegExp(
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:gofund\\.me/(fec526f5))",
+      "i",
+    ),
   },
   {
     label: "troll",
@@ -213,6 +216,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ],
   },
   {
+    language: ["eng"],
     label: "hammer-sickle",
     comment: "Hammer and sickle found in profile",
     description: true,
@@ -227,6 +231,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ],
   },
   {
+    language: ["eng"],
     label: "inverted-red-triangle",
     comment: "🔻 found in profile",
     description: true,
@@ -242,6 +247,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ],
   },
   {
+    language: ["eng"],
     label: "contains-slur",
     comment: "Slur found in profile",
     description: true,
@@ -425,6 +431,7 @@ export const HANDLE_CHECKS: Checks[] = [
 
 export const POST_CHECKS: Checks[] = [
   {
+    language: ["eng"],
     label: "general-monitoring",
     comment: "Content of interest found",
     reportAcct: false,
@@ -432,7 +439,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: false,
     toLabel: false,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:bsky\\.app/start)|88 counties flipped red. None flipped blue.|Alligator Alcatraz Shirt",
+      "88 counties flipped red. None flipped blue.|Alligator Alcatraz Shirt",
       "i",
     ),
   },
@@ -504,11 +511,12 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:watchpeopledie\\.tv|x\\.com/libsoftiktok)\\b",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:watchpeopledie\\.tv)\\b",
       "i",
     ),
   },
   {
+    language: ["eng"],
     label: "contains-slur",
     comment: "Slur found in post",
     reportAcct: false,
@@ -533,6 +541,7 @@ export const POST_CHECKS: Checks[] = [
   },
   /* eslint-disable no-misleading-character-class */
   {
+    language: ["eng"],
     label: "monitor-slur",
     comment: "Possible slur found in post",
     reportAcct: false,
@@ -546,17 +555,30 @@ export const POST_CHECKS: Checks[] = [
     whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
   },
   {
+    language: ["eng"],
     label: "dehumanizing-rhetoric",
     comment: "Dehumanizing rhetoric found in post",
     reportAcct: true,
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "(\\b(?:towelhead)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)",
+      "(\\b(?:towelhead)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
       "i",
     ),
   },
   {
+    label: "dehumanizing-rhetoric",
+    comment: "Dehumanizing rhetoric found in post",
+    reportAcct: true,
+    commentAcct: false,
+    toLabel: true,
+    check: new RegExp(
+      "(\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok))",
+      "i",
+    ),
+  },
+  {
+    language: ["eng"],
     label: "follow-farming",
     comment: "Follow farming indicators found in post",
     reportAcct: true,
@@ -604,6 +626,7 @@ export const POST_CHECKS: Checks[] = [
     ),
   },
   {
+    language: ["eng"],
     label: "maga-trump",
     comment: "Possible trump support found in post",
     reportAcct: false,
