@@ -10,6 +10,7 @@ export const langs = ["eng"];
 
 export const PROFILE_CHECKS: Checks[] = [
   {
+    language: ["eng"],
     label: "skub",
     comment: "Pro-skub language found in profile",
     description: true,
@@ -43,6 +44,7 @@ export const PROFILE_CHECKS: Checks[] = [
 
 export const HANDLE_CHECKS: Checks[] = [
   {
+    language: ["eng"],
     label: "skub",
     comment: "Pro-skub language found in handle",
     reportAcct: false,
@@ -57,10 +59,12 @@ export const HANDLE_CHECKS: Checks[] = [
 
 export const POST_CHECKS: Checks[] = [
   {
+    language: ["eng"],
     label: "pro-skub-link",
     comment: "Pro Skub link found in post",
     reportAcct: false,
     commentAcct: true,
+    reportPost: false,
     toLabel: true,
     check: new RegExp(
       "skubbe\\.com|skub\\.(me|pro|tech)",
