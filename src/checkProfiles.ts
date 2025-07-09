@@ -30,10 +30,6 @@ export const checkDescription = async (
     if (checkProfiles?.language || checkProfiles?.language !== undefined) {
       if (!checkProfiles?.language.includes(lang)) {
         return;
-      } else {
-        logger.info(
-          `[CHECKDESCRIPTION]: ${checkProfiles!.label} supported for ${lang}`,
-        );
       }
     }
 
@@ -115,10 +111,6 @@ export const checkDisplayName = async (
     if (checkProfiles?.language || checkProfiles?.language !== undefined) {
       if (!checkProfiles?.language.includes(lang)) {
         return;
-      } else {
-        logger.info(
-          `[CHECKDESCRIPTION]: ${checkProfiles!.label} supported for ${lang}`,
-        );
       }
     }
 
