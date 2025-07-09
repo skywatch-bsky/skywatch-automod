@@ -64,6 +64,7 @@ export const POST_CHECKS: Checks[] = [
     comment: "Pro Skub link found in post",
     reportAcct: false,
     commentAcct: true,
+    reportPost: false,
     toLabel: true,
     check: new RegExp(
       "skubbe\\.com|skub\\.(me|pro|tech)",
