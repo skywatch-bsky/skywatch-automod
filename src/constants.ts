@@ -585,7 +585,19 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#(blue|breakfast)crew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties|bsky\\.app/start/(did:plc:qqf54fjwyckvjrordaigstkq|did:plc:t4q27bc5gswob4zskgcqi4b6|did:plc:cu7qticlrmkvb7p6hq4etklt|did:plc:iokqyt73vzoa4f3mboyyf7go|did:plc:c3at2vzpmyodlsdksad5sqna|did:plc:fb3p4ffutjsf7ju53pvawfoz|did:plc:soxupumpwgcsbsxhqynil2m2|did:plc:agesb4bpc6iv6fpipw7pybbu|did:plc:kfj6letvntutu4ctr6dkijn7|did:plc:hhleck4pj4cl2dpuuncpzlg7|did:plc:morw3ybflmxq4wdubrvisvmn)",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#(blue|breakfast)crew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties",
+      "iu",
+    ),
+  },
+  {
+    language: ["eng"],
+    label: "follow-farming",
+    comment: "Follow farming indicators found in post",
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
+    check: new RegExp(
+      "bsky\\.app/start/(did:plc:qqf54fjwyckvjrordaigstkq|did:plc:t4q27bc5gswob4zskgcqi4b6|did:plc:cu7qticlrmkvb7p6hq4etklt|did:plc:iokqyt73vzoa4f3mboyyf7go|did:plc:c3at2vzpmyodlsdksad5sqna|did:plc:fb3p4ffutjsf7ju53pvawfoz|did:plc:soxupumpwgcsbsxhqynil2m2|did:plc:agesb4bpc6iv6fpipw7pybbu|did:plc:kfj6letvntutu4ctr6dkijn7|did:plc:hhleck4pj4cl2dpuuncpzlg7|did:plc:morw3ybflmxq4wdubrvisvmn)",
       "iu",
     ),
   },
