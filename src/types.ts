@@ -1,4 +1,5 @@
 export interface Checks {
+  language?: string;
   label: string;
   comment: string;
   description?: boolean;
