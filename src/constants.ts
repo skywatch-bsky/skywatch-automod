@@ -1,7 +1,7 @@
 import { Checks } from "./types.js";
 
 export const LINK_SHORTENER = new RegExp(
-  "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co/|go\\.bsky\\.app)",
+  "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co/|go\\.bsky\\.app|dlvrit\\.com/)",
   "i",
 );
 
@@ -73,7 +73,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "at://did:plc:wedvauzlurzle6nld7jgqtvr/app.bsky.graph.list/3lfgzid6xnc22",
     ],
   },
-  {
+  /*{
     label: "spammy",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
@@ -85,7 +85,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "Verified by (Molly (Shah|Shane)|@mommunism)|Verified by Molly",
       "i",
     ),
-  },
+  },*/
   {
     label: "suspect-inauthentic",
     comment: "Link in bio correlated with multiple accounts",
@@ -99,6 +99,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "i",
     ),
   },
+  /*
   {
     label: "troll",
     comment: "Troll language found in profile",
@@ -113,9 +114,9 @@ export const PROFILE_CHECKS: Checks[] = [
     ),
     whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "i"),
     ignoredDIDs: [
-      "did:plc:lmuoejh44euyubyxynofwavg", //Has "Anti-Groyper" in their profile and this was getting flagged before I refactored the whitelist regex.
+      "did:plc:lmuoejh44euyubyxynofwavg", // Has "Anti-Groyper" in their profile and this was getting flagged before I refactored the whitelist regex.
     ],
-  },
+  },*/
   {
     label: "maga-trump",
     comment: "MAGA/Trump support found in displayName.",
@@ -432,7 +433,7 @@ export const HANDLE_CHECKS: Checks[] = [
 ];
 
 export const POST_CHECKS: Checks[] = [
-  {
+  /* {
     language: ["eng"],
     label: "general-monitoring",
     comment: "Content of interest found",
@@ -444,7 +445,7 @@ export const POST_CHECKS: Checks[] = [
       "88 counties flipped red. None flipped blue.|Alligator Alcatraz Shirt",
       "i",
     ),
-  },
+  }, */
   {
     label: "fundraising-link",
     comment: "Fundraising link found in post",
@@ -556,7 +557,7 @@ export const POST_CHECKS: Checks[] = [
     ),
     whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
   },
-  {
+  /* {
     language: ["eng"],
     label: "dehumanizing-rhetoric",
     comment: "Dehumanizing rhetoric found in post",
@@ -578,8 +579,7 @@ export const POST_CHECKS: Checks[] = [
       "(\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok))",
       "i",
     ),
-  },
-  {
+    }*/ {
     language: ["eng"],
     label: "follow-farming",
     comment: "Follow farming indicators found in post",
