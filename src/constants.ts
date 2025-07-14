@@ -542,6 +542,15 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:lsmcyezwzoxq46gw2fj3w7fr", // Scotish Government
     ],
   },
+  {
+    language: ["afr"],
+    label: "contains-slur",
+    comment: "Slur found in post",
+    reportAcct: false,
+    commentAcct: true,
+    toLabel: true,
+    check: new RegExp("\\b(kaffir)", "i"),
+  },
   /* eslint-disable no-misleading-character-class */
   {
     language: ["eng"],
