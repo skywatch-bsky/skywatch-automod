@@ -16,10 +16,6 @@ export const checkDescription = async (
 ) => {
   const lang = await getLanguage(description);
 
-  if (!langs.includes(lang)) {
-    return;
-  }
-
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
     (profileCheck) => profileCheck.label,
@@ -30,6 +26,12 @@ export const checkDescription = async (
     const checkProfiles = PROFILE_CHECKS.find(
       (profileCheck) => profileCheck.label === label,
     );
+
+    if (checkProfiles?.language || checkProfiles?.language !== undefined) {
+      if (!checkProfiles?.language.includes(lang)) {
+        return;
+      }
+    }
 
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
@@ -94,10 +96,6 @@ export const checkDisplayName = async (
 ) => {
   const lang = await getLanguage(description);
 
-  if (!langs.includes(lang)) {
-    return;
-  }
-
   // Get a list of labels
   const labels: string[] = Array.from(
     PROFILE_CHECKS,
@@ -109,6 +107,12 @@ export const checkDisplayName = async (
     const checkProfiles = PROFILE_CHECKS.find(
       (profileCheck) => profileCheck.label === label,
     );
+
+    if (checkProfiles?.language || checkProfiles?.language !== undefined) {
+      if (!checkProfiles?.language.includes(lang)) {
+        return;
+      }
+    }
 
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
