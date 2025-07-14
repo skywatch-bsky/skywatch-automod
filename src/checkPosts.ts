@@ -51,8 +51,10 @@ export const checkPosts = async (post: Post[]) => {
       (postCheck) => postCheck.label === label,
     );
 
-    if (!langs.includes(lang)) {
-      return;
+    if (checkPost?.language || checkPost?.language !== undefined) {
+      if (!checkPost?.language.includes(lang)) {
+        return;
+      }
     }
 
     if (checkPost?.ignoredDIDs) {

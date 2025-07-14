@@ -8,11 +8,13 @@ For each check, users need to define a set of regular expressions that will be u
 ```typescript
 export const HANDLE_CHECKS: Checks[] = [
   {
+    language: "[eng]", // Language of the check. If the check language does not match the content language, the check will be skipped. Assign null or remove field to apply to all languages.
     label: "example",
     comment: "Example found in handle",
     description: true, // Optional, only used in handle checks
     displayName: true, // Optional, only used in handle checks
-    reportAcct: false, // it true, the check will only report the content against the account, not label.
+    reportAcct: false, // if true, the check will only report the content against the account, not label.
+    reportPost: false, // if true, the check will only report the content against the post, not label. Only used in post checks.
     commentOnly: false, // if true, will generate an account level comment from flagged posts, rather than a report. Intended for use when reportAcct is false, and on posts only where the flag may generate a high volume of reports.
     toLabel: true, // Should the handle in question be labeled if check evaluates to true.
     check: new RegExp("example", "i"), // Regular expression to match against the content
