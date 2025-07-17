@@ -577,7 +577,7 @@ export const POST_CHECKS: Checks[] = [
       "(\\b(?:towelhead)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
       "i",
     ),
-  },
+  },*/
   {
     label: "dehumanizing-rhetoric",
     comment: "Dehumanizing rhetoric found in post",
@@ -585,10 +585,11 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "(\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok))",
+      "(\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok|daughtersadvocatingrestoration\\.org))",
       "i",
     ),
-    }*/ {
+  },
+  {
     language: ["eng"],
     label: "follow-farming",
     comment: "Follow farming indicators found in post",
