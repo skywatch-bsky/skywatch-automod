@@ -585,7 +585,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "(\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok|daughtersadvocatingrestoration\\.org))",
+      "(\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|(?:daughtersadvocatingrestoration\\.org))",
       "i",
     ),
   },
