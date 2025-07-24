@@ -99,7 +99,6 @@ export const PROFILE_CHECKS: Checks[] = [
       "i",
     ),
   },
-  /*
   {
     label: "troll",
     comment: "Troll language found in profile",
@@ -109,14 +108,14 @@ export const PROFILE_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "only[ -]?(two|2)[ -]?genders?|genders?[ -]?only[ -]?2|[o0]n[l1]y ?([t7][wvv][o0]|2) ?[g9][e3][n][d][e3][r][s5]?|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|watchpeopledie\\.tv|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lgb✂️tq|rightmemenews\\.com|[nh]ate ?[nh]iggers?|MAGA Colony|Bluecry|White lives matter",
+      "only[ -]?(two|2)[ -]?genders?|genders?[ -]?only[ -]?2|[o0]n[l1]y ?([t7][wvv][o0]|2) ?[g9][e3][n][d][e3][r][s5]?|groyper|kiwi-?farms?|blueskycuck|[o0]n[l1]y([t7][wvv][o0]|2)[g9][e3][n][d][e3][r][s5]?|raypist|grayper|graypist|soyjack\\.party|soyjack\\.st|soybooru\\.com|archive\\.soyjack\\.st|rdrama\\.net|watchpeopledie\\.tv|kiwifrms\\.st|jewhater|jewhater[0-9]+|soyjak|troonjak|kamalasu(cks|x)|p[e3]d[o0]hunter|watchpeopledie\\.tv|reportgod\\.group|Transwomen are (male|men)|Humans cannot change sex|🚫[ #]*illegals|jointhe41percent-[0-9]+|gabzzzsatan|ni[a-zA-Z0-9]+rni[a-zA-Z0-9]+r|lgb✂️tq|rightmemenews\\.com|[nh]ate ?[nh]iggers?|MAGA Colony|Bluecry|White lives matter|#IStandWthSandiePeggie|#SexMatters",
       "i",
     ),
     whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "i"),
     ignoredDIDs: [
       "did:plc:lmuoejh44euyubyxynofwavg", // Has "Anti-Groyper" in their profile and this was getting flagged before I refactored the whitelist regex.
     ],
-  },*/
+  },
   {
     label: "maga-trump",
     comment: "MAGA/Trump support found in displayName.",
@@ -632,7 +631,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists|#IStandWthSandiePeggie|#SexMatters",
       "i",
     ),
   },
