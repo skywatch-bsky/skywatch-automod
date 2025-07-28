@@ -1,7 +1,7 @@
 import { Checks } from "./types.js";
 
 export const LINK_SHORTENER = new RegExp(
-  "(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co/|go\\.bsky\\.app|dlvrit\\.com|t\\.co|t\\.me|is\\.gd|v\\.gd|kutt\\.it)",
+  "\\b(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co|go\\.bsky\\.app|dlvrit\\.com|t\\.me|is\\.gd|v\\.gd|kutt\\.it)",
   "i",
 );
 
