@@ -21,6 +21,7 @@ export const PROFILE_CHECKS: Checks[] = [
     ),
     ignoredDIDs: [
       "did:plc:kyh3c4gpfdxp7xgxy6hodtpu", // Has #bluecrew in bio but not engaged in other behaviors and only follows 600 people.
+      "did:plc:cqlpijusxuy4u3viikknppyv", // Annoying but not a follow-farmer in the way we tend to track
     ],
   },
   {
