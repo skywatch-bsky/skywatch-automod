@@ -16,7 +16,7 @@ export const PROFILE_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#i?followback|#blue(crew|wave)|#breakfastcrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donk(party|pack|connects)|#donk|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#UnitedBlueCrew",
+      "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#i?followback|#blue(crew|wave)|#breakfastcrew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donk(party|pack|connects)|#donk\\b|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#UnitedBlueCrew",
       "i",
     ),
     ignoredDIDs: [
