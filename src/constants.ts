@@ -644,7 +644,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "protect women's sports|protect womens sports|Genital Mutilation|(trans)?gender ideology",
+      "protect women's sports|protect womens sports|Genital Mutilation|(trans)?gender ideology|biological males?",
       "i",
     ),
   },
