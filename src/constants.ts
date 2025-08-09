@@ -1,7 +1,7 @@
 import { Checks } from "./types.js";
 
 export const LINK_SHORTENER = new RegExp(
-  "\\b(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co|go\\.bsky\\.app|dlvrit\\.com|t\\.me|is\\.gd|v\\.gd|kutt\\.it|simpleURL\\.tech|sor\\.bz|shorturl\\.73\\.nu|bitly\\.com|bitly\\.kr|bl\\.ink|buff\\.ly|clicky\\.me|cutt\\.ly|dub\\.co|foxlyme\\.com|gg\\.gg|han\\.gl|is\\.gd|kurzelinks\\.de|kutt\\.it|linkhuddle\\.com|linksplit\\.iourl-shortener|lstu\\.fr|name\\.combranded-url-shortener|oe\\.cd|ow\\.ly|rebrandly\\.com|reduced\\.to|rip\\.to|san\\.aq|short\\.io|shorten-url\\.com|smallseotools\\.com/url-shortener|spoo\\.me|switchy\\.io|t2mio\\.com|tinu\\.be|tiny\\.cc|t\\.ly|urlr\\.meen|v\\.gd|vo\\.la|yaso\\.su|zlnk\\.com|dub\\.co|polrproject\\.org|reduced\\.to|shlink\\.io|yourls\\.org)",
+  "\\b(?:https?:\\/\\/)?([^.]+\\.)?(tinyurl\\.com|bit\\.ly/|goo\\.gl|g\\.co/|ow\\.ly/|shorturl\\.at|t\\.co|go\\.bsky\\.app|dlvrit\\.com|t\\.me|is\\.gd|v\\.gd|kutt\\.it|simpleURL\\.tech|sor\\.bz|shorturl\\.73\\.nu|bitly\\.com|bitly\\.kr|bl\\.ink|buff\\.ly|clicky\\.me|cutt\\.ly|dub\\.co|foxlyme\\.com|gg\\.gg|han\\.gl|is\\.gd|kurzelinks\\.de|kutt\\.it|linkhuddle\\.com|linksplit\\.iourl-shortener|lstu\\.fr|name\\.combranded-url-shortener|oe\\.cd|ow\\.ly|rebrandly\\.com|reduced\\.to|rip\\.to|san\\.aq|short\\.io|shorten-url\\.com|smallseotools\\.com/url-shortener|spoo\\.me|switchy\\.io|t2mio\\.com|tinu\\.be|tiny\\.cc|t\\.ly|urlr\\.meen|v\\.gd|vo\\.la|yaso\\.su|zlnk\\.com|dub\\.co|polrproject\\.org|reduced\\.to|shlink\\.io|yourls\\.org|nabil\\.bio)",
   "i",
 );
 
