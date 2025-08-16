@@ -88,7 +88,6 @@ jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<"app.bsky.feed.post">) => {
     const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-    const hasEmbed = event.commit.record.hasOwnProperty("embed");
     const hasFacets = event.commit.record.hasOwnProperty("facets");
     const hasText = event.commit.record.hasOwnProperty("text");
 
@@ -125,9 +124,7 @@ jetstream.onCreate(
           tasks.push(checkPosts(posts));
         });
       }
-    }
-
-    if (hasText) {
+    } else if (hasText) {
       const posts: Post[] = [
         {
           did: event.did,
@@ -139,23 +136,6 @@ jetstream.onCreate(
         },
       ];
       tasks.push(checkPosts(posts));
-    }
-
-    if (hasEmbed) {
-      const embed = event.commit.record.embed;
-      if (embed && embed.$type === "app.bsky.embed.external") {
-        const posts: Post[] = [
-          {
-            did: event.did,
-            time: event.time_us,
-            rkey: event.commit.rkey,
-            atURI: atURI,
-            text: embed.external.uri,
-            cid: event.commit.cid,
-          },
-        ];
-        tasks.push(checkPosts(posts));
-      }
     }
   },
 );
@@ -212,14 +192,16 @@ jetstream.onCreate(
           event.commit.record.displayName as string,
           event.commit.record.description as string,
         );
-      }
 
-      if (event.commit.record.joinedViaStarterPack) {
-        checkStarterPack(
-          event.did,
-          event.time_us,
-          event.commit.record.joinedViaStarterPack.uri,
-        );
+        if (event.commit.record.joinedViaStarterPack) {
+          checkStarterPack(
+            event.did,
+            event.time_us,
+            event.commit.record.joinedViaStarterPack.uri,
+          );
+        }
+      } else {
+        return;
       }
     } catch (error) {
       logger.error(`Error checking profile:  ${error}`);
