@@ -31,27 +31,27 @@ export const monitorDescription = async (
 
     if (description) {
       if (checkProfiles?.description === true) {
-        if (checkProfiles!.check.test(description)) {
-          if (checkProfiles!.whitelist) {
-            if (checkProfiles!.whitelist.test(description)) {
+        if (checkProfiles.check.test(description)) {
+          if (checkProfiles.whitelist) {
+            if (checkProfiles.whitelist.test(description)) {
               logger.info('Whitelisted phrase found.');
               return;
             }
           } else {
-            logger.info(`${checkProfiles!.label} in description for ${did}`);
+            logger.info(`${checkProfiles.label} in description for ${did}`);
           }
 
-          if (checkProfiles!.reportOnly === true) {
+          if (checkProfiles.reportOnly === true) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             return;
           } else {
             createAccountLabel(
               did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment}`,
+              checkProfiles.label,
+              `${time}: ${checkProfiles.comment}`,
             );
           }
         }
@@ -87,27 +87,27 @@ export const monitorDisplayName = async (
 
     if (displayName) {
       if (checkProfiles?.displayName === true) {
-        if (checkProfiles!.check.test(displayName)) {
-          if (checkProfiles!.whitelist) {
-            if (checkProfiles!.whitelist.test(displayName)) {
+        if (checkProfiles.check.test(displayName)) {
+          if (checkProfiles.whitelist) {
+            if (checkProfiles.whitelist.test(displayName)) {
               logger.info('Whitelisted phrase found.');
               return;
             }
           } else {
-            logger.info(`${checkProfiles!.label} in displayName for ${did}`);
+            logger.info(`${checkProfiles.label} in displayName for ${did}`);
           }
 
-          if (checkProfiles!.reportOnly === true) {
+          if (checkProfiles.reportOnly === true) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             return;
           } else {
             createAccountLabel(
               did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment}`,
+              checkProfiles.label,
+              `${time}: ${checkProfiles.comment}`,
             );
           }
         }

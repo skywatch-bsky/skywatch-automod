@@ -73,14 +73,19 @@ export async function getLanguage(profile: string): Promise<string> {
     return 'eng';
   }
 
-  const lande = (await import('lande')).default;
-  const langsProbabilityMap = lande(profileText);
+  try {
+    const lande = (await import('lande')).default;
+    const langsProbabilityMap = lande(profileText);
 
-  // Sort by probability in descending order
-  langsProbabilityMap.sort(
-    (a: [string, number], b: [string, number]) => b[1] - a[1],
-  );
+    // Sort by probability in descending order
+    langsProbabilityMap.sort(
+      (a: [string, number], b: [string, number]) => b[1] - a[1],
+    );
 
-  // Return the language code with the highest probability
-  return langsProbabilityMap[0][0];
+    // Return the language code with the highest probability
+    return langsProbabilityMap[0][0];
+  } catch (error) {
+    logger.error('Error detecting language, defaulting to \'eng\':', error);
+    return 'eng'; // Fallback to English on error
+  }
 }

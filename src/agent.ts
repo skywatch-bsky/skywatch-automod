@@ -1,9 +1,8 @@
-import { AtpAgent } from "@atproto/api";
-
-import { setGlobalDispatcher, Agent as Agent } from "undici";
+import { AtpAgent } from '@atproto/api';
+import { setGlobalDispatcher, Agent as Agent } from 'undici';
 
 setGlobalDispatcher(new Agent({ connect: { timeout: 20_000 } }));
-import { BSKY_HANDLE, BSKY_PASSWORD, OZONE_PDS } from "./config.js";
+import { BSKY_HANDLE, BSKY_PASSWORD, OZONE_PDS } from './config.js';
 
 export const agent = new AtpAgent({
   service: `https://${OZONE_PDS}`,
