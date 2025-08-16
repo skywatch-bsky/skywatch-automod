@@ -11,38 +11,43 @@ export const checkStarterPack = async (
   time: number,
   atURI: string,
 ) => {
-  // Get a list of labels
-  const labels: string[] = Array.from(
-    PROFILE_CHECKS,
-    (profileCheck) => profileCheck.label,
-  );
-
-  // iterate through the labels
-  labels.forEach((label) => {
-    const checkProfiles = PROFILE_CHECKS.find(
-      (profileCheck) => profileCheck.label === label,
+  try {
+    // Get a list of labels
+    const labels: string[] = Array.from(
+      PROFILE_CHECKS,
+      (profileCheck) => profileCheck.label,
     );
 
-    // Check if DID is whitelisted
-    if (checkProfiles?.ignoredDIDs) {
-      if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`Whitelisted DID: ${did}`); return;
-      }
-    }
+    // iterate through the labels
+    labels.forEach((label) => {
+      const checkProfiles = PROFILE_CHECKS.find(
+        (profileCheck) => profileCheck.label === label,
+      );
 
-    if (atURI) {
-      if (checkProfiles?.starterPacks) {
-        if (checkProfiles?.starterPacks.includes(atURI)) {
-          logger.info(`Account joined via starter pack at: ${atURI}`);
-          createAccountLabel(
-            did,
-            `${checkProfiles!.label}`,
-            `${time}: ${checkProfiles!.comment} - Account joined via starter pack at: ${atURI}`,
-          );
+      // Check if DID is whitelisted
+      if (checkProfiles?.ignoredDIDs) {
+        if (checkProfiles.ignoredDIDs.includes(did)) {
+          logger.info(`Whitelisted DID: ${did}`); return;
         }
       }
-    }
-  });
+
+      if (atURI) {
+        if (checkProfiles?.starterPacks) {
+          if (checkProfiles?.starterPacks.includes(atURI)) {
+            logger.info(`Account joined via starter pack at: ${atURI}`);
+            createAccountLabel(
+              did,
+              checkProfiles.label,
+              `${time}: ${checkProfiles.comment} - Account joined via starter pack at: ${atURI}`,
+            );
+          }
+        }
+      }
+    });
+  } catch (error) {
+    logger.error(`Error in checkStarterPack for ${did}:`, error);
+    throw error;
+  }
 };
 
 export const checkNewStarterPack = async (
@@ -53,57 +58,62 @@ export const checkNewStarterPack = async (
   packName: string | undefined,
   description: string | undefined,
 ) => {
-  const labels: string[] = Array.from(
-    STARTERPACK_CHECKS,
-    (SPCheck) => SPCheck.label,
-  );
+  try {
+    const labels: string[] = Array.from(
+      STARTERPACK_CHECKS,
+      (SPCheck) => SPCheck.label,
+    );
 
-  labels.forEach((label) => {
-    const checkList = PROFILE_CHECKS.find((SPCheck) => SPCheck.label === label);
+    labels.forEach((label) => {
+      const checkList = PROFILE_CHECKS.find((SPCheck) => SPCheck.label === label);
 
-    if (checkList?.knownVectors?.includes(did)) {
-      createPostLabel(
-        atURI,
-        cid,
-        `${checkList!.label}`,
-        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
-      );
-      createAccountReport(
-        did,
-        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
-      );
-    }
-
-    if (description) {
-      if (checkList!.check.test(description)) {
-        logger.info(`Labeling post: ${atURI}`);
+      if (checkList?.knownVectors?.includes(did)) {
         createPostLabel(
           atURI,
           cid,
-          `${checkList!.label}`,
-          `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+          checkList.label,
+          `${time}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
         );
         createAccountReport(
           did,
-          `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+          `${time}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
         );
       }
-    }
 
-    if (packName) {
-      if (checkList!.check.test(packName)) {
-        logger.info(`Labeling post: ${atURI}`);
-        createPostLabel(
-          atURI,
-          cid,
-          `${checkList!.label}`,
-          `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
-        );
-        createAccountReport(
-          did,
-          `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
-        );
+      if (description) {
+        if (checkList!.check.test(description)) {
+          logger.info(`Labeling post: ${atURI}`);
+          createPostLabel(
+            atURI,
+            cid,
+            checkList!.label,
+            `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+          );
+          createAccountReport(
+            did,
+            `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+          );
+        }
       }
-    }
-  });
+
+      if (packName) {
+        if (checkList!.check.test(packName)) {
+          logger.info(`Labeling post: ${atURI}`);
+          createPostLabel(
+            atURI,
+            cid,
+            checkList!.label,
+            `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
+          );
+          createAccountReport(
+            did,
+            `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
+          );
+        }
+      }
+    });
+  } catch (error) {
+    logger.error(`Error in checkNewStarterPack for ${did}:`, error);
+    throw error;
+  }
 };

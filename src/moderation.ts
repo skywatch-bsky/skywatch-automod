@@ -40,8 +40,9 @@ export const createPostLabel = async (
           },
         },
       );
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logger.error(`Error creating post label for URI ${uri}:`, error);
+      throw error;
     }
   });
 };
@@ -80,8 +81,9 @@ export const createAccountLabel = async (
           },
         },
       );
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logger.error(`Error creating account label for DID ${did}:`, error);
+      throw error;
     }
   });
 };
@@ -120,8 +122,9 @@ export const createPostReport = async (
           },
         },
       );
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logger.error(`Error creating post report for URI ${uri}:`, error);
+      throw error;
     }
   });
 };
@@ -154,8 +157,9 @@ export const createAccountComment = async (did: string, comment: string) => {
           },
         },
       );
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logger.error(`Error creating account comment for DID ${did}:`, error);
+      throw error;
     }
   });
 };
@@ -189,8 +193,9 @@ export const createAccountReport = async (did: string, comment: string) => {
           },
         },
       );
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logger.error(`Error creating account report for DID ${did}:`, error);
+      throw error;
     }
   });
 };
@@ -220,8 +225,9 @@ export const addToList = async (label: string, did: string) => {
           createdAt: new Date().toISOString(),
         },
       });
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      logger.error(`Error adding DID ${did} to list ${label}:`, error);
+      throw error;
     }
   });
 };
