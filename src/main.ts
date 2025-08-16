@@ -125,7 +125,9 @@ jetstream.onCreate(
           tasks.push(checkPosts(posts));
         });
       }
-    } else if (hasText) {
+    }
+
+    if (hasText) {
       const posts: Post[] = [
         {
           did: event.did,
@@ -137,7 +139,9 @@ jetstream.onCreate(
         },
       ];
       tasks.push(checkPosts(posts));
-    } else if (hasEmbed) {
+    }
+
+    if (hasEmbed) {
       const embed = event.commit.record.embed;
       if (embed && embed.$type === "app.bsky.embed.external") {
         const posts: Post[] = [
@@ -208,16 +212,14 @@ jetstream.onCreate(
           event.commit.record.displayName as string,
           event.commit.record.description as string,
         );
+      }
 
-        if (event.commit.record.joinedViaStarterPack) {
-          checkStarterPack(
-            event.did,
-            event.time_us,
-            event.commit.record.joinedViaStarterPack.uri,
-          );
-        }
-      } else {
-        return;
+      if (event.commit.record.joinedViaStarterPack) {
+        checkStarterPack(
+          event.did,
+          event.time_us,
+          event.commit.record.joinedViaStarterPack.uri,
+        );
       }
     } catch (error) {
       logger.error(`Error checking profile:  ${error}`);
