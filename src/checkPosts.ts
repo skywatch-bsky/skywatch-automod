@@ -1,13 +1,13 @@
-import { LINK_SHORTENER, POST_CHECKS, langs } from "./constants.js";
-import { Post } from "./types.js";
-import logger from "./logger.js";
+import { LINK_SHORTENER, POST_CHECKS, langs } from './constants.js';
+import logger from './logger.js';
 import {
   createPostLabel,
   createAccountReport,
   createAccountComment,
   createPostReport,
-} from "./moderation.js";
-import { getFinalUrl, getLanguage } from "./utils.js";
+} from './moderation.js';
+import type { Post } from './types.js';
+import { getFinalUrl, getLanguage } from './utils.js';
 
 export const checkPosts = async (post: Post[]) => {
   // Get a list of labels
@@ -68,7 +68,7 @@ export const checkPosts = async (post: Post[]) => {
       // Check if post is whitelisted
       if (checkPost?.whitelist) {
         if (checkPost?.whitelist.test(post[0].text)) {
-          logger.info(`[CHECKPOSTS]: Whitelisted phrase found"`);
+          logger.info('[CHECKPOSTS]: Whitelisted phrase found"');
           return;
         }
       }
