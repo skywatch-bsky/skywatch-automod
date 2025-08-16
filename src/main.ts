@@ -140,15 +140,13 @@ jetstream.onCreate(
     } else if (hasEmbed) {
       const embed = event.commit.record.embed;
       if (embed && embed.$type === "app.bsky.embed.external") {
-        const postText = `Post: ${event.commit.record.text}; Embed: ${embed.external.title}: ${embed.external.uri}`;
-
         const posts: Post[] = [
           {
             did: event.did,
             time: event.time_us,
             rkey: event.commit.rkey,
             atURI: atURI,
-            text: postText,
+            text: embed.external.uri,
             cid: event.commit.cid,
           },
         ];
