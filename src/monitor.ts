@@ -1,7 +1,8 @@
-import { describe } from "node:test";
-import { PROFILE_CHECKS } from "./constants.js";
-import logger from "./logger.js";
-import { createAccountReport, createAccountLabel } from "./moderation.js";
+import { describe } from 'node:test';
+
+import { PROFILE_CHECKS } from './constants.js';
+import logger from './logger.js';
+import { createAccountReport, createAccountLabel } from './moderation.js';
 
 export const monitorDescription = async (
   did: string,
@@ -24,7 +25,7 @@ export const monitorDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`); return;
       }
     }
 
@@ -33,7 +34,7 @@ export const monitorDescription = async (
         if (checkProfiles!.check.test(description)) {
           if (checkProfiles!.whitelist) {
             if (checkProfiles!.whitelist.test(description)) {
-              logger.info(`Whitelisted phrase found.`);
+              logger.info('Whitelisted phrase found.');
               return;
             }
           } else {
@@ -80,7 +81,7 @@ export const monitorDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`); return;
       }
     }
 
@@ -89,7 +90,7 @@ export const monitorDisplayName = async (
         if (checkProfiles!.check.test(displayName)) {
           if (checkProfiles!.whitelist) {
             if (checkProfiles!.whitelist.test(displayName)) {
-              logger.info(`Whitelisted phrase found.`);
+              logger.info('Whitelisted phrase found.');
               return;
             }
           } else {

@@ -1,10 +1,10 @@
-import { PROFILE_CHECKS, STARTERPACK_CHECKS } from "./constants.js";
-import logger from "./logger.js";
+import { PROFILE_CHECKS, STARTERPACK_CHECKS } from './constants.js';
+import logger from './logger.js';
 import {
   createAccountLabel,
   createAccountReport,
   createPostLabel,
-} from "./moderation.js";
+} from './moderation.js';
 
 export const checkStarterPack = async (
   did: string,
@@ -26,7 +26,7 @@ export const checkStarterPack = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`); return;
       }
     }
 

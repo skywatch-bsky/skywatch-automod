@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__git-mcp-server__git_status",
+      "mcp__git-mcp-server__git_diff",
+      "mcp__git-mcp-server__git_set_working_dir"
+    ],
+    "ask": [
+      "curl"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "git-mcp-server"
+  ]
+}
