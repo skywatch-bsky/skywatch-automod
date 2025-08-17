@@ -13,7 +13,7 @@ export const createPostLabel = async (
   await isLoggedIn;
   await limit(async () => {
     try {
-      return agent.tools.ozone.moderation.emitEvent(
+      return await agent.tools.ozone.moderation.emitEvent(
         {
           event: {
             $type: 'tools.ozone.moderation.defs#modEventLabel',
@@ -28,7 +28,7 @@ export const createPostLabel = async (
             cid,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? '',
           createdAt: new Date().toISOString(),
         },
         {
@@ -69,7 +69,7 @@ export const createAccountLabel = async (
             did,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? '',
           createdAt: new Date().toISOString(),
         },
         {
@@ -96,7 +96,7 @@ export const createPostReport = async (
   await isLoggedIn;
   await limit(async () => {
     try {
-      return agent.tools.ozone.moderation.emitEvent(
+      return await agent.tools.ozone.moderation.emitEvent(
         {
           event: {
             $type: 'tools.ozone.moderation.defs#modEventReport',
@@ -110,7 +110,7 @@ export const createPostReport = async (
             cid,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? '',
           createdAt: new Date().toISOString(),
         },
         {
@@ -145,7 +145,7 @@ export const createAccountComment = async (did: string, comment: string) => {
             did,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? '',
           createdAt: new Date().toISOString(),
         },
         {
@@ -181,7 +181,7 @@ export const createAccountReport = async (did: string, comment: string) => {
             did,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? '',
           createdAt: new Date().toISOString(),
         },
         {
@@ -232,7 +232,7 @@ export const addToList = async (label: string, did: string) => {
   });
 };
 
-export async function checkAccountLabels(did: string) {
+export function checkAccountLabels(_did: string) {
   /* try {
     const repo = await limit(() =>
       agent.tools.ozone.moderation.getRepo(
