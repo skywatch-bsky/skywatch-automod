@@ -86,7 +86,6 @@ The code-reviewer has completed a comprehensive review of the codebase and ident
   Immediate Blocking Issues
 
   - Missing constants.ts file (only example exists)
-  - Unsafe type assertions in main.ts:152,158
   - Inadequate error handling for async operations
 
   High Priority Security & Reliability Concerns
