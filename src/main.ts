@@ -95,16 +95,16 @@ jetstream.onCreate(
     const tasks: Promise<void>[] = [];
 
     // Check if the record has facets
-    if (hasFacets) {
-      const hasLinkType = event.commit.record.facets!.some((facet) =>
+    if (hasFacets && event.commit.record.facets) {
+      const hasLinkType = event.commit.record.facets.some((facet) =>
         facet.features.some(
           (feature) => feature.$type === "app.bsky.richtext.facet#link",
         ),
       );
 
       if (hasLinkType) {
-        const urls = event.commit.record
-          .facets!.flatMap((facet) =>
+        const urls = event.commit.record.facets
+          .flatMap((facet) =>
             facet.features.filter(
               (feature) => feature.$type === "app.bsky.richtext.facet#link",
             ),
@@ -166,18 +166,11 @@ jetstream.onUpdate(
   async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        checkDescription(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
-        checkDisplayName(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
+        const displayName = event.commit.record.displayName ?? "";
+        const description = event.commit.record.description ?? "";
+
+        checkDescription(event.did, event.time_us, displayName, description);
+        checkDisplayName(event.did, event.time_us, displayName, description);
       }
 
       if (event.commit.record.joinedViaStarterPack) {
@@ -200,18 +193,11 @@ jetstream.onCreate(
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        checkDescription(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
-        checkDisplayName(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
+        const displayName = event.commit.record.displayName ?? "";
+        const description = event.commit.record.description ?? "";
+
+        checkDescription(event.did, event.time_us, displayName, description);
+        checkDisplayName(event.did, event.time_us, displayName, description);
       }
 
       if (event.commit.record.joinedViaStarterPack) {
@@ -289,7 +275,9 @@ jetstream.start();
 function shutdown() {
   try {
     logger.info("Shutting down gracefully...");
-    fs.writeFileSync("cursor.txt", jetstream.cursor!.toString(), "utf8");
+    if (jetstream.cursor) {
+      fs.writeFileSync("cursor.txt", jetstream.cursor.toString(), "utf8");
+    }
     jetstream.close();
     metricsServer.close();
   } catch (error) {
