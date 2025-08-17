@@ -6,7 +6,7 @@ import {
   createAccountLabel,
 } from './moderation.js';
 
-export const checkHandle = async (
+export const checkHandle = (
   did: string,
   handle: string,
   time: number,
@@ -31,36 +31,36 @@ export const checkHandle = async (
         }
       }
 
-      if (checkList!.check.test(handle)) {
+      if (checkList?.check.test(handle)) {
       // False-positive checks
-        if (checkList?.whitelist) {
-          if (checkList?.whitelist.test(handle)) {
+        if (checkList.whitelist) {
+          if (checkList.whitelist.test(handle)) {
             logger.info(`Whitelisted phrase found for: ${handle}`);
             return;
           }
         }
 
-        if (checkList?.toLabel === true) {
+        if (checkList.toLabel) {
           logger.info(`[CHECKHANDLE]: Labeling ${did} for ${checkList.label}`);
           {
-            createAccountLabel(
+            void createAccountLabel(
               did,
               checkList.label,
-              `${time}: ${checkList.comment} - ${handle}`,
+              `${time.toString()}: ${checkList.comment} - ${handle}`,
             );
           }
         }
 
-        if (checkList?.reportAcct === true) {
+        if (checkList.reportAcct) {
           logger.info(`[CHECKHANDLE]: Reporting ${did} for ${checkList.label}`);
-          createAccountReport(did, `${time}: ${checkList.comment} - ${handle}`);
+          void createAccountReport(did, `${time.toString()}: ${checkList.comment} - ${handle}`);
         }
 
-        if (checkList?.commentAcct === true) {
+        if (checkList.commentAcct) {
           logger.info(
             `[CHECKHANDLE]: Commenting on ${did} for ${checkList.label}`,
           );
-          createAccountComment(did, `${time}: ${checkList.comment} - ${handle}`);
+          void createAccountComment(did, `${time.toString()}: ${checkList.comment} - ${handle}`);
         }
       }
     });
