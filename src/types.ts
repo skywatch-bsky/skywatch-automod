@@ -39,7 +39,7 @@ export interface Profile {
 
 // Define the type for the link feature
 export interface LinkFeature {
-  $type: 'app.bsky.richtext.facet#link';
+  $type: "app.bsky.richtext.facet#link";
   uri: string;
 }
 

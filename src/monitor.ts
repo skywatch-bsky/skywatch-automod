@@ -1,8 +1,7 @@
-import { describe } from 'node:test';
-
-import { PROFILE_CHECKS } from './constants.js';
-import logger from './logger.js';
-import { createAccountReport, createAccountLabel } from './moderation.js';
+import { describe } from "node:test";
+import { PROFILE_CHECKS } from "./constants.js";
+import logger from "./logger.js";
+import { createAccountReport, createAccountLabel } from "./moderation.js";
 
 export const monitorDescription = async (
   did: string,
@@ -25,33 +24,33 @@ export const monitorDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`Whitelisted DID: ${did}`); return;
+        return logger.info(`Whitelisted DID: ${did}`);
       }
     }
 
     if (description) {
       if (checkProfiles?.description === true) {
-        if (checkProfiles.check.test(description)) {
-          if (checkProfiles.whitelist) {
-            if (checkProfiles.whitelist.test(description)) {
-              logger.info('Whitelisted phrase found.');
+        if (checkProfiles!.check.test(description)) {
+          if (checkProfiles!.whitelist) {
+            if (checkProfiles!.whitelist.test(description)) {
+              logger.info(`Whitelisted phrase found.`);
               return;
             }
           } else {
-            logger.info(`${checkProfiles.label} in description for ${did}`);
+            logger.info(`${checkProfiles!.label} in description for ${did}`);
           }
 
-          if (checkProfiles.reportOnly === true) {
+          if (checkProfiles!.reportOnly === true) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
             return;
           } else {
             createAccountLabel(
               did,
-              checkProfiles.label,
-              `${time}: ${checkProfiles.comment}`,
+              `${checkProfiles!.label}`,
+              `${time}: ${checkProfiles!.comment}`,
             );
           }
         }
@@ -81,33 +80,33 @@ export const monitorDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`Whitelisted DID: ${did}`); return;
+        return logger.info(`Whitelisted DID: ${did}`);
       }
     }
 
     if (displayName) {
       if (checkProfiles?.displayName === true) {
-        if (checkProfiles.check.test(displayName)) {
-          if (checkProfiles.whitelist) {
-            if (checkProfiles.whitelist.test(displayName)) {
-              logger.info('Whitelisted phrase found.');
+        if (checkProfiles!.check.test(displayName)) {
+          if (checkProfiles!.whitelist) {
+            if (checkProfiles!.whitelist.test(displayName)) {
+              logger.info(`Whitelisted phrase found.`);
               return;
             }
           } else {
-            logger.info(`${checkProfiles.label} in displayName for ${did}`);
+            logger.info(`${checkProfiles!.label} in displayName for ${did}`);
           }
 
-          if (checkProfiles.reportOnly === true) {
+          if (checkProfiles!.reportOnly === true) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
             );
             return;
           } else {
             createAccountLabel(
               did,
-              checkProfiles.label,
-              `${time}: ${checkProfiles.comment}`,
+              `${checkProfiles!.label}`,
+              `${time}: ${checkProfiles!.comment}`,
             );
           }
         }
