@@ -87,18 +87,18 @@ Make sure your `.env` file is present when building the Docker image, as it will
 
 The following environment variables are used for configuration:
 
-| Variable                 | Description                                                      | Default                                   |
-| ------------------------ | ---------------------------------------------------------------- | ----------------------------------------- |
-| `DID`                    | The DID of your moderation service for atproto-proxy headers.    | `""`                                      |
-| `OZONE_URL`              | The URL of the Ozone service.                                    | `""`                                      |
-| `OZONE_PDS`              | The Public Downstream Service for Ozone.                         | `""`                                      |
-| `BSKY_HANDLE`            | The handle (username) of the bot's Bluesky account.              | `""`                                      |
-| `BSKY_PASSWORD`          | The app password for the bot's Bluesky account.                  | `""`                                      |
-| `HOST`                   | The host on which the server runs.                               | `127.0.0.1`                               |
-| `PORT`                   | The port for the main application (currently unused).            | `4100`                                    |
-| `METRICS_PORT`           | The port for the Prometheus metrics server.                      | `4101`                                    |
+| Variable                 | Description                                                      | Default                                                        |
+| ------------------------ | ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| `DID`                    | The DID of your moderation service for atproto-proxy headers.    | `""`                                                           |
+| `OZONE_URL`              | The URL of the Ozone service.                                    | `""`                                                           |
+| `OZONE_PDS`              | The Public Downstream Service for Ozone.                         | `""`                                                           |
+| `BSKY_HANDLE`            | The handle (username) of the bot's Bluesky account.              | `""`                                                           |
+| `BSKY_PASSWORD`          | The app password for the bot's Bluesky account.                  | `""`                                                           |
+| `HOST`                   | The host on which the server runs.                               | `127.0.0.1`                                                    |
+| `PORT`                   | The port for the main application (currently unused).            | `4100`                                                         |
+| `METRICS_PORT`           | The port for the Prometheus metrics server.                      | `4101`                                                         |
 | `FIREHOSE_URL`           | The WebSocket URL for the Bluesky firehose.                      | `FIREHOSE_URL=wss://jetstream1.us-east.bsky.network/subscribe` |
-| `CURSOR_UPDATE_INTERVAL` | How often to save the firehose cursor to disk (in milliseconds). | `60000`                                   |
-| `LABEL_LIMIT`            | (Optional) API call limit for labeling.                          | `undefined`                               |
-| `LABEL_LIMIT_WAIT`       | (Optional) Wait time when label limit is hit.                    | `undefined`                               |
-| `LOG_LEVEL`              | The logging level.                                               | `info`                                    |
+| `CURSOR_UPDATE_INTERVAL` | How often to save the firehose cursor to disk (in milliseconds). | `60000`                                                        |
+| `LABEL_LIMIT`            | (Optional) API call limit for labeling.                          | `undefined`                                                    |
+| `LABEL_LIMIT_WAIT`       | (Optional) Wait time when label limit is hit.                    | `undefined`                                                    |
+| `LOG_LEVEL`              | The logging level.                                               | `info`                                                         |

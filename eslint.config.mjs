@@ -83,7 +83,7 @@ export default tseslint.config(
 
       // Style preferences
       "@stylistic/indent": ["error", 2],
-      "@stylistic/quotes": ["error", "single"],
+      "@stylistic/quotes": ["error", "double"],
       "@stylistic/semi": ["error", "always"],
       //"@stylistic/comma-dangle": ["error", "es5"],
       "@stylistic/object-curly-spacing": ["error", "always"],
