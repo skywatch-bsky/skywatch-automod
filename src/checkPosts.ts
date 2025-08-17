@@ -1,4 +1,4 @@
-import { LINK_SHORTENER, POST_CHECKS, langs } from './constants.js';
+import { LINK_SHORTENER, POST_CHECKS } from './constants.js';
 import logger from './logger.js';
 import {
   createPostLabel,
@@ -53,68 +53,68 @@ export const checkPosts = async (post: Post[]) => {
       );
 
       if (checkPost?.language || checkPost?.language !== undefined) {
-        if (!checkPost?.language.includes(lang)) {
+        if (!checkPost.language.includes(lang)) {
           return;
         }
       }
 
       if (checkPost?.ignoredDIDs) {
-        if (checkPost?.ignoredDIDs.includes(post[0].did)) {
+        if (checkPost.ignoredDIDs.includes(post[0].did)) {
           logger.info(`[CHECKPOSTS]: Whitelisted DID: ${post[0].did}`);
           return;
         }
       }
 
-      if (checkPost!.check.test(post[0].text)) {
+      if (checkPost?.check.test(post[0].text)) {
       // Check if post is whitelisted
-        if (checkPost?.whitelist) {
-          if (checkPost?.whitelist.test(post[0].text)) {
+        if (checkPost.whitelist) {
+          if (checkPost.whitelist.test(post[0].text)) {
             logger.info('[CHECKPOSTS]: Whitelisted phrase found"');
             return;
           }
         }
 
-        if (checkPost!.toLabel) {
+        if (checkPost.toLabel) {
           logger.info(
-            `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost!.label}`,
+            `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost.label}`,
           );
-          createPostLabel(
+          void createPostLabel(
             post[0].atURI,
             post[0].cid,
-            checkPost!.label,
-            `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+            checkPost.label,
+            `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           );
         }
 
-        if (checkPost!.reportPost === true) {
+        if (checkPost.reportPost) {
           logger.info(
-            `[CHECKPOSTS]: Reporting ${post[0].atURI} for ${checkPost!.label}`,
+            `[CHECKPOSTS]: Reporting ${post[0].atURI} for ${checkPost.label}`,
           );
           logger.info(`Reporting: ${post[0].atURI}`);
-          createPostReport(
+          void createPostReport(
             post[0].atURI,
             post[0].cid,
-            `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+            `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           );
         }
 
-        if (checkPost!.reportAcct) {
+        if (checkPost.reportAcct) {
           logger.info(
-            `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
+            `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost.label} in ${post[0].atURI}`,
           );
-          createAccountReport(
+          void createAccountReport(
             post[0].did,
-            `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+            `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           );
         }
 
-        if (checkPost!.commentAcct) {
+        if (checkPost.commentAcct) {
           logger.info(
-            `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
+            `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost.label} in ${post[0].atURI}`,
           );
-          createAccountComment(
+          void createAccountComment(
             post[0].did,
-            `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+            `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           );
         }
       }

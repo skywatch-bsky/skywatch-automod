@@ -6,7 +6,7 @@ import {
   createPostLabel,
 } from './moderation.js';
 
-export const checkStarterPack = async (
+export const checkStarterPack = (
   did: string,
   time: number,
   atURI: string,
@@ -33,12 +33,12 @@ export const checkStarterPack = async (
 
       if (atURI) {
         if (checkProfiles?.starterPacks) {
-          if (checkProfiles?.starterPacks.includes(atURI)) {
+          if (checkProfiles.starterPacks.includes(atURI)) {
             logger.info(`Account joined via starter pack at: ${atURI}`);
-            createAccountLabel(
+            void createAccountLabel(
               did,
               checkProfiles.label,
-              `${time}: ${checkProfiles.comment} - Account joined via starter pack at: ${atURI}`,
+              `${time.toString()}: ${checkProfiles.comment} - Account joined via starter pack at: ${atURI}`,
             );
           }
         }
@@ -50,7 +50,7 @@ export const checkStarterPack = async (
   }
 };
 
-export const checkNewStarterPack = async (
+export const checkNewStarterPack = (
   did: string,
   time: number,
   atURI: string,
@@ -59,55 +59,52 @@ export const checkNewStarterPack = async (
   description: string | undefined,
 ) => {
   try {
-    const labels: string[] = Array.from(
-      STARTERPACK_CHECKS,
-      (SPCheck) => SPCheck.label,
-    );
+    const labels: string[] = STARTERPACK_CHECKS.map((SPCheck) => SPCheck.label);
 
     labels.forEach((label) => {
-      const checkList = PROFILE_CHECKS.find((SPCheck) => SPCheck.label === label);
+      const checkList = STARTERPACK_CHECKS.find((SPCheck) => SPCheck.label === label);
 
       if (checkList?.knownVectors?.includes(did)) {
-        createPostLabel(
+        void createPostLabel(
           atURI,
           cid,
           checkList.label,
-          `${time}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
+          `${time.toString()}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
         );
-        createAccountReport(
+        void createAccountReport(
           did,
-          `${time}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
+          `${time.toString()}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
         );
       }
 
       if (description) {
-        if (checkList!.check.test(description)) {
+        if (checkList?.check.test(description)) {
           logger.info(`Labeling post: ${atURI}`);
-          createPostLabel(
+          void createPostLabel(
             atURI,
             cid,
-            checkList!.label,
-            `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+            checkList.label,
+            `${time.toString()}: ${checkList.comment} at ${atURI} with text "${description}"`,
           );
-          createAccountReport(
+          void createAccountReport(
             did,
-            `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
+            `${time.toString()}: ${checkList.comment} at ${atURI} with text "${description}"`,
           );
         }
       }
 
       if (packName) {
-        if (checkList!.check.test(packName)) {
+        if (checkList?.check.test(packName)) {
           logger.info(`Labeling post: ${atURI}`);
-          createPostLabel(
+          void createPostLabel(
             atURI,
             cid,
-            checkList!.label,
-            `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
+            checkList.label,
+            `${time.toString()}: ${checkList.comment} at ${atURI} with pack name "${packName}"`,
           );
-          createAccountReport(
+          void createAccountReport(
             did,
-            `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
+            `${time.toString()}: ${checkList.comment} at ${atURI} with pack name "${packName}"`,
           );
         }
       }
