@@ -1,47 +1,53 @@
-import logger from './logger.js';
+import logger from "./logger.js";
 
-/*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
+import { homoglyphMap } from "./homoglyphs";
+
+/**
+ * Normalizes a string by converting it to lowercase, replacing homoglyphs,
+ * and stripping diacritics. This is useful for sanitizing user input
+ * before performing checks for forbidden words.
+ *
+ * The process is as follows:
+ * 1. Convert the entire string to lowercase.
+ * 2. Replace characters that are visually similar to ASCII letters (homoglyphs)
+ *    with their ASCII counterparts based on the `homoglyphMap`.
+ * 3. Apply NFD (Normalization Form D) Unicode normalization to decompose
+ *    characters into their base characters and combining marks.
+ * 4. Remove all Unicode combining diacritical marks.
+ * 5. Apply NFKC (Normalization Form KC) Unicode normalization for a final
+ *    cleanup, which handles compatibility characters.
+ *
+ * @param text The input string to normalize.
+ * @returns The normalized string.
+ */
 export function normalizeUnicode(text: string): string {
-  // First decompose the characters (NFD)
-  const decomposed = text.normalize('NFD');
+  // Convert to lowercase to match the homoglyph map keys
+  const lowercased = text.toLowerCase();
 
-  // Remove diacritics and combining marks
-  const withoutDiacritics = decomposed.replace(/[\u0300-\u036f]/g, '');
+  // Replace characters using the homoglyph map.
+  // This is done before NFD so that pre-composed characters are caught.
+  let replaced = "";
+  for (const char of lowercased) {
+    replaced += homoglyphMap[char] || char;
+  }
 
-  // Remove mathematical alphanumeric symbols
-  const withoutMath = withoutDiacritics.replace(
-    /[\uD835][\uDC00-\uDFFF]/g,
-    (char) => {
-      // Get the base character from the mathematical symbol
-      const code = char.codePointAt(0);
-      if (code >= 0x1d400 && code <= 0x1d433)
-        // Mathematical bold
-        return String.fromCharCode(code - 0x1d400 + 0x41);
-      if (code >= 0x1d434 && code <= 0x1d467)
-        // Mathematical italic
-        return String.fromCharCode(code - 0x1d434 + 0x61);
-      if (code >= 0x1d468 && code <= 0x1d49b)
-        // Mathematical bold italic
-        return String.fromCharCode(code - 0x1d468 + 0x41);
-      if (code >= 0x1d49c && code <= 0x1d4cf)
-        // Mathematical script
-        return String.fromCharCode(code - 0x1d49c + 0x61);
-      return char;
-    },
-  );
+  // First decompose the characters (NFD), then remove diacritics.
+  const withoutDiacritics = replaced
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-  // Final NFKC normalization to handle any remaining special characters
-  return withoutMath.normalize('NFKC');
+  // Final NFKC normalization to handle any remaining special characters.
+  return withoutDiacritics.normalize("NFKC");
 }
 
 export async function getFinalUrl(url: string): Promise<string> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => { controller.abort(); }, 10000); // 10-second timeout
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
 
   try {
     const response = await fetch(url, {
-      method: 'HEAD',
-      redirect: 'follow', // This will follow redirects automatically
+      method: "HEAD",
+      redirect: "follow", // This will follow redirects automatically
       signal: controller.signal, // Pass the abort signal to fetch
     });
     clearTimeout(timeoutId); // Clear the timeout if fetch completes
@@ -49,7 +55,7 @@ export async function getFinalUrl(url: string): Promise<string> {
   } catch (error) {
     clearTimeout(timeoutId); // Clear the timeout if fetch fails
     // Log the error with more specific information if it's a timeout
-    if (error instanceof Error && error.name === 'AbortError') {
+    if (error instanceof Error && error.name === "AbortError") {
       logger.warn(`Timeout fetching URL: ${url}`, error);
     } else {
       logger.warn(`Error fetching URL: ${url}`, error);
@@ -59,33 +65,28 @@ export async function getFinalUrl(url: string): Promise<string> {
 }
 
 export async function getLanguage(profile: string): Promise<string> {
-  if (!profile) {
+  if (typeof profile !== "string" || profile === null) {
     logger.warn(
-      '[GETLANGUAGE] getLanguage called with empty profile data, defaulting to \'eng\'.',
+      "[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to 'eng'.",
       profile,
     );
-    return 'eng'; // Default or throw an error
+    return "eng"; // Default or throw an error
   }
 
   const profileText = profile.trim();
 
   if (profileText.length === 0) {
-    return 'eng';
+    return "eng";
   }
 
-  try {
-    const lande = (await import('lande')).default;
-    const langsProbabilityMap = lande(profileText);
+  const lande = (await import("lande")).default;
+  let langsProbabilityMap = lande(profileText);
 
-    // Sort by probability in descending order
-    langsProbabilityMap.sort(
-      (a: [string, number], b: [string, number]) => b[1] - a[1],
-    );
+  // Sort by probability in descending order
+  langsProbabilityMap.sort(
+    (a: [string, number], b: [string, number]) => b[1] - a[1],
+  );
 
-    // Return the language code with the highest probability
-    return langsProbabilityMap[0][0];
-  } catch (error) {
-    logger.error('Error detecting language, defaulting to \'eng\':', error);
-    return 'eng'; // Fallback to English on error
-  }
+  // Return the language code with the highest probability
+  return langsProbabilityMap[0][0];
 }

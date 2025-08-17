@@ -1,11 +1,11 @@
-import { PROFILE_CHECKS } from './constants.js';
-import logger from './logger.js';
+import { PROFILE_CHECKS } from "./constants.js";
+import logger from "./logger.js";
 import {
   createAccountReport,
   createAccountLabel,
   createAccountComment,
-} from './moderation.js';
-import { getLanguage } from './utils.js';
+} from "./moderation.js";
+import { getLanguage } from "./utils.js";
 
 export const checkDescription = async (
   did: string,
@@ -44,10 +44,10 @@ export const checkDescription = async (
       if (description) {
         if (checkProfiles?.description === true) {
           if (checkProfiles.check.test(description)) {
-          // Check if description is whitelisted
+            // Check if description is whitelisted
             if (checkProfiles.whitelist) {
               if (checkProfiles.whitelist.test(description)) {
-                logger.info('[CHECKDESCRIPTION]: Whitelisted phrase found.');
+                logger.info("[CHECKDESCRIPTION]: Whitelisted phrase found.");
                 return;
               }
             }
@@ -130,10 +130,10 @@ export const checkDisplayName = async (
       if (displayName) {
         if (checkProfiles?.displayName === true) {
           if (checkProfiles.check.test(displayName)) {
-          // Check if displayName is whitelisted
+            // Check if displayName is whitelisted
             if (checkProfiles.whitelist) {
               if (checkProfiles.whitelist.test(displayName)) {
-                logger.info('[CHECKDISPLAYNAME]: Whitelisted phrase found.');
+                logger.info("[CHECKDISPLAYNAME]: Whitelisted phrase found.");
                 return;
               }
             }

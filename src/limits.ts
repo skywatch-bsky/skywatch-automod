@@ -1,4 +1,4 @@
-import { pRateLimit } from 'p-ratelimit'; // TypeScript
+import { pRateLimit } from "p-ratelimit"; // TypeScript
 
 // create a rate limiter that allows up to 30 API calls per second,
 // with max concurrency of 10

@@ -17,9 +17,9 @@ import {
   METRICS_PORT,
   WANTED_COLLECTION,
 } from "./config.js";
-import { validateEnvironment } from "./validateEnv.js";
 import logger from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
+import { validateEnvironment } from "./validateEnv.js";
 import type { Post, LinkFeature } from "./types.js";
 
 validateEnvironment();
