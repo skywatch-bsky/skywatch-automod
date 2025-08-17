@@ -15,11 +15,14 @@ import {
 } from "./config.js";
 import logger from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
+import { validateEnvironment } from "./validateEnv.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
 import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
+
+validateEnvironment();
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
