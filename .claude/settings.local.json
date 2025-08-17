@@ -8,7 +8,10 @@
       "mcp__git-mcp-server__git_checkout",
       "Bash(bun run lint:*)",
       "mcp__git-mcp-server__git_commit",
-      "mcp__git-mcp-server__git_push"
+      "mcp__git-mcp-server__git_push",
+      "Bash(bunx tsc:*)",
+      "Bash(DID=did:test OZONE_URL=http://test OZONE_PDS=http://test BSKY_HANDLE=test.bsky.social BSKY_PASSWORD=testpass bun --eval \"import(''./src/validateEnv.js'').then(m => m.validateEnvironment())\")",
+      "mcp__git-mcp-server__git_add"
     ],
     "ask": [
       "curl"
