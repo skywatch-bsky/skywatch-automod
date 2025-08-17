@@ -1,0 +1,174 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# LLM Agent Guidelines for `@cyanheads/git-mcp-server`
+
+This document provides a concise overview of the available Git tools, designed to be used as a quick-reference guide for an LLM coding assistant.
+
+### Guiding Principles for the LLM Agent
+
+* **Human-in-the-Loop**: Do not commit any changes without explicit permission from a human operator.
+* **Safety First**: Never use potentially destructive commands like `git_reset`, `git_clean`, or `git_push` with the `force` option enabled. These operations can lead to permanent data loss.
+* **Session Context is Key**: Always start your workflow by setting a working directory with `git_set_working_dir`. Subsequent commands can then use `.` as the path, which is more efficient. Use `git_clear_working_dir` when a session is complete.
+* **Conventional Commits**: When using `git_commit`, write clear, concise messages following the Conventional Commits format: `type(scope): subject`. The tool's description provides detailed guidance.
+* **Review Before Committing**: Before committing, always use `git_status` and `git_diff` to review the changes. This ensures you create logical, atomic commits.
+
+---
+
+## Commonly Used Tools
+
+These are the essential tools for day-to-day version control tasks.
+
+### `git_set_working_dir`
+
+* **Description**: Sets the default working directory for the current session. Subsequent Git tool calls can use `.` for the `path`, which will resolve to this directory. **This should be the first tool you use in any workflow.**
+* **When to Use**: At the beginning of any task that involves a Git repository to establish context for all subsequent commands.
+* **Input Parameters**:
+
+| Parameter                | Type    | Description                                                                  |
+| :----------------------- | :------ | :--------------------------------------------------------------------------- |
+| `path`                   | string  | The **absolute path** to set as the default working directory. |
+| `validateGitRepo`        | boolean | Validate that the path is a Git repository. Defaults to `true`. |
+| `initializeIfNotPresent` | boolean | If not a Git repository, initialize it with 'git init'. Defaults to `false`. |
+
+### `git_status`
+
+* **Description**: Retrieves the status of the repository, showing staged, unstaged, and untracked files.
+* **When to Use**: Use this frequently to check the state of the repository before staging changes, after pulling from a remote, or before committing.
+* **Input Parameters**:
+
+| Parameter | Type   | Description                                                                                                                           |
+| :-------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `path`    | string | Path to the Git repository. Defaults to `.` (the session's working directory). |
+
+### `git_add`
+
+* **Description**: Stages changes, adding them to the index before committing.
+* **When to Use**: After making changes to files and before you are ready to commit them.
+* **Input Parameters**:
+
+| Parameter | Type                 | Description                                                                                                                           |
+| :-------- | :------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `path`    | string               | Path to the Git repository. Defaults to the directory set via `git_set_working_dir`. |
+| `files`   | string \| string\[] | Files or patterns to stage. Defaults to all changes (`.`). |
+
+### `git_commit`
+
+* **Description**: Commits staged changes to the repository with a descriptive message.
+* **When to Use**: After staging a logical group of changes with `git_add` and receiving approval from the operator to commit.
+* **Input Parameters**:
+
+| Parameter    | Type                             | Description                                                                                                                              |
+| :----------- | :------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| `path`       | string                           | Path to the Git repository. |
+| `message`    | string                           | The commit message. |
+| `author`     | object                           | Override the commit author (`{ name: string, email: string }`). |
+| `filesToStage`| string\[]                        | An array of file paths to stage before committing. |
+
+### `git_log`
+
+* **Description**: Shows the commit history. Can be filtered by author, date, or branch.
+* **When to Use**: To review recent changes, find a specific commit, or understand the history of a file or branch.
+* **Input Parameters**:
+
+| Parameter      | Type    | Description                                                          |
+| :------------- | :------ | :------------------------------------------------------------------- |
+| `path`         | string  | Path to the Git repository. |
+| `maxCount`     | number  | Limit the number of commits to output. |
+| `author`       | string  | Filter commits by a specific author. |
+| `since`        | string  | Show commits more recent than a specific date. |
+| `until`        | string  | Show commits older than a specific date. |
+| `branchOrFile` | string  | Show logs for a specific branch, tag, or file path. |
+| `showSignature`| boolean | Show signature verification status for commits. |
+
+### `git_diff`
+
+* **Description**: Shows changes between commits, the working tree, etc.
+* **When to Use**: To review unstaged changes before adding, or to see the difference between two branches or commits.
+* **Input Parameters**:
+
+| Parameter        | Type    | Description                                                                      |
+| :--------------- | :------ | :------------------------------------------------------------------------------- |
+| `path`           | string  | Path to the Git repository. |
+| `commit1`        | string  | First commit, branch, or ref for comparison. |
+| `commit2`        | string  | Second commit, branch, or ref for comparison. |
+| `staged`         | boolean | Show diff of staged changes. |
+| `file`           | string  | Limit the diff to a specific file. |
+| `includeUntracked`| boolean | Include untracked files in the diff output. |
+
+### `git_branch`
+
+* **Description**: Manages branches: list, create, delete, and rename.
+* **When to Use**: To see what branches are available, create a new branch for a feature or bugfix, or clean up old branches. DO NOT do this without human operator confirmation.
+* **Input Parameters**:
+
+| Parameter     | Type    | Description                                                          |
+| :------------ | :------ | :------------------------------------------------------------------- |
+| `path`        | string  | Path to the Git repository. |
+| `mode`        | enum    | The operation: `list`, `create`, `delete`, `rename`, `show-current`. |
+| `branchName`  | string  | Name of the branch for create/delete/rename operations. |
+| `newBranchName`| string  | The new name for the branch when renaming. |
+| `startPoint`  | string  | The starting point for a new branch. |
+| `force`       | boolean | Force the operation (e.g., deleting an unmerged branch). |
+| `all`         | boolean | List all branches (local and remote). |
+| `remote`      | boolean | Act on remote-tracking branches. |
+
+### `git_checkout`
+
+* **Description**: Switches branches or restores working tree files.
+* **When to Use**: To start working on a different branch or to discard changes in a specific file. DO NOT do this without human operator confirmation.
+* **Input Parameters**:
+
+| Parameter    | Type    | Description                                                       |
+| :----------- | :------ | :---------------------------------------------------------------- |
+| `path`       | string  | Path to the Git repository. |
+| `branchOrPath`| string  | The branch, commit, tag, or file path to checkout. |
+| `newBranch`  | string  | Create a new branch before checking out. |
+| `force`      | boolean | Force checkout, discarding local changes. |
+
+### `git_pull`
+
+* **Description**: Fetches from and integrates with a remote repository or a local branch.
+* **When to Use**: To update your current local branch with changes from its remote counterpart. DO NOT do this without human operator confirmation.
+* **Input Parameters**:
+
+| Parameter | Type    | Description                                                        |
+| :-------- | :------ | :----------------------------------------------------------------- |
+| `path`    | string  | Path to the Git repository. |
+| `remote`  | string  | The remote repository to pull from (e.g., 'origin'). |
+| `branch`  | string  | The remote branch to pull. |
+| `rebase`  | boolean | Use 'git pull --rebase' instead of merge. |
+| `ffOnly`  | boolean | Only allow fast-forward merges. |
+
+### `git_push`
+
+* **Description**: Updates remote refs with local changes.
+* **When to Use**: After committing your changes locally, use this to share them on the remote repository. DO NOT do this without human operator confirmation.
+* **Input Parameters**:
+
+| Parameter    | Type    | Description                                                  |
+| :----------- | :------ | :----------------------------------------------------------- |
+| `path`       | string  | Path to the Git repository. |
+| `remote`     | string  | The remote repository to push to. |
+| `branch`     | string  | The local branch to push. |
+| `remoteBranch`| string  | The remote branch to push to. |
+| `force`      | boolean | Force the push (use with caution). |
+| `forceWithLease`| boolean | Force push only if remote ref is as expected. |
+| `setUpstream`| boolean | Set the upstream tracking configuration. |
+| `tags`       | boolean | Push all tags. |
+| `delete`     | boolean | Delete the remote branch. |
+
+---
+
+## Complex Situations
+
+If you encounter a situation where you believe a more advanced or potentially destructive tool is needed (such as `git rebase`, `git reset`, `git cherry-pick`, or `git clean`), **do not proceed automatically**.
+
+Instead, you should:
+
+1.  **Pause execution.**
+2.  **Explain the situation** to the human operator.
+3.  **State which advanced Git operation you think is necessary and why.**
+4.  **Await explicit instruction** from the operator before taking any further action.
