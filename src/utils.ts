@@ -1,12 +1,12 @@
-import logger from "./logger.js";
+import logger from './logger.js';
 
 /*  Normalize the Unicode characters: this doesn't consistently work yet, there is something about certain bluesky strings that causes it to fail. */
 export function normalizeUnicode(text: string): string {
   // First decompose the characters (NFD)
-  const decomposed = text.normalize("NFD");
+  const decomposed = text.normalize('NFD');
 
   // Remove diacritics and combining marks
-  const withoutDiacritics = decomposed.replace(/[\u0300-\u036f]/g, "");
+  const withoutDiacritics = decomposed.replace(/[\u0300-\u036f]/g, '');
 
   // Remove mathematical alphanumeric symbols
   const withoutMath = withoutDiacritics.replace(
@@ -31,17 +31,17 @@ export function normalizeUnicode(text: string): string {
   );
 
   // Final NFKC normalization to handle any remaining special characters
-  return withoutMath.normalize("NFKC");
+  return withoutMath.normalize('NFKC');
 }
 
 export async function getFinalUrl(url: string): Promise<string> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+  const timeoutId = setTimeout(() => { controller.abort(); }, 10000); // 10-second timeout
 
   try {
     const response = await fetch(url, {
-      method: "HEAD",
-      redirect: "follow", // This will follow redirects automatically
+      method: 'HEAD',
+      redirect: 'follow', // This will follow redirects automatically
       signal: controller.signal, // Pass the abort signal to fetch
     });
     clearTimeout(timeoutId); // Clear the timeout if fetch completes
@@ -49,7 +49,7 @@ export async function getFinalUrl(url: string): Promise<string> {
   } catch (error) {
     clearTimeout(timeoutId); // Clear the timeout if fetch fails
     // Log the error with more specific information if it's a timeout
-    if (error instanceof Error && error.name === "AbortError") {
+    if (error instanceof Error && error.name === 'AbortError') {
       logger.warn(`Timeout fetching URL: ${url}`, error);
     } else {
       logger.warn(`Error fetching URL: ${url}`, error);
@@ -59,28 +59,33 @@ export async function getFinalUrl(url: string): Promise<string> {
 }
 
 export async function getLanguage(profile: string): Promise<string> {
-  if (typeof profile !== "string" || profile === null) {
+  if (!profile) {
     logger.warn(
-      "[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to 'eng'.",
+      '[GETLANGUAGE] getLanguage called with empty profile data, defaulting to \'eng\'.',
       profile,
     );
-    return "eng"; // Default or throw an error
+    return 'eng'; // Default or throw an error
   }
 
   const profileText = profile.trim();
 
   if (profileText.length === 0) {
-    return "eng";
+    return 'eng';
   }
 
-  const lande = (await import("lande")).default;
-  let langsProbabilityMap = lande(profileText);
+  try {
+    const lande = (await import('lande')).default;
+    const langsProbabilityMap = lande(profileText);
 
-  // Sort by probability in descending order
-  langsProbabilityMap.sort(
-    (a: [string, number], b: [string, number]) => b[1] - a[1],
-  );
+    // Sort by probability in descending order
+    langsProbabilityMap.sort(
+      (a: [string, number], b: [string, number]) => b[1] - a[1],
+    );
 
-  // Return the language code with the highest probability
-  return langsProbabilityMap[0][0];
+    // Return the language code with the highest probability
+    return langsProbabilityMap[0][0];
+  } catch (error) {
+    logger.error('Error detecting language, defaulting to \'eng\':', error);
+    return 'eng'; // Fallback to English on error
+  }
 }
