@@ -8,7 +8,9 @@
       "mcp__git-mcp-server__git_checkout",
       "Bash(bun run lint:*)",
       "mcp__git-mcp-server__git_commit",
-      "mcp__git-mcp-server__git_push"
+      "mcp__git-mcp-server__git_push",
+      "Bash(bunx eslint:*)",
+      "mcp__git-mcp-server__git_add"
     ],
     "ask": [
       "curl"

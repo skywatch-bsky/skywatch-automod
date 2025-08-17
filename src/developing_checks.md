@@ -1,6 +1,7 @@
 # How to build checks for skywatch-automod
 
 ## Introduction
+
 Constants.ts defines three types of types of checks: `HANDLE_CHECKS`, `POST_CHECKS`, and `PROFILE_CHECKS`.
 
 For each check, users need to define a set of regular expressions that will be used to match against the content of the post, handle, or profile. A maximal example of a check is as follows:
@@ -19,8 +20,8 @@ export const HANDLE_CHECKS: Checks[] = [
     toLabel: true, // Should the handle in question be labeled if check evaluates to true.
     check: new RegExp("example", "i"), // Regular expression to match against the content
     whitelist: new RegExp("example.com", "i"), // Optional, regular expression to whitelist content
-    ignoredDIDs: ["did:plc:example"] // Optional, array of DIDs to ignore if they match the check. Useful for folks who reclaim words or accounts which may be false positives.
-  }
+    ignoredDIDs: ["did:plc:example"], // Optional, array of DIDs to ignore if they match the check. Useful for folks who reclaim words or accounts which may be false positives.
+  },
 ];
 ```
 
