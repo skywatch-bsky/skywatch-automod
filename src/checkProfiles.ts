@@ -1,5 +1,4 @@
-import { login } from './agent.js';
-import { langs, PROFILE_CHECKS } from './constants.js';
+import { PROFILE_CHECKS } from './constants.js';
 import logger from './logger.js';
 import {
   createAccountReport,
@@ -29,7 +28,7 @@ export const checkDescription = async (
       );
 
       if (checkProfiles?.language || checkProfiles?.language !== undefined) {
-        if (!checkProfiles?.language.includes(lang)) {
+        if (!checkProfiles.language.includes(lang)) {
           return;
         }
       }
@@ -54,10 +53,10 @@ export const checkDescription = async (
             }
 
             if (checkProfiles.toLabel) {
-              createAccountLabel(
+              void createAccountLabel(
                 did,
                 checkProfiles.label,
-                `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+                `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
               );
               logger.info(
                 `[CHECKDESCRIPTION]: Labeling ${did} for ${checkProfiles.label}`,
@@ -65,9 +64,9 @@ export const checkDescription = async (
             }
 
             if (checkProfiles.reportAcct) {
-              createAccountReport(
+              void createAccountReport(
                 did,
-                `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+                `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
               );
               logger.info(
                 `[CHECKDESCRIPTION]: Reporting ${did} for ${checkProfiles.label}`,
@@ -75,9 +74,9 @@ export const checkDescription = async (
             }
 
             if (checkProfiles.commentAcct) {
-              createAccountComment(
+              void createAccountComment(
                 did,
-                `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+                `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
               );
               logger.info(
                 `[CHECKDESCRIPTION]: Commenting on ${did} for ${checkProfiles.label}`,
@@ -115,7 +114,7 @@ export const checkDisplayName = async (
       );
 
       if (checkProfiles?.language || checkProfiles?.language !== undefined) {
-        if (!checkProfiles?.language.includes(lang)) {
+        if (!checkProfiles.language.includes(lang)) {
           return;
         }
       }
@@ -140,10 +139,10 @@ export const checkDisplayName = async (
             }
 
             if (checkProfiles.toLabel) {
-              createAccountLabel(
+              void createAccountLabel(
                 did,
                 checkProfiles.label,
-                `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+                `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
               );
               logger.info(
                 `[CHECKDISPLAYNAME]: Labeling ${did} for ${checkProfiles.label}`,
@@ -151,9 +150,9 @@ export const checkDisplayName = async (
             }
 
             if (checkProfiles.reportAcct) {
-              createAccountReport(
+              void createAccountReport(
                 did,
-                `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+                `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
               );
               logger.info(
                 `[CHECKDISPLAYNAME]: Reporting ${did} for ${checkProfiles.label}`,
@@ -161,9 +160,9 @@ export const checkDisplayName = async (
             }
 
             if (checkProfiles.commentAcct) {
-              createAccountComment(
+              void createAccountComment(
                 did,
-                `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+                `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
               );
               logger.info(
                 `[CHECKDISPLAYNAME]: Commenting on ${did} for ${checkProfiles.label}`,
