@@ -1,18 +1,18 @@
-import express from "express";
-import { Registry, collectDefaultMetrics } from "prom-client";
+import express from 'express';
+import { Registry, collectDefaultMetrics } from 'prom-client';
 
-import logger from "./logger.js";
+import logger from './logger.js';
 
 const register = new Registry();
 collectDefaultMetrics({ register });
 
 const app = express();
 
-app.get("/metrics", (req, res) => {
+app.get('/metrics', (req, res) => {
   register
     .metrics()
     .then((metrics) => {
-      res.set("Content-Type", register.contentType);
+      res.set('Content-Type', register.contentType);
       res.send(metrics);
     })
     .catch((ex: unknown) => {
@@ -21,7 +21,7 @@ app.get("/metrics", (req, res) => {
     });
 });
 
-export const startMetricsServer = (port: number, host = "127.0.0.1") => {
+export const startMetricsServer = (port: number, host = '127.0.0.1') => {
   return app.listen(port, host, () => {
     logger.info(`Metrics server is listening on ${host}:${port}`);
   });
