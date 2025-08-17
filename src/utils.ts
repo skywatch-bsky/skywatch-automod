@@ -59,9 +59,9 @@ export async function getFinalUrl(url: string): Promise<string> {
 }
 
 export async function getLanguage(profile: string): Promise<string> {
-  if (typeof profile !== 'string' || profile === null) {
+  if (!profile) {
     logger.warn(
-      '[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to \'eng\'.',
+      '[GETLANGUAGE] getLanguage called with empty profile data, defaulting to \'eng\'.',
       profile,
     );
     return 'eng'; // Default or throw an error
