@@ -654,8 +654,8 @@ export const POST_CHECKS: Checks[] = [
     comment: "Possible trump support found in post",
     reportAcct: false,
     commentAcct: true,
-    reportPost: true,
-    toLabel: false,
+    reportPost: false,
+    toLabel: true,
     check: new RegExp("Trump is (still)? your president|#MA[GH]A\\b", "i"),
   },
 ];
