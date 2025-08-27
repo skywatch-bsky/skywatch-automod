@@ -540,6 +540,7 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", //Troon Vineyards
       "did:plc:lsmcyezwzoxq46gw2fj3w7fr", // Scotish Government
+      "did:plc:4jedp474v24ftcpi6jvcijlb", // Reclaimed use
     ],
   },
   {
