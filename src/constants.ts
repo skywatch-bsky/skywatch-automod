@@ -52,6 +52,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:lf32xdw4jez2vkxbcl2wbncu", // Michigan
       "did:plc:u5lvtp6ai6mg25xgazc4m7gv", // Random not political vtuber
       "did:plc:eqh433fdh2bqhvt455e3tg67", // doing a bit
+      "did:plc:265db7sm562y3622h3t62koz", // False positive
     ],
   },
   {
@@ -274,7 +275,8 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:izmavvmqfvm7je4l6aacfwlr", // Last name is troon
       "did:plc:e2ud5if7wvdhp2kysdwgz2l6", // Uses word "snigger"
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", // Troon Vineyards
-      "did:plc:nbyonvtuc7l5onssae2as3ns", // Uses the word troon
+      "did:plc:nbyonvtuc7l5onssae2as3ns", // Uses the word troon in a reclaimed manner
+      "did:plc:65rlhxbruzs4lkqcgu2necml", // scottish
     ],
   },
   {
