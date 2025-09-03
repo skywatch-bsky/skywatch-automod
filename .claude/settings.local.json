@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__search_atproto_docs__search_documentation",
+      "mcp__task-master-ai__initialize_project",
+      "mcp__task-master-ai__add_task",
+      "mcp__task-master-ai__parse_prd"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
