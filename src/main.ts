@@ -185,6 +185,10 @@ jetstream.onUpdate(
         );
       }
 
+      if (event.did) {
+        countStarterPacks(event.did, event.time_us);
+      }
+
       if (event.commit.record.joinedViaStarterPack) {
         checkStarterPack(
           event.did,
