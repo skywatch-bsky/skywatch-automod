@@ -6,6 +6,13 @@ import { createAccountLabel } from "./moderation.js";
 export const countStarterPacks = async (did: string, time: number) => {
   await isLoggedIn;
 
+  if (did in ["did:plc:gpunjjgvlyb4racypz3yfiq4"]) {
+    logger.info(
+      `[COUNTSTARTERPACKS]: ${time}: Account ${did} is a whitelisted.`,
+    );
+    return;
+  }
+
   await limit(async () => {
     try {
       const profile = await agent.app.bsky.actor.getProfile({ actor: did });
