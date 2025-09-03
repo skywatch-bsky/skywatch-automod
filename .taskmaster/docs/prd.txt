@@ -1,0 +1,54 @@
+## Project Requirements Document: Starter Pack Counter Function
+
+### Overview
+Create a function that retrieves and counts the number of starter packs associated with an AT Protocol (Bluesky) profile.
+
+### Objectives
+- Implement a function to fetch profile data from Bluesky API
+- Extract and count starter packs associated with the profile
+- Integrate with existing skywatch-tools moderation system
+
+### Technical Requirements
+
+#### API Integration
+- Use the existing AtpAgent from @atproto/api package
+- Determine correct endpoint (app.bsky.actor.getProfile or app.bsky.graph.getActorStarterPacks)
+- Handle authentication using existing agent.ts module
+
+#### Function Requirements
+- Accept a DID (Decentralized Identifier) or handle as input
+- Return the count of starter packs associated with the profile
+- Handle errors gracefully (network issues, invalid profiles, etc.)
+- Include proper TypeScript typing
+
+#### Integration Points
+- Utilize existing agent.ts for API authentication
+- Follow existing code patterns in checkStarterPack.ts
+- Add appropriate logging using existing logger module
+- Consider rate limiting implications
+
+### Implementation Details
+
+#### Core Function
+- Name: getProfileStarterPackCount
+- Input: DID string or handle string
+- Output: Number of starter packs or error state
+- Location: New file or addition to existing utils.ts
+
+#### Error Handling
+- Network timeout handling
+- Invalid DID/handle responses
+- Rate limit responses
+- Profile not found scenarios
+
+#### Testing Considerations
+- Unit tests for the function
+- Mock API responses for testing
+- Integration with existing test suite
+
+### Success Criteria
+- Function successfully retrieves starter pack count for valid profiles
+- Proper error handling for edge cases
+- Clean integration with existing codebase
+- Follows TypeScript best practices
+- Includes appropriate documentation

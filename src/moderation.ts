@@ -41,7 +41,7 @@ export const createPostLabel = async (
         },
       );
     } catch (e) {
-      console.error(e);
+      logger.error(`Failed to create post label with error: ${e}`);
     }
   });
 };
@@ -81,7 +81,7 @@ export const createAccountLabel = async (
         },
       );
     } catch (e) {
-      console.error(e);
+      logger.error(`Failed to create account label with error: ${e}`);
     }
   });
 };
@@ -121,7 +121,7 @@ export const createPostReport = async (
         },
       );
     } catch (e) {
-      console.error(e);
+      logger.error(`Failed to create post label with error: ${e}`);
     }
   });
 };

@@ -23,20 +23,19 @@ export const checkPosts = async (post: Post[]) => {
     try {
       const url = post[0].text.match(urlRegex);
       if (url && LINK_SHORTENER.test(url[0])) {
-        logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
+        // logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
         const finalUrl = await getFinalUrl(url[0]);
         if (finalUrl) {
           const originalUrl = post[0].text;
           post[0].text = post[0].text.replace(url[0], finalUrl);
-          logger.info(
+          /* logger.info(
             `[CHECKPOSTS]: Shortened URL resolved: ${originalUrl} -> ${finalUrl}`,
-          );
+            ); */
         }
       }
     } catch (error) {
       logger.error(
-        `[CHECKPOSTS]: Failed to resolve shortened URL: ${post[0].text}`,
-        error,
+        `[CHECKPOSTS]: Failed to resolve shortened URL: ${post[0].text} with error: ${error}`,
       );
       // Keep the original URL if resolution fails
     }
