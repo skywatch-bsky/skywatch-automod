@@ -9,9 +9,9 @@ export const countStarterPacks = async (did: string, time: number) => {
   await limit(async () => {
     try {
       const profile = await agent.app.bsky.actor.getProfile({ actor: did });
-      const starterPacks = profile.data.associated?.starterPacks || 0;
+      const starterPacks = profile.data.associated?.starterPacks;
 
-      if (starterPacks > 20) {
+      if (starterPacks && starterPacks.valueOf() > 20) {
         createAccountLabel(
           did,
           "follow-farming",
