@@ -88,10 +88,6 @@ jetstream.on("error", (error) => {
 jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<"app.bsky.feed.post">) => {
-    if (event.did) {
-      countStarterPacks(event.did, event.time_us);
-    }
-
     const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
     const hasEmbed = event.commit.record.hasOwnProperty("embed");
     const hasFacets = event.commit.record.hasOwnProperty("facets");
