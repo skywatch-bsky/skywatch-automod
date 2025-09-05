@@ -19,7 +19,6 @@ import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
 import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
-import { countStarterPacks } from "./count.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 
 let cursor = 0;
@@ -179,10 +178,6 @@ jetstream.onUpdate(
           event.commit.record.displayName as string,
           event.commit.record.description as string,
         );
-      }
-
-      if (event.did) {
-        countStarterPacks(event.did, event.time_us);
       }
 
       if (event.commit.record.joinedViaStarterPack) {

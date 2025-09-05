@@ -1,6 +1,7 @@
 import { LINK_SHORTENER, POST_CHECKS, langs } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
+import { countStarterPacks } from "./count.js";
 import {
   createPostLabel,
   createAccountReport,
@@ -71,6 +72,8 @@ export const checkPosts = async (post: Post[]) => {
           return;
         }
       }
+
+      countStarterPacks(post[0].did, post[0].time);
 
       if (checkPost!.toLabel === true) {
         logger.info(
