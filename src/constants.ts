@@ -455,7 +455,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: true,
     toLabel: true,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.(?:app|me)|paypal\\.(?:com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org|memedefensefund\\.com|donate\\.stripe\\.com)",
+      "(\\b|\\n)(?:https?:\\/\\/)?([^.]+\\.)?(?:gofundme\\.com|gofund\\.me|buymeacoffee\\.com|venmo\\.com|cash\\.(app|me)|paypal\\.(com|me|app)|gogetfunding\\.com|winred\\.com|givesendgo\\.com|chuffed\\.org|memedefensefund\\.com|donate\\.stripe\\.com)",
       "i",
     ),
     ignoredDIDs: [
