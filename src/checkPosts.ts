@@ -1,4 +1,4 @@
-import { LINK_SHORTENER, POST_CHECKS, langs } from "./constants.js";
+import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
 import { Post } from "./types.js";
 import logger from "./logger.js";
 import { countStarterPacks } from "./count.js";
