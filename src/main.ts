@@ -156,6 +156,22 @@ jetstream.onCreate(
         ];
         tasks.push(checkPosts(posts));
       }
+
+      if (embed && embed.$type === "app.bsky.embed.recordWithMedia") {
+        if (embed.media.$type === "app.bsky.embed.external") {
+          const posts: Post[] = [
+            {
+              did: event.did,
+              time: event.time_us,
+              rkey: event.commit.rkey,
+              atURI: atURI,
+              text: embed.media.external.uri,
+              cid: event.commit.cid,
+            },
+          ];
+          tasks.push(checkPosts(posts));
+        }
+      }
     }
   },
 );
