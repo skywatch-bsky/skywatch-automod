@@ -669,7 +669,7 @@ export const POST_CHECKS: Checks[] = [
     reportAcct: true,
     commentAcct: false,
     reportPost: false,
-    toLabel: false,
+    toLabel: true,
     check: new RegExp("Trump is (still)? your president|#MA[GH]A\\b", "i"),
   },
 ];
