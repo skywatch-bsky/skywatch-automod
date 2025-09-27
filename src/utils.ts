@@ -1,7 +1,6 @@
 import { homoglyphMap } from "./homoglyphs.js";
 import logger from "./logger.js";
 
-
 /**
  * Normalizes a string by converting it to lowercase, replacing homoglyphs,
  * and stripping diacritics. This is useful for sanitizing user input
@@ -42,7 +41,9 @@ export function normalizeUnicode(text: string): string {
 
 export async function getFinalUrl(url: string): Promise<string> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => { controller.abort(); }, 10000); // 10-second timeout
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 10000); // 10-second timeout
 
   try {
     const response = await fetch(url, {

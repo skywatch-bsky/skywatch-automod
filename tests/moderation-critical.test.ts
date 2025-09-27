@@ -22,7 +22,9 @@ describe("Critical moderation language detection", () => {
         // Should detect as French (fra) or potentially other Romance languages, but NOT English
         expect(result).not.toBe("eng");
         // Most likely to be detected as French
-        expect(["fra", "cat", "spa", "ita", "por", "ron"].includes(result)).toBe(true);
+        expect(
+          ["fra", "cat", "spa", "ita", "por", "ron"].includes(result),
+        ).toBe(true);
       }
     });
 
@@ -83,41 +85,47 @@ describe("Critical moderation language detection", () => {
           text: "Je suis en retard pour le meeting",
           expectedLang: ["fra", "cat", "spa", "ita"],
           isOffensive: false,
-          context: "French: I am late for the meeting"
+          context: "French: I am late for the meeting",
         },
         {
           text: "You're being a retard about this",
           expectedLang: ["eng", "sco", "nld"],
           isOffensive: true,
-          context: "English: Offensive slur usage"
+          context: "English: Offensive slur usage",
         },
         {
           text: "Le retard mental est un terme médical désuet",
           expectedLang: ["fra", "cat", "spa"],
           isOffensive: false,
-          context: "French: Medical terminology (outdated)"
+          context: "French: Medical terminology (outdated)",
         },
         {
           text: "That's so retarded dude",
           expectedLang: ["eng", "sco"],
           isOffensive: true,
-          context: "English: Casual offensive usage"
-        }
+          context: "English: Casual offensive usage",
+        },
       ];
 
       for (const testCase of testCases) {
         const result = await getLanguage(testCase.text);
 
         // Check if detected language is in expected set
-        const isExpectedLang = testCase.expectedLang.some(lang => result === lang);
+        const isExpectedLang = testCase.expectedLang.some(
+          (lang) => result === lang,
+        );
 
         if (!isExpectedLang) {
-          console.log(`Warning: "${testCase.text}" detected as ${result}, expected one of ${testCase.expectedLang.join(', ')}`);
+          console.log(
+            `Warning: "${testCase.text}" detected as ${result}, expected one of ${testCase.expectedLang.join(", ")}`,
+          );
         }
 
         // The key insight: if detected as French/Romance language, likely NOT offensive
         // if detected as English/Germanic, needs moderation review
-        const needsModeration = ["eng", "sco", "nld", "afr", "deu"].includes(result);
+        const needsModeration = ["eng", "sco", "nld", "afr", "deu"].includes(
+          result,
+        );
 
         // This aligns with whether the content is actually offensive
         if (testCase.isOffensive) {
@@ -130,19 +138,45 @@ describe("Critical moderation language detection", () => {
   describe("Other ambiguous terms across languages", () => {
     it("should detect language for other potentially ambiguous terms", async () => {
       const ambiguousCases = [
-        { text: "Elle a un chat noir", lang: "fra", meaning: "She has a black cat (French)" },
-        { text: "Let's chat about it", lang: "eng", meaning: "Let's talk (English)" },
-        { text: "Das Gift ist gefährlich", lang: "deu", meaning: "The poison is dangerous (German)" },
-        { text: "I got a gift for you", lang: "eng", meaning: "I got a present (English)" },
-        { text: "El éxito fue grande", lang: "spa", meaning: "The success was great (Spanish)" },
-        { text: "Take the exit here", lang: "eng", meaning: "Take the exit (English)" },
+        {
+          text: "Elle a un chat noir",
+          lang: "fra",
+          meaning: "She has a black cat (French)",
+        },
+        {
+          text: "Let's chat about it",
+          lang: "eng",
+          meaning: "Let's talk (English)",
+        },
+        {
+          text: "Das Gift ist gefährlich",
+          lang: "deu",
+          meaning: "The poison is dangerous (German)",
+        },
+        {
+          text: "I got a gift for you",
+          lang: "eng",
+          meaning: "I got a present (English)",
+        },
+        {
+          text: "El éxito fue grande",
+          lang: "spa",
+          meaning: "The success was great (Spanish)",
+        },
+        {
+          text: "Take the exit here",
+          lang: "eng",
+          meaning: "Take the exit (English)",
+        },
       ];
 
       for (const testCase of ambiguousCases) {
         const result = await getLanguage(testCase.text);
         // Log for debugging but don't fail - language detection is probabilistic
         if (result !== testCase.lang) {
-          console.log(`Note: "${testCase.text}" detected as ${result}, expected ${testCase.lang}`);
+          console.log(
+            `Note: "${testCase.text}" detected as ${result}, expected ${testCase.lang}`,
+          );
         }
       }
     });

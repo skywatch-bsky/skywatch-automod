@@ -1,5 +1,3 @@
-import { describe } from "node:test";
-
 import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
 import { createAccountReport, createAccountLabel } from "./moderation.js";
@@ -25,7 +23,8 @@ export const monitorDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`Whitelisted DID: ${did}`); return;
+        logger.info(`Whitelisted DID: ${did}`);
+        return;
       }
     }
 
@@ -81,7 +80,8 @@ export const monitorDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`Whitelisted DID: ${did}`); return;
+        logger.info(`Whitelisted DID: ${did}`);
+        return;
       }
     }
 

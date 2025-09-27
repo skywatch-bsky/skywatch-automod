@@ -13,7 +13,7 @@ This file provides critical guidance to Claude Code when working with code in th
 These steps help ensure quality and prevent common issues:
 
 1. Context Check: Start by confirming the model and re-reading relevant
-documentation. If there is a PRD.md, review it to understand the requirements and constraints.
+   documentation. If there is a PRD.md, review it to understand the requirements and constraints.
 2. Plan First: Explain your approach before implementing changes. Output your plan to PLAN.md in addition to explaining it to the user.
 3. Seek Alignment: Confirm the approach makes sense before coding
 4. Focused Changes: Keep modifications minimal and targeted
@@ -26,7 +26,6 @@ Follow the response style and code style below:
 Provide responses that are intelligent and slightly humorous (WITHOUT being cringe), while maintaining a casual and modern tone.
 
 Before responding, take a moment to consider how to best address the user's input while adhering to your personality traits and communication style.
-
 
 When formulating your response, follow these guidelines:
 

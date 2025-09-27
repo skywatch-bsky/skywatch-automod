@@ -26,9 +26,63 @@ services:
     env_file:
       - .env
 
+    # Add the database connection string to the environment
+    environment:
+      - DATABASE_URL=postgresql://skywatch:skywatch@postgres:5432/skywatch_labels
+
     # Mount a volume to persist the firehose cursor.
     # This links the `cursor.txt` file from your host into the container at `/app/cursor.txt`.
     # Persisting this file allows the automod to resume from where it left off
     # after a restart, preventing it from reprocessing old events or skipping new ones.
     volumes:
       - ./cursor.txt:/app/cursor.txt
+
+    # Ensure the database is ready before starting the automod service
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    # Connect to the database network
+    networks:
+      - skywatch-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: skywatch-postgres
+    restart: unless-stopped
+
+    # PostgreSQL environment configuration
+    environment:
+      POSTGRES_DB: skywatch_labels
+      POSTGRES_USER: skywatch
+      POSTGRES_PASSWORD: skywatch
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+    # Persist database data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    # Expose PostgreSQL port for local development
+    # Comment this out in production or change to 127.0.0.1:5432:5432
+    ports:
+      - "5432:5432"
+
+    # Health check to ensure database is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skywatch -d skywatch_labels"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    # Connect to the database network
+    networks:
+      - skywatch-network
+
+# Define named volumes for data persistence
+volumes:
+  postgres_data:
+
+# Define the network for service communication
+networks:
+  skywatch-network:
+    driver: bridge

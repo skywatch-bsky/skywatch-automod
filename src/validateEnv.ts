@@ -108,6 +108,52 @@ const ENV_VARIABLES: EnvironmentVariable[] = [
     description: "Node environment (development, production, test)",
     validator: (value) => ["development", "production", "test"].includes(value),
   },
+  {
+    name: "DATABASE_URL",
+    required: false,
+    description: "PostgreSQL database connection URL",
+    validator: (value) =>
+      value.startsWith("postgresql://") || value.startsWith("postgres://"),
+  },
+  {
+    name: "DATABASE_POOL_SIZE",
+    required: false,
+    description: "Database connection pool size (defaults to 10)",
+    validator: (value) => !isNaN(Number(value)) && Number(value) > 0,
+  },
+  {
+    name: "OZONE_LABEL_STREAM_URL",
+    required: false,
+    description: "Ozone label subscription WebSocket URL",
+    validator: (value) => value.startsWith("ws"),
+  },
+  {
+    name: "OZONE_RECONNECT_MAX_ATTEMPTS",
+    required: false,
+    description:
+      "Maximum reconnection attempts for Ozone stream (defaults to 5)",
+    validator: (value) => !isNaN(Number(value)) && Number(value) > 0,
+  },
+  {
+    name: "OZONE_RECONNECT_DELAY_MS",
+    required: false,
+    description: "Delay between reconnection attempts in ms (defaults to 1000)",
+    validator: (value) => !isNaN(Number(value)) && Number(value) > 0,
+  },
+  {
+    name: "ENABLE_LABEL_DEDUP",
+    required: false,
+    description: "Enable label deduplication feature (defaults to false)",
+    validator: (value) =>
+      ["true", "false", "1", "0"].includes(value.toLowerCase()),
+  },
+  {
+    name: "ENABLE_LABEL_SYNC",
+    required: false,
+    description: "Enable label sync from Ozone stream (defaults to false)",
+    validator: (value) =>
+      ["true", "false", "1", "0"].includes(value.toLowerCase()),
+  },
 ];
 
 export function validateEnvironment(): void {
