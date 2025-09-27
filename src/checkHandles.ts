@@ -40,26 +40,26 @@ export const checkHandle = async (
       }
 
       if (checkList?.toLabel === true) {
-        logger.info(`[CHECKHANDLE]: Labeling ${did} for ${checkList!.label}`);
+        logger.info(`[CHECKHANDLE]: Labeling ${did} for ${checkList.label}`);
         {
           createAccountLabel(
             did,
-            `${checkList!.label}`,
-            `${time}: ${checkList!.comment} - ${handle}`,
+            checkList.label,
+            `${time}: ${checkList.comment} - ${handle}`,
           );
         }
       }
 
       if (checkList?.reportAcct === true) {
-        logger.info(`[CHECKHANDLE]: Reporting ${did} for ${checkList!.label}`);
-        createAccountReport(did, `${time}: ${checkList!.comment} - ${handle}`);
+        logger.info(`[CHECKHANDLE]: Reporting ${did} for ${checkList.label}`);
+        createAccountReport(did, `${time}: ${checkList.comment} - ${handle}`);
       }
 
       if (checkList?.commentAcct === true) {
         logger.info(
-          `[CHECKHANDLE]: Commenting on ${did} for ${checkList!.label}`,
+          `[CHECKHANDLE]: Commenting on ${did} for ${checkList.label}`,
         );
-        createAccountComment(did, `${time}: ${checkList!.comment} - ${handle}`);
+        createAccountComment(did, `${time}: ${checkList.comment} - ${handle}`);
       }
     }
   });
