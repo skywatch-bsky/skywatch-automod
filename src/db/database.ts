@@ -278,7 +278,10 @@ export class DatabaseService {
   }
 
   async close(): Promise<void> {
-    await this.db.destroy();
-    await this.pool.end();
+    try {
+      await this.db.destroy();
+    } catch (error) {
+      logger.debug('Database already destroyed:', error);
+    }
   }
 }

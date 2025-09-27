@@ -41,9 +41,8 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@atcute/car": "^1.0.0",
-    "@atcute/cbor": "^1.0.0",
-    "@atcute/client": "^4.0.3",
+    "@atcute/car": "^1.1.1",
+    "@atcute/cbor": "^1.0.7",
     "@atproto/api": "^0.13.35",
     "@atproto/bsky": "^0.0.101",
     "@atproto/lexicon": "^0.4.10",

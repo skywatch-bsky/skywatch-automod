@@ -7,11 +7,18 @@
       "mcp__git-mcp-server__git_push",
       "mcp__github__create_pull_request",
       "Bash(mkdir:*)",
-      "Bash(bun run lint:*)"
+      "Bash(bun run lint:*)",
+      "Bash(docker compose build:*)",
+      "Bash(bun pm ls:*)",
+      "Bash(bun add:*)",
+      "Bash(docker compose:*)",
+      "mcp__git-mcp-server__git_status"
     ],
     "deny": [],
     "ask": []
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["git-mcp-server"]
+  "enabledMcpjsonServers": [
+    "git-mcp-server"
+  ]
 }
