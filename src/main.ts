@@ -19,6 +19,7 @@ import {
 } from "./config.js";
 import logger from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
+import { initializeLabelManager } from "./moderation.js";
 import type { Post, LinkFeature } from "./types.js";
 import { Handle } from "./types.js";
 
@@ -293,22 +294,48 @@ jetstream.on("identity", async (event: IdentityEvent) => {
 
 const metricsServer = startMetricsServer(METRICS_PORT);
 
-/* labelerServer.app.listen({ port: PORT, host: HOST }, (error, address) => {
-  if (error) {
-    logger.error("Error starting server: %s", error);
-  } else {
-    logger.info(`Labeler server listening on ${address}`);
+// Initialize label manager before starting the jetstream
+async function initialize() {
+  try {
+    logger.info("Initializing label manager...");
+    await initializeLabelManager();
+    logger.info("Label manager initialized successfully");
+  } catch (error) {
+    logger.error("Failed to initialize label manager:", error);
+    // Continue running even if label manager fails - deduplication will just be disabled
   }
-});*/
 
-jetstream.start();
+  /* labelerServer.app.listen({ port: PORT, host: HOST }, (error, address) => {
+    if (error) {
+      logger.error("Error starting server: %s", error);
+    } else {
+      logger.info(`Labeler server listening on ${address}`);
+    }
+  });*/
 
-function shutdown() {
+  jetstream.start();
+}
+
+// Start initialization
+void initialize();
+
+async function shutdown() {
   try {
     logger.info("Shutting down gracefully...");
     fs.writeFileSync("cursor.txt", jetstream.cursor!.toString(), "utf8");
     jetstream.close();
     metricsServer.close();
+
+    // Shutdown label manager if it exists
+    const { getLabelManager } = await import("./moderation.js");
+    try {
+      const manager = getLabelManager();
+      await manager.shutdown();
+      logger.info("Label manager shut down successfully");
+    } catch (error) {
+      // Label manager might not be initialized
+      logger.debug("Label manager not initialized, skipping shutdown");
+    }
   } catch (error) {
     logger.error(`Error shutting down gracefully: ${error}`);
     process.exit(1);

@@ -80,6 +80,7 @@ CREATE TABLE label_history (
 1. **Set up PostgreSQL**
 
    - Add database connection config to `.env` and integrate with `src/validateEnv.ts`
+   - Update `compose.yml` with PostgreSQL service for local development
    - Create migration system
    - Implement connection pooling
 
