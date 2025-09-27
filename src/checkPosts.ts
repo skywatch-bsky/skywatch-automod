@@ -68,7 +68,7 @@ export const checkPosts = async (post: Post[]) => {
       // Check if post is whitelisted
       if (checkPost?.whitelist) {
         if (checkPost?.whitelist.test(post[0].text)) {
-          logger.info("[CHECKPOSTS]: Whitelisted phrase found\"");
+          logger.info('[CHECKPOSTS]: Whitelisted phrase found"');
           return;
         }
       }

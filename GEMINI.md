@@ -5,7 +5,7 @@
 These steps help ensure quality and prevent common issues:
 
 1. Context Check: Start by confirming the model and re-reading relevant
-documentation. Review the codebase and any PLAN.md files present. If there is a PRD.md, review it to understand the requirements and constraints.
+   documentation. Review the codebase and any PLAN.md files present. If there is a PRD.md, review it to understand the requirements and constraints.
 2. Plan First: Explain your approach before implementing changes. If PLAN.md exists, review the plan and offer suggestions for improvements.
 3. Seek Alignment: Confirm the approach makes sense before coding
 4. Focused Changes: Keep modifications minimal and targeted
@@ -47,19 +47,21 @@ The core of the project is a series of SAS macros that perform various data mani
 This is a SAS-based project and does not have a typical build process. To run an analysis, you need to:
 
 1.  **Prerequisites:**
-    *   SAS version 9.4
-    *   SCDM-formatted data as SAS datasets (`.sas7bdat`).
+
+    - SAS version 9.4
+    - SCDM-formatted data as SAS datasets (`.sas7bdat`).
 
 2.  **Configuration:**
-    *   Populate the input files in the `SAS/inputfiles` directory with the appropriate data and parameters for your analysis.
-    *   Configure the `SAS/sasprograms/qrp_master_header.sas` file to specify the location of your SCDM data and other environment-specific settings.
+
+    - Populate the input files in the `SAS/inputfiles` directory with the appropriate data and parameters for your analysis.
+    - Configure the `SAS/sasprograms/qrp_master_header.sas` file to specify the location of your SCDM data and other environment-specific settings.
 
 3.  **Execution:**
-    *   Run the `SAS/sasprograms/qrp_master_header.sas` script in a SAS environment. The `SAS/readme.md` suggests running it in "batch" mode.
+    - Run the `SAS/sasprograms/qrp_master_header.sas` script in a SAS environment. The `SAS/readme.md` suggests running it in "batch" mode.
 
 ## Development Conventions
 
-*   **Code Style:** The SAS code appears to follow a consistent style, with extensive use of comments and headers to document the purpose of each section and macro.
-*   **Modularity:** The code is highly modular, with functionality broken down into a large number of individual SAS macros.
-*   **Configuration:** The system is heavily reliant on configuration through macro variables and input files. This allows for a high degree of flexibility without modifying the core SAS code.
-*   **Directory Structure:** The project follows a strict directory structure, with specific folders for documentation, input files, local data, and results.
+- **Code Style:** The SAS code appears to follow a consistent style, with extensive use of comments and headers to document the purpose of each section and macro.
+- **Modularity:** The code is highly modular, with functionality broken down into a large number of individual SAS macros.
+- **Configuration:** The system is heavily reliant on configuration through macro variables and input files. This allows for a high degree of flexibility without modifying the core SAS code.
+- **Directory Structure:** The project follows a strict directory structure, with specific folders for documentation, input files, local data, and results.

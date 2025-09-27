@@ -42,50 +42,58 @@ describe("getLanguage", () => {
 
   describe("language detection", () => {
     it("should detect English text", async () => {
-      const englishText = "This is a sample English text that should be detected correctly.";
+      const englishText =
+        "This is a sample English text that should be detected correctly.";
       const result = await getLanguage(englishText);
       expect(result).toBe("eng");
     });
 
     it("should detect Spanish text", async () => {
-      const spanishText = "Este es un texto de ejemplo en español que debe ser detectado correctamente.";
+      const spanishText =
+        "Este es un texto de ejemplo en español que debe ser detectado correctamente.";
       const result = await getLanguage(spanishText);
       // franc may detect Galician (glg) for some Spanish text - both are valid Romance languages
       expect(["spa", "glg", "cat"].includes(result)).toBe(true);
     });
 
     it("should detect French text", async () => {
-      const frenchText = "Ceci est un exemple de texte en français qui devrait être détecté correctement.";
+      const frenchText =
+        "Ceci est un exemple de texte en français qui devrait être détecté correctement.";
       const result = await getLanguage(frenchText);
       expect(result).toBe("fra");
     });
 
     it("should detect German text", async () => {
-      const germanText = "Dies ist ein deutscher Beispieltext, der korrekt erkannt werden sollte.";
+      const germanText =
+        "Dies ist ein deutscher Beispieltext, der korrekt erkannt werden sollte.";
       const result = await getLanguage(germanText);
       expect(result).toBe("deu");
     });
 
     it("should detect Portuguese text", async () => {
-      const portugueseText = "Este é um texto de exemplo em português que deve ser detectado corretamente.";
+      const portugueseText =
+        "Este é um texto de exemplo em português que deve ser detectado corretamente.";
       const result = await getLanguage(portugueseText);
       expect(result).toBe("por");
     });
 
     it("should detect Italian text", async () => {
-      const italianText = "Questo è un testo di esempio in italiano che dovrebbe essere rilevato correttamente.";
+      const italianText =
+        "Questo è un testo di esempio in italiano che dovrebbe essere rilevato correttamente.";
       const result = await getLanguage(italianText);
       expect(result).toBe("ita");
     });
 
     it("should detect Russian text", async () => {
-      const russianText = "Это пример текста на русском языке, который должен быть правильно определен.";
+      const russianText =
+        "Это пример текста на русском языке, который должен быть правильно определен.";
       const result = await getLanguage(russianText);
       expect(result).toBe("rus");
     });
 
     it("should detect Japanese text", async () => {
-      const japaneseText = "これは正しく検出されるべき日本語のサンプルテキストです。";
+      const japaneseText =
+        "これは正しく検出されるべき日本語のサンプルテキストです。";
       const result = await getLanguage(japaneseText);
       expect(result).toBe("jpn");
     });
@@ -143,11 +151,15 @@ describe("getLanguage", () => {
       const result = await getLanguage(textWithSpecialChars);
       // Short text with special chars may be detected as various languages
       // Common results: 'eng', 'nld' (Dutch), 'afr' (Afrikaans)
-      expect(["eng", "nld", "afr", "sco"].includes(result) || result.match(/^[a-z]{3}$/)).toBe(true);
+      expect(
+        ["eng", "nld", "afr", "sco"].includes(result) ||
+          result.match(/^[a-z]{3}$/),
+      ).toBe(true);
     });
 
     it("should handle text with URLs", async () => {
-      const textWithUrls = "Check out this website: https://example.com for more information.";
+      const textWithUrls =
+        "Check out this website: https://example.com for more information.";
       const result = await getLanguage(textWithUrls);
       expect(result).toBe("eng");
     });
@@ -156,7 +168,9 @@ describe("getLanguage", () => {
       const textWithNumbers = "The year 2024 has 365 days and 12 months.";
       const result = await getLanguage(textWithNumbers);
       // May be detected as English, Scots, or other Germanic languages
-      expect(["eng", "sco", "nld"].includes(result) || result.match(/^[a-z]{3}$/)).toBe(true);
+      expect(
+        ["eng", "sco", "nld"].includes(result) || result.match(/^[a-z]{3}$/),
+      ).toBe(true);
     });
   });
 

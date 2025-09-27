@@ -5,7 +5,9 @@
       "mcp__git-mcp-server__git_add",
       "mcp__git-mcp-server__git_commit",
       "mcp__git-mcp-server__git_push",
-      "mcp__github__create_pull_request"
+      "mcp__github__create_pull_request",
+      "Bash(mkdir:*)",
+      "Bash(bun run lint:*)"
     ],
     "deny": [],
     "ask": []

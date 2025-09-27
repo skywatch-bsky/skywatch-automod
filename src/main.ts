@@ -3,12 +3,9 @@ import fs from "node:fs";
 import type {
   CommitCreateEvent,
   CommitUpdateEvent,
-  IdentityEvent } from "@skyware/jetstream";
-import {
-  CommitUpdate,
-  Jetstream,
+  IdentityEvent,
 } from "@skyware/jetstream";
-
+import { CommitUpdate, Jetstream } from "@skyware/jetstream";
 
 import { checkHandle } from "./checkHandles.js";
 import { checkPosts } from "./checkPosts.js";
@@ -109,10 +106,10 @@ jetstream.onCreate(
       if (hasLinkType) {
         const urls = event.commit.record
           .facets!.flatMap((facet) =>
-          facet.features.filter(
-            (feature) => feature.$type === "app.bsky.richtext.facet#link",
-          ),
-        )
+            facet.features.filter(
+              (feature) => feature.$type === "app.bsky.richtext.facet#link",
+            ),
+          )
           .map((feature: LinkFeature) => feature.uri);
 
         urls.forEach((url) => {
