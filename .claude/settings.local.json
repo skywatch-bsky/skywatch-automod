@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(git checkout:*)",
-      "mcp__git-mcp-server__git_add"
+      "mcp__git-mcp-server__git_add",
+      "mcp__git-mcp-server__git_commit",
+      "mcp__git-mcp-server__git_push",
+      "mcp__github__create_pull_request"
     ],
     "deny": [],
     "ask": []
