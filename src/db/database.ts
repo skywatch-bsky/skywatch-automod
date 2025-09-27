@@ -62,6 +62,29 @@ export class DatabaseService {
     }
   }
 
+  async checkPostLabelExists(
+    atUri: string,
+    labelValue: string,
+  ): Promise<boolean> {
+    try {
+      // For posts, we only check if this specific URI already has this specific label
+      // We don't include DID in the check - this allows posts to be labeled
+      // even if the account has the same label
+      const query = this.db
+        .selectFrom("labels")
+        .select("id")
+        .where("at_uri", "=", atUri)
+        .where("label_value", "=", labelValue)
+        .where("negated", "=", false);
+
+      const result = await query.executeTakeFirst();
+      return !!result;
+    } catch (error) {
+      logger.error("Error checking post label existence:", error);
+      throw error;
+    }
+  }
+
   async addLabel(label: NewLabel): Promise<Label> {
     try {
       const inserted = await this.db

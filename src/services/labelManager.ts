@@ -81,6 +81,33 @@ export class LabelManager {
     }
   }
 
+  async shouldCreatePostLabel(
+    atUri: string,
+    labelValue: string,
+  ): Promise<boolean> {
+    if (!this.dedupEnabled) {
+      return true;
+    }
+
+    try {
+      // For posts, we only check if this specific URI already has this label
+      // We don't care about the DID - a post can be labeled even if the account has the same label
+      const exists = await this.db.checkPostLabelExists(atUri, labelValue);
+
+      if (exists) {
+        logger.debug(
+          `Post label already exists, skipping: ${labelValue} for ${atUri}`,
+        );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      logger.error("Error checking post label existence, allowing creation:", error);
+      return true;
+    }
+  }
+
   async createLabel(
     did: string,
     atUri: string,

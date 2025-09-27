@@ -63,9 +63,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
     # Expose PostgreSQL port for local development
-    # Comment this out in production or change to 127.0.0.1:5432:5432
+    # Comment this out in production or change to 127.0.0.1:5434:5432
     ports:
-      - "5432:5432"
+      - "5434:5432"
 
     # Health check to ensure database is ready
     healthcheck:

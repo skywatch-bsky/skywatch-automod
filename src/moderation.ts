@@ -32,13 +32,15 @@ export const createPostLabel = async (
 ) => {
   await isLoggedIn;
 
-  // Extract DID from URI for deduplication check
+  // Extract DID from URI for storing the label
   const didMatch = uri.match(/did:[^/]+/);
   const did = didMatch ? didMatch[0] : null;
 
-  // Check if we should create this label
+  // Check if this specific post already has this label
+  // We only check the URI + label combination, not the DID
+  // This allows labeling posts even if the account has the same label
   if (labelManager && did) {
-    const shouldCreate = await labelManager.shouldCreateLabel(did, uri, label);
+    const shouldCreate = await labelManager.shouldCreatePostLabel(uri, label);
     if (!shouldCreate) {
       logger.debug(`Skipping duplicate post label: ${label} for ${uri}`);
       return;
