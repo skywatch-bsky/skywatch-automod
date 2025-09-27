@@ -1,13 +1,13 @@
 import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
-import { Post } from "./types.js";
-import logger from "./logger.js";
 import { countStarterPacks } from "./count.js";
+import logger from "./logger.js";
 import {
   createPostLabel,
   createAccountReport,
   createAccountComment,
   createPostReport,
 } from "./moderation.js";
+import type { Post } from "./types.js";
 import { getFinalUrl, getLanguage } from "./utils.js";
 
 export const checkPosts = async (post: Post[]) => {
@@ -68,21 +68,21 @@ export const checkPosts = async (post: Post[]) => {
       // Check if post is whitelisted
       if (checkPost?.whitelist) {
         if (checkPost?.whitelist.test(post[0].text)) {
-          logger.info(`[CHECKPOSTS]: Whitelisted phrase found"`);
+          logger.info("[CHECKPOSTS]: Whitelisted phrase found\"");
           return;
         }
       }
 
       countStarterPacks(post[0].did, post[0].time);
 
-      if (checkPost!.toLabel === true) {
+      if (checkPost!.toLabel) {
         logger.info(
           `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost!.label}`,
         );
         createPostLabel(
           post[0].atURI,
           post[0].cid,
-          `${checkPost!.label}`,
+          checkPost!.label,
           `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
@@ -99,7 +99,7 @@ export const checkPosts = async (post: Post[]) => {
         );
       }
 
-      if (checkPost!.reportAcct === true) {
+      if (checkPost!.reportAcct) {
         logger.info(
           `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
         );
@@ -109,7 +109,7 @@ export const checkPosts = async (post: Post[]) => {
         );
       }
 
-      if (checkPost!.commentAcct === true) {
+      if (checkPost!.commentAcct) {
         logger.info(
           `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
         );

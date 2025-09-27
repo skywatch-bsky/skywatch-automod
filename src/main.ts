@@ -1,12 +1,19 @@
-import {
-  CommitCreateEvent,
-  CommitUpdate,
-  CommitUpdateEvent,
-  IdentityEvent,
-  Jetstream,
-} from "@skyware/jetstream";
 import fs from "node:fs";
 
+import type {
+  CommitCreateEvent,
+  CommitUpdateEvent,
+  IdentityEvent } from "@skyware/jetstream";
+import {
+  CommitUpdate,
+  Jetstream,
+} from "@skyware/jetstream";
+
+
+import { checkHandle } from "./checkHandles.js";
+import { checkPosts } from "./checkPosts.js";
+import { checkDescription, checkDisplayName } from "./checkProfiles.js";
+import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
@@ -15,11 +22,8 @@ import {
 } from "./config.js";
 import logger from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
-import { Post, LinkFeature, Handle } from "./types.js";
-import { checkPosts } from "./checkPosts.js";
-import { checkHandle } from "./checkHandles.js";
-import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
-import { checkDescription, checkDisplayName } from "./checkProfiles.js";
+import type { Post, LinkFeature } from "./types.js";
+import { Handle } from "./types.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -48,7 +52,7 @@ try {
 const jetstream = new Jetstream({
   wantedCollections: WANTED_COLLECTION,
   endpoint: FIREHOSE_URL,
-  cursor: cursor,
+  cursor,
 });
 
 jetstream.on("open", () => {
@@ -105,10 +109,10 @@ jetstream.onCreate(
       if (hasLinkType) {
         const urls = event.commit.record
           .facets!.flatMap((facet) =>
-            facet.features.filter(
-              (feature) => feature.$type === "app.bsky.richtext.facet#link",
-            ),
-          )
+          facet.features.filter(
+            (feature) => feature.$type === "app.bsky.richtext.facet#link",
+          ),
+        )
           .map((feature: LinkFeature) => feature.uri);
 
         urls.forEach((url) => {
@@ -117,7 +121,7 @@ jetstream.onCreate(
               did: event.did,
               time: event.time_us,
               rkey: event.commit.rkey,
-              atURI: atURI,
+              atURI,
               text: url,
               cid: event.commit.cid,
             },
@@ -133,7 +137,7 @@ jetstream.onCreate(
           did: event.did,
           time: event.time_us,
           rkey: event.commit.rkey,
-          atURI: atURI,
+          atURI,
           text: event.commit.record.text,
           cid: event.commit.cid,
         },
@@ -142,14 +146,14 @@ jetstream.onCreate(
     }
 
     if (hasEmbed) {
-      const embed = event.commit.record.embed;
+      const { embed } = event.commit.record;
       if (embed && embed.$type === "app.bsky.embed.external") {
         const posts: Post[] = [
           {
             did: event.did,
             time: event.time_us,
             rkey: event.commit.rkey,
-            atURI: atURI,
+            atURI,
             text: embed.external.uri,
             cid: event.commit.cid,
           },
@@ -164,7 +168,7 @@ jetstream.onCreate(
               did: event.did,
               time: event.time_us,
               rkey: event.commit.rkey,
-              atURI: atURI,
+              atURI,
               text: embed.media.external.uri,
               cid: event.commit.cid,
             },
@@ -185,14 +189,14 @@ jetstream.onUpdate(
         checkDescription(
           event.did,
           event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
+          event.commit.record.displayName!,
+          event.commit.record.description!,
         );
         checkDisplayName(
           event.did,
           event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
+          event.commit.record.displayName!,
+          event.commit.record.description!,
         );
       }
 
@@ -219,14 +223,14 @@ jetstream.onCreate(
         checkDescription(
           event.did,
           event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
+          event.commit.record.displayName!,
+          event.commit.record.description!,
         );
         checkDisplayName(
           event.did,
           event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
+          event.commit.record.displayName!,
+          event.commit.record.description!,
         );
       }
 

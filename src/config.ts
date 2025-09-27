@@ -20,5 +20,5 @@ export const WANTED_COLLECTION = [
 export const CURSOR_UPDATE_INTERVAL = process.env.CURSOR_UPDATE_INTERVAL
   ? Number(process.env.CURSOR_UPDATE_INTERVAL)
   : 60000;
-export const LABEL_LIMIT = process.env.LABEL_LIMIT;
-export const LABEL_LIMIT_WAIT = process.env.LABEL_LIMIT_WAIT;
+export const { LABEL_LIMIT } = process.env;
+export const { LABEL_LIMIT_WAIT } = process.env;
