@@ -43,43 +43,43 @@ export const checkDescription = async (
 
     if (description) {
       if (checkProfiles?.description === true) {
-        if (checkProfiles!.check.test(description)) {
+        if (checkProfiles.check.test(description)) {
           // Check if description is whitelisted
-          if (checkProfiles!.whitelist) {
-            if (checkProfiles!.whitelist.test(description)) {
-              logger.info(`[CHECKDESCRIPTION]: Whitelisted phrase found.`);
+          if (checkProfiles.whitelist) {
+            if (checkProfiles.whitelist.test(description)) {
+              logger.info("[CHECKDESCRIPTION]: Whitelisted phrase found.");
               return;
             }
           }
 
-          if (checkProfiles!.toLabel === true) {
+          if (checkProfiles.toLabel) {
             createAccountLabel(
               did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              checkProfiles.label,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDESCRIPTION]: Labeling ${did} for ${checkProfiles!.label}`,
+              `[CHECKDESCRIPTION]: Labeling ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.reportAcct === true) {
+          if (checkProfiles.reportAcct) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDESCRIPTION]: Reporting ${did} for ${checkProfiles!.label}`,
+              `[CHECKDESCRIPTION]: Reporting ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.commentAcct === true) {
+          if (checkProfiles.commentAcct) {
             createAccountComment(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDESCRIPTION]: Commenting on ${did} for ${checkProfiles!.label}`,
+              `[CHECKDESCRIPTION]: Commenting on ${did} for ${checkProfiles.label}`,
             );
           }
         }
@@ -124,43 +124,43 @@ export const checkDisplayName = async (
 
     if (displayName) {
       if (checkProfiles?.displayName === true) {
-        if (checkProfiles!.check.test(displayName)) {
+        if (checkProfiles.check.test(displayName)) {
           // Check if displayName is whitelisted
-          if (checkProfiles!.whitelist) {
-            if (checkProfiles!.whitelist.test(displayName)) {
-              logger.info(`[CHECKDISPLAYNAME]: Whitelisted phrase found.`);
+          if (checkProfiles.whitelist) {
+            if (checkProfiles.whitelist.test(displayName)) {
+              logger.info("[CHECKDISPLAYNAME]: Whitelisted phrase found.");
               return;
             }
           }
 
-          if (checkProfiles!.toLabel === true) {
+          if (checkProfiles.toLabel) {
             createAccountLabel(
               did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              checkProfiles.label,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDISPLAYNAME]: Labeling ${did} for ${checkProfiles!.label}`,
+              `[CHECKDISPLAYNAME]: Labeling ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.reportAcct === true) {
+          if (checkProfiles.reportAcct) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDISPLAYNAME]: Reporting ${did} for ${checkProfiles!.label}`,
+              `[CHECKDISPLAYNAME]: Reporting ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.commentAcct === true) {
+          if (checkProfiles.commentAcct) {
             createAccountComment(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDISPLAYNAME]: Commenting on ${did} for ${checkProfiles!.label}`,
+              `[CHECKDISPLAYNAME]: Commenting on ${did} for ${checkProfiles.label}`,
             );
           }
         }
