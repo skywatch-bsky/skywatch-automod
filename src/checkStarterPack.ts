@@ -26,7 +26,7 @@ export const checkStarterPack = async (
     // Check if DID is whitelisted
     if (checkProfiles?.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        return logger.info(`Whitelisted DID: ${did}`);
+        logger.info(`Whitelisted DID: ${did}`); return;
       }
     }
 
@@ -36,8 +36,8 @@ export const checkStarterPack = async (
           logger.info(`Account joined via starter pack at: ${atURI}`);
           createAccountLabel(
             did,
-            `${checkProfiles!.label}`,
-            `${time}: ${checkProfiles!.comment} - Account joined via starter pack at: ${atURI}`,
+            checkProfiles.label,
+            `${time}: ${checkProfiles.comment} - Account joined via starter pack at: ${atURI}`,
           );
         }
       }
@@ -65,12 +65,12 @@ export const checkNewStarterPack = async (
       createPostLabel(
         atURI,
         cid,
-        `${checkList!.label}`,
-        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
+        checkList.label,
+        `${time}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
       );
       createAccountReport(
         did,
-        `${time}: Starter pack created by known vector for ${checkList!.label} at: ${atURI}"`,
+        `${time}: Starter pack created by known vector for ${checkList.label} at: ${atURI}"`,
       );
     }
 
@@ -80,7 +80,7 @@ export const checkNewStarterPack = async (
         createPostLabel(
           atURI,
           cid,
-          `${checkList!.label}`,
+          checkList!.label,
           `${time}: ${checkList!.comment} at ${atURI} with text "${description}"`,
         );
         createAccountReport(
@@ -96,7 +96,7 @@ export const checkNewStarterPack = async (
         createPostLabel(
           atURI,
           cid,
-          `${checkList!.label}`,
+          checkList!.label,
           `${time}: ${checkList!.comment} at ${atURI} with pack name "${packName}"`,
         );
         createAccountReport(
