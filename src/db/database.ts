@@ -105,7 +105,12 @@ export class DatabaseService {
         source: label.source || "automod",
       });
 
-      logger.debug(`Added label: ${label.label_value} for DID: ${label.did}`);
+      // Log with at_uri if it's a post label, otherwise just the DID for account labels
+      if (label.at_uri) {
+        logger.debug(`Added label: ${label.label_value} for post: ${label.at_uri}`);
+      } else {
+        logger.debug(`Added label: ${label.label_value} for account: ${label.did}`);
+      }
       return inserted;
     } catch (error: any) {
       if (error?.code === "23505") {

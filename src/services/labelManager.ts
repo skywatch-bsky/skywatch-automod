@@ -68,9 +68,16 @@ export class LabelManager {
       const exists = await this.db.checkLabelExists(did, atUri, labelValue);
 
       if (exists) {
-        logger.debug(
-          `Label already exists, skipping: ${labelValue || "any"} for ${did}`,
-        );
+        // Log clearly whether it's a post or account label
+        if (atUri) {
+          logger.debug(
+            `Post label already exists, skipping: ${labelValue || "any"} for ${atUri}`,
+          );
+        } else {
+          logger.debug(
+            `Account label already exists, skipping: ${labelValue || "any"} for ${did}`,
+          );
+        }
         return false;
       }
 
@@ -128,7 +135,12 @@ export class LabelManager {
         negated: false,
       });
 
-      logger.debug(`Stored label in database: ${labelValue} for ${did}`);
+      // Log with at_uri if it's a post label, otherwise just the DID for account labels
+      if (atUri) {
+        logger.debug(`Stored label in database: ${labelValue} for post: ${atUri}`);
+      } else {
+        logger.debug(`Stored label in database: ${labelValue} for account: ${did}`);
+      }
       return label;
     } catch (error) {
       logger.error("Failed to store label in database:", error);
