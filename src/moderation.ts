@@ -1,8 +1,8 @@
 import { agent, isLoggedIn } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
-import { LISTS } from "./lists.js";
 import logger from "./logger.js";
+import { LISTS } from "./lists.js";
 
 export const createPostLabel = async (
   uri: string,
@@ -13,36 +13,35 @@ export const createPostLabel = async (
   await isLoggedIn;
   await limit(async () => {
     try {
-      return await agent.tools.ozone.moderation.emitEvent(
+      return agent.tools.ozone.moderation.emitEvent(
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventLabel",
-            comment,
+            comment: comment,
             createLabelVals: [label],
             negateLabelVals: [],
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.repo.strongRef",
-            uri,
-            cid,
+            uri: uri,
+            cid: cid,
           },
           // put in the rest of the metadata
-          createdBy: agent.did ?? "",
+          createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
         },
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
         },
       );
-    } catch (error) {
-      logger.error(`Error creating post label for URI ${uri}:`, error);
-      throw error;
+    } catch (e) {
+      logger.error(`Failed to create post label with error: ${e}`);
     }
   });
 };
@@ -59,31 +58,30 @@ export const createAccountLabel = async (
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventLabel",
-            comment,
+            comment: comment,
             createLabelVals: [label],
             negateLabelVals: [],
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.admin.defs#repoRef",
-            did,
+            did: did,
           },
           // put in the rest of the metadata
-          createdBy: agent.did ?? "",
+          createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
         },
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
         },
       );
-    } catch (error) {
-      logger.error(`Error creating account label for DID ${did}:`, error);
-      throw error;
+    } catch (e) {
+      logger.error(`Failed to create account label with error: ${e}`);
     }
   });
 };
@@ -96,35 +94,34 @@ export const createPostReport = async (
   await isLoggedIn;
   await limit(async () => {
     try {
-      return await agent.tools.ozone.moderation.emitEvent(
+      return agent.tools.ozone.moderation.emitEvent(
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventReport",
-            comment,
+            comment: comment,
             reportType: "com.atproto.moderation.defs#reasonOther",
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.repo.strongRef",
-            uri,
-            cid,
+            uri: uri,
+            cid: cid,
           },
           // put in the rest of the metadata
-          createdBy: agent.did ?? "",
+          createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
         },
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
         },
       );
-    } catch (error) {
-      logger.error(`Error creating post report for URI ${uri}:`, error);
-      throw error;
+    } catch (e) {
+      logger.error(`Failed to create post label with error: ${e}`);
     }
   });
 };
@@ -137,29 +134,28 @@ export const createAccountComment = async (did: string, comment: string) => {
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventComment",
-            comment,
+            comment: comment,
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.admin.defs#repoRef",
-            did,
+            did: did,
           },
           // put in the rest of the metadata
-          createdBy: agent.did ?? "",
+          createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
         },
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
         },
       );
-    } catch (error) {
-      logger.error(`Error creating account comment for DID ${did}:`, error);
-      throw error;
+    } catch (e) {
+      console.error(e);
     }
   });
 };
@@ -172,30 +168,29 @@ export const createAccountReport = async (did: string, comment: string) => {
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventReport",
-            comment,
+            comment: comment,
             reportType: "com.atproto.moderation.defs#reasonOther",
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.admin.defs#repoRef",
-            did,
+            did: did,
           },
           // put in the rest of the metadata
-          createdBy: agent.did ?? "",
+          createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
         },
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
         },
       );
-    } catch (error) {
-      logger.error(`Error creating account report for DID ${did}:`, error);
-      throw error;
+    } catch (e) {
+      console.error(e);
     }
   });
 };
@@ -212,27 +207,26 @@ export const addToList = async (label: string, did: string) => {
   }
   logger.info(`New label added to list: ${newList.label}`);
 
-  const listUri = `at://${MOD_DID}/app.bsky.graph.list/${newList.rkey}`;
+  const listUri = `at://${MOD_DID!}/app.bsky.graph.list/${newList.rkey}`;
 
   await limit(async () => {
     try {
       await agent.com.atproto.repo.createRecord({
         collection: "app.bsky.graph.listitem",
-        repo: MOD_DID,
+        repo: `${MOD_DID!}`,
         record: {
           subject: did,
           list: listUri,
           createdAt: new Date().toISOString(),
         },
       });
-    } catch (error) {
-      logger.error(`Error adding DID ${did} to list ${label}:`, error);
-      throw error;
+    } catch (e) {
+      console.error(e);
     }
   });
 };
 
-export function checkAccountLabels(_did: string) {
+export async function checkAccountLabels(did: string) {
   /* try {
     const repo = await limit(() =>
       agent.tools.ozone.moderation.getRepo(

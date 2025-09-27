@@ -1,12 +1,13 @@
-import { LINK_SHORTENER, POST_CHECKS, langs } from "./constants.js";
+import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
+import { Post } from "./types.js";
 import logger from "./logger.js";
+import { countStarterPacks } from "./count.js";
 import {
   createPostLabel,
   createAccountReport,
   createAccountComment,
   createPostReport,
 } from "./moderation.js";
-import type { Post } from "./types.js";
 import { getFinalUrl, getLanguage } from "./utils.js";
 
 export const checkPosts = async (post: Post[]) => {
@@ -23,20 +24,19 @@ export const checkPosts = async (post: Post[]) => {
     try {
       const url = post[0].text.match(urlRegex);
       if (url && LINK_SHORTENER.test(url[0])) {
-        logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
+        // logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
         const finalUrl = await getFinalUrl(url[0]);
         if (finalUrl) {
           const originalUrl = post[0].text;
           post[0].text = post[0].text.replace(url[0], finalUrl);
-          logger.info(
+          /* logger.info(
             `[CHECKPOSTS]: Shortened URL resolved: ${originalUrl} -> ${finalUrl}`,
-          );
+            ); */
         }
       }
     } catch (error) {
       logger.error(
-        `[CHECKPOSTS]: Failed to resolve shortened URL: ${post[0].text}`,
-        error,
+        `[CHECKPOSTS]: Failed to resolve shortened URL: ${post[0].text} with error: ${error}`,
       );
       // Keep the original URL if resolution fails
     }
@@ -72,6 +72,8 @@ export const checkPosts = async (post: Post[]) => {
           return;
         }
       }
+
+      countStarterPacks(post[0].did, post[0].time);
 
       if (checkPost!.toLabel === true) {
         logger.info(

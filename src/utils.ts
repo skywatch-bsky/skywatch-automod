@@ -1,6 +1,6 @@
 import logger from "./logger.js";
 
-import { homoglyphMap } from "./homoglyphs";
+import { homoglyphMap } from "./homoglyphs.js";
 
 /**
  * Normalizes a string by converting it to lowercase, replacing homoglyphs,
