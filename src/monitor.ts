@@ -1,5 +1,3 @@
-import { describe } from "node:test";
-
 import { PROFILE_CHECKS } from "./constants.js";
 import logger from "./logger.js";
 import { createAccountReport, createAccountLabel } from "./moderation.js";
