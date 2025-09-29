@@ -53,6 +53,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:u5lvtp6ai6mg25xgazc4m7gv", // Random not political vtuber
       "did:plc:eqh433fdh2bqhvt455e3tg67", // doing a bit
       "did:plc:265db7sm562y3622h3t62koz", // False positive
+      "did:plc:wuakswcypemayqaawz63yev4", // False Positive
     ],
   },
   {
@@ -554,6 +555,7 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", //Troon Vineyards
       "did:plc:lsmcyezwzoxq46gw2fj3w7fr", // Scotish Government
       "did:plc:4jedp474v24ftcpi6jvcijlb", // Reclaimed use
+      "did:plc:i6m5urtifwvjqv4bfytcwslt", // ACARs repeater
     ],
   },
   {
@@ -646,7 +648,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists|#IStandWthSandiePeggie|#SexMatters|#TheodoreUpton",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists|#IStandWthSandiePeggie|#SexMatters|#TheodoreUpton|radical leftists",
       "i",
     ),
   },
