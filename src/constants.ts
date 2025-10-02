@@ -609,8 +609,8 @@ export const POST_CHECKS: Checks[] = [
     language: ["eng"],
     label: "follow-farming",
     comment: "Follow farming indicators found in post",
-    reportAcct: true,
-    commentAcct: false,
+    reportAcct: false,
+    commentAcct: true,
     toLabel: true,
     check: new RegExp(
       "blueskyfollower\\.com|#ifbap|#socialistsunday|#follow4follow|#followback|#(blue|breakfast)crew|#donksfriends|#nodemunder[0-9]+?k|#megaboost|#donkpack|#donkparty|#bluestorm(?:boosts|friends)|#fbr(?:e)?|#fbrparty|#fbarmy|#donkconnects|#ifollowback|#FreeDonk|Follow Party|#BlueResisters|#BlueCrewBoosts?[0-9]*|#BlueStormComin1|💙Vetted RESISTERS🦋|Follow Back Pack|#FreedomFightersRise|#fridaynightparties|#UnitedBlueCrew|#(Friday|Saturday|Sunday)Parties",
