@@ -436,19 +436,16 @@ export const HANDLE_CHECKS: Checks[] = [
 ];
 
 export const POST_CHECKS: Checks[] = [
-  /* {
+  {
     language: ["eng"],
-    label: "general-monitoring",
-    comment: "Content of interest found",
+    label: "discriminatory-language",
+    comment: "Discriminatory language found in post",
     reportAcct: false,
     commentAcct: true,
-    reportPost: false,
+    reportPost: true,
     toLabel: false,
-    check: new RegExp(
-      "88 counties flipped red. None flipped blue.|Alligator Alcatraz Shirt",
-      "i",
-    ),
-  }, */
+    check: new RegExp("temu elon", "i"),
+  },
   {
     label: "fundraising-link",
     comment: "Fundraising link found in post",
