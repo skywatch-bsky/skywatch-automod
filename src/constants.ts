@@ -574,7 +574,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "(\\s(?:Z(O|0)G|k[i1]k[e3])[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|\\b(?:t[0o]w[e3]lh[e3][a4]d|r[a4]gh[e3][a4]d|j[i1]h[a4]d[i1]|R[a4]p[e3]fug[e3][e3]|k[a4]f{1,2}[i1]r|khazar(ian)?)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
+      "(\\s(?:Z(O|0)G|k[i1]k[e3])[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\s|\\b(?:t[0o]w[e3]lh[e3][a4]d|r[a4]gh[e3][a4]d|j[i1]h[a4]d[i1]|R[a4]p[e3]fug[e3][e3]|k[a4]f{1,2}[i1]r|khazar(ian)?)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)|\\b(clanker)s?",
       "i",
     ),
     whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
