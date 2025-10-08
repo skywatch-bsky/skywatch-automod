@@ -589,7 +589,7 @@ export const POST_CHECKS: Checks[] = [
     toLabel: true,
     duration: 168,
     check: new RegExp(
-      "(\\s(clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
+      "\\b(clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b",
       "i",
     ),
   },
