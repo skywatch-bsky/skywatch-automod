@@ -581,6 +581,21 @@ export const POST_CHECKS: Checks[] = [
   },
   {
     language: ["eng"],
+    label: "discourse-bait",
+    comment: "Contains discourse bait",
+    reportAcct: false,
+    commentAcct: true,
+    reportPost: false,
+    toLabel: true,
+    duration: 168,
+    check: new RegExp(
+      "(\\s(clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
+      "i",
+    ),
+    whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
+  },
+  {
+    language: ["eng"],
     label: "dehumanizing-rhetoric",
     comment: "Dehumanizing rhetoric found in post",
     reportAcct: true,
