@@ -9,20 +9,31 @@ export const createPostLabel = async (
   cid: string,
   label: string,
   comment: string,
-  duration: number | null,
+  duration: number | undefined,
 ) => {
   await isLoggedIn;
   await limit(async () => {
     try {
+      const event: {
+        $type: string;
+        comment: string;
+        createLabelVals: string[];
+        negateLabelVals: string[];
+        durationInHours?: number;
+      } = {
+        $type: "tools.ozone.moderation.defs#modEventLabel",
+        comment: comment,
+        createLabelVals: [label],
+        negateLabelVals: [],
+      };
+
+      if (duration) {
+        event.durationInHours = duration;
+      }
+
       return agent.tools.ozone.moderation.emitEvent(
         {
-          event: {
-            $type: "tools.ozone.moderation.defs#modEventLabel",
-            comment: comment,
-            createLabelVals: [label],
-            negateLabelVals: [],
-            durationInHours: duration,
-          },
+          event: event,
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.repo.strongRef",
