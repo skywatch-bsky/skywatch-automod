@@ -86,6 +86,9 @@ export const createAccountLabel = async (
           // put in the rest of the metadata
           createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+          },
         },
         {
           encoding: "application/json",
@@ -126,6 +129,9 @@ export const createPostReport = async (
           // put in the rest of the metadata
           createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+          },
         },
         {
           encoding: "application/json",
@@ -160,6 +166,9 @@ export const createAccountComment = async (did: string, comment: string) => {
           // put in the rest of the metadata
           createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+          },
         },
         {
           encoding: "application/json",
@@ -195,6 +204,9 @@ export const createAccountReport = async (did: string, comment: string) => {
           // put in the rest of the metadata
           createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+          },
         },
         {
           encoding: "application/json",
