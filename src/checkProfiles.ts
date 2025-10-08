@@ -16,25 +16,16 @@ export const checkDescription = async (
 ) => {
   const lang = await getLanguage(description);
 
-  const labels: string[] = Array.from(
-    PROFILE_CHECKS,
-    (profileCheck) => profileCheck.label,
-  );
-
-  // iterate through the labels
-  labels.forEach((label) => {
-    const checkProfiles = PROFILE_CHECKS.find(
-      (profileCheck) => profileCheck.label === label,
-    );
-
-    if (checkProfiles?.language || checkProfiles?.language !== undefined) {
-      if (!checkProfiles?.language.includes(lang)) {
+  // iterate through the checks
+  PROFILE_CHECKS.forEach((checkProfiles) => {
+    if (checkProfiles.language) {
+      if (!checkProfiles.language.includes(lang)) {
         return;
       }
     }
 
     // Check if DID is whitelisted
-    if (checkProfiles?.ignoredDIDs) {
+    if (checkProfiles.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
         logger.info(`[CHECKDESCRIPTION]: Whitelisted DID: ${did}`);
         return;
@@ -42,44 +33,44 @@ export const checkDescription = async (
     }
 
     if (description) {
-      if (checkProfiles?.description === true) {
-        if (checkProfiles!.check.test(description)) {
+      if (checkProfiles.description === true) {
+        if (checkProfiles.check.test(description)) {
           // Check if description is whitelisted
-          if (checkProfiles!.whitelist) {
-            if (checkProfiles!.whitelist.test(description)) {
+          if (checkProfiles.whitelist) {
+            if (checkProfiles.whitelist.test(description)) {
               logger.info(`[CHECKDESCRIPTION]: Whitelisted phrase found.`);
               return;
             }
           }
 
-          if (checkProfiles!.toLabel === true) {
+          if (checkProfiles.toLabel === true) {
             createAccountLabel(
               did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${checkProfiles.label}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDESCRIPTION]: Labeling ${did} for ${checkProfiles!.label}`,
+              `[CHECKDESCRIPTION]: Labeling ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.reportAcct === true) {
+          if (checkProfiles.reportAcct === true) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDESCRIPTION]: Reporting ${did} for ${checkProfiles!.label}`,
+              `[CHECKDESCRIPTION]: Reporting ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.commentAcct === true) {
+          if (checkProfiles.commentAcct === true) {
             createAccountComment(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDESCRIPTION]: Commenting on ${did} for ${checkProfiles!.label}`,
+              `[CHECKDESCRIPTION]: Commenting on ${did} for ${checkProfiles.label}`,
             );
           }
         }
@@ -96,26 +87,16 @@ export const checkDisplayName = async (
 ) => {
   const lang = await getLanguage(description);
 
-  // Get a list of labels
-  const labels: string[] = Array.from(
-    PROFILE_CHECKS,
-    (profileCheck) => profileCheck.label,
-  );
-
-  // iterate through the labels
-  labels.forEach((label) => {
-    const checkProfiles = PROFILE_CHECKS.find(
-      (profileCheck) => profileCheck.label === label,
-    );
-
-    if (checkProfiles?.language || checkProfiles?.language !== undefined) {
-      if (!checkProfiles?.language.includes(lang)) {
+  // iterate through the checks
+  PROFILE_CHECKS.forEach((checkProfiles) => {
+    if (checkProfiles.language) {
+      if (!checkProfiles.language.includes(lang)) {
         return;
       }
     }
 
     // Check if DID is whitelisted
-    if (checkProfiles?.ignoredDIDs) {
+    if (checkProfiles.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
         logger.info(`[CHECKDISPLAYNAME]: Whitelisted DID: ${did}`);
         return;
@@ -123,44 +104,44 @@ export const checkDisplayName = async (
     }
 
     if (displayName) {
-      if (checkProfiles?.displayName === true) {
-        if (checkProfiles!.check.test(displayName)) {
+      if (checkProfiles.displayName === true) {
+        if (checkProfiles.check.test(displayName)) {
           // Check if displayName is whitelisted
-          if (checkProfiles!.whitelist) {
-            if (checkProfiles!.whitelist.test(displayName)) {
+          if (checkProfiles.whitelist) {
+            if (checkProfiles.whitelist.test(displayName)) {
               logger.info(`[CHECKDISPLAYNAME]: Whitelisted phrase found.`);
               return;
             }
           }
 
-          if (checkProfiles!.toLabel === true) {
+          if (checkProfiles.toLabel === true) {
             createAccountLabel(
               did,
-              `${checkProfiles!.label}`,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${checkProfiles.label}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDISPLAYNAME]: Labeling ${did} for ${checkProfiles!.label}`,
+              `[CHECKDISPLAYNAME]: Labeling ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.reportAcct === true) {
+          if (checkProfiles.reportAcct === true) {
             createAccountReport(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDISPLAYNAME]: Reporting ${did} for ${checkProfiles!.label}`,
+              `[CHECKDISPLAYNAME]: Reporting ${did} for ${checkProfiles.label}`,
             );
           }
 
-          if (checkProfiles!.commentAcct === true) {
+          if (checkProfiles.commentAcct === true) {
             createAccountComment(
               did,
-              `${time}: ${checkProfiles!.comment} - ${displayName} - ${description}`,
+              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
-              `[CHECKDISPLAYNAME]: Commenting on ${did} for ${checkProfiles!.label}`,
+              `[CHECKDISPLAYNAME]: Commenting on ${did} for ${checkProfiles.label}`,
             );
           }
         }
