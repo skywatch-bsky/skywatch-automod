@@ -428,7 +428,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:5yoxqeyfviyrdw3wsfaglh23", //golfer talking about Royal Troon Golf Club
       "did:plc:kv2twqy5didztis6w4hvjn5t", //Scot from Troon, Ayrshire
       "did:plc:dtb2mkl46skh5k2ohfyxxbct", //Scottish Golfer
-      "did:plc:eadsauxkjxhiygdjg6iss552", //Winemaker from Oregon's Troon Vineyards
+      "did:plc:eadsauxkjxhiygdjg6iss552", // Winemaker from Oregon's Troon Vineyards
       "did:plc:66hjw7i6p2ay4z75n5cj4siy", // Troon Vineyards
       "did:plc:yiigf6rlrsegsqhot6cndrhu", // Ayr Advertiser
     ],
@@ -589,9 +589,14 @@ export const POST_CHECKS: Checks[] = [
     toLabel: true,
     duration: 168,
     check: new RegExp(
-      "((clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?)",
+      "((clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?)|Hive AI|thehive\\.ai",
       "i",
     ),
+    ignoredDIDs: [
+      "did:plc:ksjfbda7262bbqmuoly54lww",
+      "did:plc:oky5czdrnfjpqslsw2a5iclo",
+      "did:plc:oisofpd7lj26yvgiivf3lxsi",
+    ],
   },
   {
     language: ["eng"],
