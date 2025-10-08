@@ -9,6 +9,7 @@ export const createPostLabel = async (
   cid: string,
   label: string,
   comment: string,
+  duration: number | null,
 ) => {
   await isLoggedIn;
   await limit(async () => {
@@ -20,6 +21,7 @@ export const createPostLabel = async (
             comment: comment,
             createLabelVals: [label],
             negateLabelVals: [],
+            durationInHours: duration,
           },
           // specify the labeled post by strongRef
           subject: {
@@ -30,6 +32,9 @@ export const createPostLabel = async (
           // put in the rest of the metadata
           createdBy: `${agent.did}`,
           createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+          },
         },
         {
           encoding: "application/json",
