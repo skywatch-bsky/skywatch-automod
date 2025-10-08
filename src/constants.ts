@@ -589,7 +589,7 @@ export const POST_CHECKS: Checks[] = [
     toLabel: true,
     duration: 168,
     check: new RegExp(
-      "((clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?)|Hive AI|thehive\\.ai",
+      "((clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?)|Hive AI|thehive\\.ai|\\bRose.*?Heritage Foundation\\b",
       "i",
     ),
     ignoredDIDs: [
