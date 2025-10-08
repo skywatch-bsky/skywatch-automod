@@ -84,6 +84,7 @@ export const checkPosts = async (post: Post[]) => {
           post[0].cid,
           `${checkPost!.label}`,
           `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          checkPost!.duration ?? null,
         );
       }
 

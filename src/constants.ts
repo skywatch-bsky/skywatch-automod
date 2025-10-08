@@ -592,7 +592,6 @@ export const POST_CHECKS: Checks[] = [
       "(\\s(clanker|wireback|tinskin)[sŚśṤṥŜŝŠšṦṧṠṡŞşṢṣṨṩȘșS̩s̩ꞨꞩⱾȿꟅʂᶊᵴ]?\\b)",
       "i",
     ),
-    whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
   },
   {
     language: ["eng"],
