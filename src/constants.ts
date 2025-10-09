@@ -179,6 +179,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
       "did:plc:rxfutzaujbo5tv3nsrzfgvqe", // Not MAGA
+      "did:plc:wrprhfzhsa4f3fvjgqm2sos7", // False positive
     ],
   },
   {
@@ -664,7 +665,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists|#IStandWthSandiePeggie|#SexMatters|#TheodoreUpton|radical leftists",
+      "only (2|two) genders((?=.*transition)(?=.*mental health challenges)(?=.*love)(?=.*ideology))|trump is (your ?)(king|god|jesus|daddy)|(there (are|is))? only (two|2) genders|Colony of New Twitter|bluecry|mutilate (adolescents|kids|children)|Floyd.*convicted|[Gg]eorge.*[Ff]entanyl|YWNBAW|CASTRATING Minors|\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:x\\.com/libsoftiktok)|Genital Mutilation|2020 Election was Stolen|kiwifarms\\.st|Leftist terrorists|#IStandWthSandiePeggie|#SexMatters|#TheodoreUpton|radical leftists|demonrats",
       "i",
     ),
   },
@@ -676,7 +677,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "protect women's sports|protect womens sports|Genital Mutilation|(trans)?gender ideology|biological males?|the transgender issue",
+      "protect women's sports|protect womens sports|Genital Mutilation|(trans)?gender ideology|biological males?|the transgender issue|trantifa",
       "i",
     ),
   },
