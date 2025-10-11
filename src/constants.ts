@@ -163,7 +163,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp(
-      "(#?(?<=Never|Fuck|anti|🚫|DNI|Remove|🖕|🚫NO)).*?((#)?(Donald[ -:]?)?Trump|MAGA(t)?|DJT)|#?((Donald)?[ -:]?Trump[ -:]?Hater|magazine|stop[ -:]?project[ -:]?2025|MAGA.*?DNI)",
+      "(#?(?<=Never|Fuck|anti|🚫|DNI|Remove|🖕|🚫NO)).*?((#)?(Donald[ -:]?)?Trump|MAGA(t)?|DJT)|#?((Donald)?[ -:]?Trump[ -:]?Hater|magazine|stop[ -:]?project[ -:]?2025|MAGA.*?DNI)|#?(MAGA ?🚫)",
       "iu",
     ),
     ignoredDIDs: [
@@ -677,7 +677,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: true,
     toLabel: false,
     check: new RegExp(
-      "protect women's sports|protect womens sports|(trans)?gender ideology|biological males?|the transgender issue|trantifa",
+      "protect women's sports|protect womens sports|(trans)?gender ideology|biological males?|the transgender issue|trantifa|#cancelnetflix",
       "i",
     ),
   },
