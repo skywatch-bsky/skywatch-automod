@@ -4,6 +4,16 @@ import { limit } from "./limits.js";
 import logger from "./logger.js";
 import { LISTS } from "./lists.js";
 
+const doesLabelExist = (
+  labels: { val: string }[] | undefined,
+  labelVal: string,
+): boolean => {
+  if (!labels) {
+    return false;
+  }
+  return labels.some((label) => label.val === labelVal);
+};
+
 export const createPostLabel = async (
   uri: string,
   cid: string,
@@ -259,17 +269,9 @@ export const checkAccountLabels = async (
         },
       );
 
-      if (response.data.labels) {
-        for (const existingLabel of response.data.labels) {
-          if (existingLabel.val === label) {
-            return true;
-          }
-        }
-      }
-
-      return false;
+      return doesLabelExist(response.data.labels, label);
     } catch (e) {
-      logger.error(`Failed to check account labels with error: ${e}`);
+      logger.error(`Failed to check account labels for ${did} with error: ${e}`);
       return false;
     }
   });
@@ -293,17 +295,9 @@ export const checkRecordLabels = async (
         },
       );
 
-      if (response.data.labels) {
-        for (const existingLabel of response.data.labels) {
-          if (existingLabel.val === label) {
-            return true;
-          }
-        }
-      }
-
-      return false;
+      return doesLabelExist(response.data.labels, label);
     } catch (e) {
-      logger.error(`Failed to check record labels with error: ${e}`);
+      logger.error(`Failed to check record labels for ${uri} with error: ${e}`);
       return false;
     }
   });
