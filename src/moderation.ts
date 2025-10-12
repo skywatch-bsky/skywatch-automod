@@ -12,6 +12,15 @@ export const createPostLabel = async (
   duration: number | undefined,
 ) => {
   await isLoggedIn;
+
+  const hasLabel = await checkRecordLabels(uri, label);
+  if (hasLabel) {
+    logger.info(
+      `Post ${uri} already has label ${label}, skipping`,
+    );
+    return;
+  }
+
   await limit(async () => {
     try {
       const event: {
@@ -68,6 +77,15 @@ export const createAccountLabel = async (
   comment: string,
 ) => {
   await isLoggedIn;
+
+  const hasLabel = await checkAccountLabels(did, label);
+  if (hasLabel) {
+    logger.info(
+      `Account ${did} already has label ${label}, skipping`,
+    );
+    return;
+  }
+
   await limit(async () => {
     try {
       await agent.tools.ozone.moderation.emitEvent(
@@ -223,6 +241,74 @@ export const createAccountReport = async (did: string, comment: string) => {
   });
 };
 
+export const checkAccountLabels = async (
+  did: string,
+  label: string,
+): Promise<boolean> => {
+  await isLoggedIn;
+  return await limit(async () => {
+    try {
+      const response = await agent.tools.ozone.moderation.getRepo(
+        { did },
+        {
+          headers: {
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      );
+
+      if (response.data.labels) {
+        for (const existingLabel of response.data.labels) {
+          if (existingLabel.val === label) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      logger.error(`Failed to check account labels with error: ${e}`);
+      return false;
+    }
+  });
+};
+
+export const checkRecordLabels = async (
+  uri: string,
+  label: string,
+): Promise<boolean> => {
+  await isLoggedIn;
+  return await limit(async () => {
+    try {
+      const response = await agent.tools.ozone.moderation.getRecord(
+        { uri },
+        {
+          headers: {
+            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      );
+
+      if (response.data.labels) {
+        for (const existingLabel of response.data.labels) {
+          if (existingLabel.val === label) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      logger.error(`Failed to check record labels with error: ${e}`);
+      return false;
+    }
+  });
+};
+
 export const addToList = async (label: string, did: string) => {
   await isLoggedIn;
 
@@ -253,32 +339,3 @@ export const addToList = async (label: string, did: string) => {
     }
   });
 };
-
-export async function checkAccountLabels(did: string) {
-  /* try {
-    const repo = await limit(() =>
-      agent.tools.ozone.moderation.getRepo(
-        {
-          did: did,
-        },
-        {
-          headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
-            "atproto-accept-labelers":
-              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
-          },
-        },
-      ),
-    );
-
-    if (!repo.data.labels) {
-      return null;
-    }
-
-    return repo.data.labels.map((label) => label.label);
-  } catch (e) {
-    logger.info("Error retrieving repo for account.");
-    return null;
-    } */
-  return null;
-}
