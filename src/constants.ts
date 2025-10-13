@@ -163,7 +163,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "i",
     ),
     whitelist: new RegExp(
-      "(#?(?<=Never|Fuck|anti|🚫|DNI|Remove|🖕|🚫NO|No)).*?((#)?(Donald[ -:]?)?Trump|MAGA(t)?|DJT)|#?((Donald)?[ -:]?Trump[ -:]?Hater|magazine|stop[ -:]?project[ -:]?2025|MAGA.*?DNI)|#?(MAGA ?🚫)",
+      "(#?(?<=Never|Fuck|anti|🚫|DNI|Remove|🖕|🚫NO|No|❌️)).*?((#)?(Donald[ -:]?)?Trump|MAGA(t)?|DJT)|#?((Donald)?[ -:]?Trump[ -:]?Hater|magazine|stop[ -:]?project[ -:]?2025|MAGA.*?DNI)|#?(MAGA ?🚫)",
       "iu",
     ),
     ignoredDIDs: [
