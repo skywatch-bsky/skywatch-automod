@@ -1,30 +1,366 @@
-# PRD: PDS Host Check Module
+# PRD: Label Determination
 
 ## 1. Objective
 
-To enhance account monitoring capabilities by implementing a new module that checks the Personal Data Server (PDS) hosting a user'''s account upon creation. This will allow for the identification and moderation of accounts originating from malicious or untrusted PDS instances.
+To enhance account monitoring capabilities by implementing a new function that first checks that the account or post under consideration does not have the current label already applied. If already applied, the the function will return false, allowing the parent function to return early.
 
 ## 2. Background
 
-The platform'''s decentralized nature allows users to create accounts on various PDS instances. While this offers flexibility, it also presents a challenge in controlling the influx of malicious actors who may use specific PDS hosts to create spam or abusive accounts. By checking the PDS host at the time of account creation, we can proactively identify and take action on accounts from known bad sources. This module will follow the established design patterns of other `check*` modules in the system.
+Skywatch automatically applies labels to accounts and posts, however, it does not check to ensure the account does not already have the label applied, which can have downstream ramifications. Labels are available via the `tools.ozone.moderation.getRecord` and `tools.ozone.moderation.getRepo` endpoints.
 
-## 3. Requirements
+`tools.ozone.moderation.getRecord` accepts the values `uri` and `cid` and returns a schema illustrated by the following example:
 
-*   A new module file, `src/checkPDS.ts`, will be created.
-*   The module will check the `endpoint` and `alsoKnownAs` fields associated with a user'''s account.
-*   A new check array, `PDS_CHECKS`, will be defined in `src/constants.ts`.
-*   The `PDS_CHECKS` array will contain objects with the following properties:
-    *   `label`: A string to identify the check.
-    *   `comment`: A string to be used in moderation comments/reports.
-    *   `check`: A regular expression to match against the PDS endpoint or `alsoKnownAs` fields.
-    *   `whitelist`: An optional regular expression to prevent false positives.
-    *   `ignoredDIDs`: An optional array of DIDs to ignore.
-    *   `toLabel`: A boolean indicating whether to apply a label to the account.
-    *   `reportAcct`: A boolean indicating whether to report the account.
-    *   `commentAcct`: A boolean indicating whether to add a comment to the account.
-*   The new `checkPDS` function will be integrated into the main agent logic to be triggered on account creation events.
+```json
+{
+  "uri": "string",
+  "cid": "string",
+  "value": {},
+  "blobs": [
+    {
+      "cid": "string",
+      "mimeType": "string",
+      "size": 0,
+      "createdAt": "2024-07-29T15:51:28.071Z",
+      "details": {
+        "width": 0,
+        "height": 0
+      },
+      "moderation": {
+        "subjectStatus": {
+          "id": 0,
+          "subject": {
+            "did": "string"
+          },
+          "hosting": {
+            "status": "takendown",
+            "updatedAt": "2024-07-29T15:51:28.071Z",
+            "createdAt": "2024-07-29T15:51:28.071Z",
+            "deletedAt": "2024-07-29T15:51:28.071Z",
+            "deactivatedAt": "2024-07-29T15:51:28.071Z",
+            "reactivatedAt": "2024-07-29T15:51:28.071Z"
+          },
+          "subjectBlobCids": [
+            "string"
+          ],
+          "subjectRepoHandle": "string",
+          "updatedAt": "2024-07-29T15:51:28.071Z",
+          "createdAt": "2024-07-29T15:51:28.071Z",
+          "reviewState": "#reviewOpen",
+          "comment": "string",
+          "priorityScore": 0,
+          "muteUntil": "2024-07-29T15:51:28.071Z",
+          "muteReportingUntil": "2024-07-29T15:51:28.071Z",
+          "lastReviewedBy": "string",
+          "lastReviewedAt": "2024-07-29T15:51:28.071Z",
+          "lastReportedAt": "2024-07-29T15:51:28.071Z",
+          "lastAppealedAt": "2024-07-29T15:51:28.071Z",
+          "takendown": true,
+          "appealed": true,
+          "suspendUntil": "2024-07-29T15:51:28.071Z",
+          "tags": [
+            "string"
+          ],
+          "accountStats": {
+            "reportCount": 0,
+            "appealCount": 0,
+            "suspendCount": 0,
+            "escalateCount": 0,
+            "takedownCount": 0
+          },
+          "recordsStats": {
+            "totalReports": 0,
+            "reportedCount": 0,
+            "escalatedCount": 0,
+            "appealedCount": 0,
+            "subjectCount": 0,
+            "pendingCount": 0,
+            "processedCount": 0,
+            "takendownCount": 0
+          }
+        }
+      }
+    }
+  ],
+  "labels": [
+    {
+      "ver": 0,
+      "src": "string",
+      "uri": "string",
+      "cid": "string",
+      "val": "string",
+      "neg": true,
+      "cts": "2024-07-29T15:51:28.071Z",
+      "exp": "2024-07-29T15:51:28.071Z",
+      "sig": "string"
+    }
+  ],
+  "indexedAt": "2024-07-29T15:51:28.071Z",
+  "moderation": {
+    "subjectStatus": {
+      "id": 0,
+      "subject": {
+        "did": "string"
+      },
+      "hosting": {
+        "status": "takendown",
+        "updatedAt": "2024-07-29T15:51:28.071Z",
+        "createdAt": "2024-07-29T15:51:28.071Z",
+        "deletedAt": "2024-07-29T15:51:28.071Z",
+        "deactivatedAt": "2024-07-29T15:51:28.071Z",
+        "reactivatedAt": "2024-07-29T15:51:28.071Z"
+      },
+      "subjectBlobCids": [
+        "string"
+      ],
+      "subjectRepoHandle": "string",
+      "updatedAt": "2024-07-29T15:51:28.071Z",
+      "createdAt": "2024-07-29T15:51:28.071Z",
+      "reviewState": "#reviewOpen",
+      "comment": "string",
+      "priorityScore": 0,
+      "muteUntil": "2024-07-29T15:51:28.071Z",
+      "muteReportingUntil": "2024-07-29T15:51:28.071Z",
+      "lastReviewedBy": "string",
+      "lastReviewedAt": "2024-07-29T15:51:28.071Z",
+      "lastReportedAt": "2024-07-29T15:51:28.071Z",
+      "lastAppealedAt": "2024-07-29T15:51:28.071Z",
+      "takendown": true,
+      "appealed": true,
+      "suspendUntil": "2024-07-29T15:51:28.071Z",
+      "tags": [
+        "string"
+      ],
+      "accountStats": {
+        "reportCount": 0,
+        "appealCount": 0,
+        "suspendCount": 0,
+        "escalateCount": 0,
+        "takedownCount": 0
+      },
+      "recordsStats": {
+        "totalReports": 0,
+        "reportedCount": 0,
+        "escalatedCount": 0,
+        "appealedCount": 0,
+        "subjectCount": 0,
+        "pendingCount": 0,
+        "processedCount": 0,
+        "takendownCount": 0
+      }
+    }
+  },
+  "repo": {
+    "did": "string",
+    "handle": "string",
+    "email": "string",
+    "relatedRecords": [
+      null
+    ],
+    "indexedAt": "2024-07-29T15:51:28.071Z",
+    "moderation": {
+      "subjectStatus": {
+        "id": 0,
+        "subject": {
+          "did": "string"
+        },
+        "hosting": {
+          "status": "takendown",
+          "updatedAt": "2024-07-29T15:51:28.071Z",
+          "createdAt": "2024-07-29T15:51:28.071Z",
+          "deletedAt": "2024-07-29T15:51:28.071Z",
+          "deactivatedAt": "2024-07-29T15:51:28.071Z",
+          "reactivatedAt": "2024-07-29T15:51:28.071Z"
+        },
+        "subjectBlobCids": [
+          "string"
+        ],
+        "subjectRepoHandle": "string",
+        "updatedAt": "2024-07-29T15:51:28.071Z",
+        "createdAt": "2024-07-29T15:51:28.071Z",
+        "reviewState": "#reviewOpen",
+        "comment": "string",
+        "priorityScore": 0,
+        "muteUntil": "2024-07-29T15:51:28.071Z",
+        "muteReportingUntil": "2024-07-29T15:51:28.071Z",
+        "lastReviewedBy": "string",
+        "lastReviewedAt": "2024-07-29T15:51:28.071Z",
+        "lastReportedAt": "2024-07-29T15:51:28.071Z",
+        "lastAppealedAt": "2024-07-29T15:51:28.071Z",
+        "takendown": true,
+        "appealed": true,
+        "suspendUntil": "2024-07-29T15:51:28.071Z",
+        "tags": [
+          "string"
+        ],
+        "accountStats": {
+          "reportCount": 0,
+          "appealCount": 0,
+          "suspendCount": 0,
+          "escalateCount": 0,
+          "takedownCount": 0
+        },
+        "recordsStats": {
+          "totalReports": 0,
+          "reportedCount": 0,
+          "escalatedCount": 0,
+          "appealedCount": 0,
+          "subjectCount": 0,
+          "pendingCount": 0,
+          "processedCount": 0,
+          "takendownCount": 0
+        }
+      }
+    },
+    "invitedBy": {
+      "code": "string",
+      "available": 0,
+      "disabled": true,
+      "forAccount": "string",
+      "createdBy": "string",
+      "createdAt": "2024-07-29T15:51:28.071Z",
+      "uses": [
+        {
+          "usedBy": "string",
+          "usedAt": "2024-07-29T15:51:28.071Z"
+        }
+      ]
+    },
+    "invitesDisabled": true,
+    "inviteNote": "string",
+    "deactivatedAt": "2024-07-29T15:51:28.071Z",
+    "threatSignatures": [
+      {
+        "property": "string",
+        "value": "string"
+      }
+    ]
+  }
+}
+```
 
-## 5. Out of Scope
+`tools.ozone.moderation.getRepo` accepts the value `did` and returns a schema illustrated by the following example:
 
-*   This module will only check PDS information at the time of account creation. It will not retroactively scan existing accounts.
-*   This module will not be responsible for determining if a PDS is malicious, it will only act on the predefined rules in `PDS_CHECKS`. The population and maintenance of these rules are a separate operational task.
+```json
+{
+  "did": "string",
+  "handle": "string",
+  "email": "string",
+  "relatedRecords": [
+    null
+  ],
+  "indexedAt": "2024-07-29T15:51:28.071Z",
+  "moderation": {
+    "subjectStatus": {
+      "id": 0,
+      "subject": {
+        "did": "string"
+      },
+      "hosting": {
+        "status": "takendown",
+        "updatedAt": "2024-07-29T15:51:28.071Z",
+        "createdAt": "2024-07-29T15:51:28.071Z",
+        "deletedAt": "2024-07-29T15:51:28.071Z",
+        "deactivatedAt": "2024-07-29T15:51:28.071Z",
+        "reactivatedAt": "2024-07-29T15:51:28.071Z"
+      },
+      "subjectBlobCids": [
+        "string"
+      ],
+      "subjectRepoHandle": "string",
+      "updatedAt": "2024-07-29T15:51:28.071Z",
+      "createdAt": "2024-07-29T15:51:28.071Z",
+      "reviewState": "#reviewOpen",
+      "comment": "string",
+      "priorityScore": 0,
+      "muteUntil": "2024-07-29T15:51:28.071Z",
+      "muteReportingUntil": "2024-07-29T15:51:28.071Z",
+      "lastReviewedBy": "string",
+      "lastReviewedAt": "2024-07-29T15:51:28.071Z",
+      "lastReportedAt": "2024-07-29T15:51:28.071Z",
+      "lastAppealedAt": "2024-07-29T15:51:28.071Z",
+      "takendown": true,
+      "appealed": true,
+      "suspendUntil": "2024-07-29T15:51:28.071Z",
+      "tags": [
+        "string"
+      ],
+      "accountStats": {
+        "reportCount": 0,
+        "appealCount": 0,
+        "suspendCount": 0,
+        "escalateCount": 0,
+        "takedownCount": 0
+      },
+      "recordsStats": {
+        "totalReports": 0,
+        "reportedCount": 0,
+        "escalatedCount": 0,
+        "appealedCount": 0,
+        "subjectCount": 0,
+        "pendingCount": 0,
+        "processedCount": 0,
+        "takendownCount": 0
+      }
+    }
+  },
+  "labels": [
+    {
+      "ver": 0,
+      "src": "string",
+      "uri": "string",
+      "cid": "string",
+      "val": "string",
+      "neg": true,
+      "cts": "2024-07-29T15:51:28.071Z",
+      "exp": "2024-07-29T15:51:28.071Z",
+      "sig": "string"
+    }
+  ],
+  "invitedBy": {
+    "code": "string",
+    "available": 0,
+    "disabled": true,
+    "forAccount": "string",
+    "createdBy": "string",
+    "createdAt": "2024-07-29T15:51:28.071Z",
+    "uses": [
+      {
+        "usedBy": "string",
+        "usedAt": "2024-07-29T15:51:28.071Z"
+      }
+    ]
+  },
+  "invites": [
+    {
+      "code": "string",
+      "available": 0,
+      "disabled": true,
+      "forAccount": "string",
+      "createdBy": "string",
+      "createdAt": "2024-07-29T15:51:28.071Z",
+      "uses": [
+        {
+          "usedBy": "string",
+          "usedAt": "2024-07-29T15:51:28.071Z"
+        }
+      ]
+    }
+  ],
+  "invitesDisabled": true,
+  "inviteNote": "string",
+  "emailConfirmedAt": "2024-07-29T15:51:28.071Z",
+  "deactivatedAt": "2024-07-29T15:51:28.071Z",
+  "threatSignatures": [
+    {
+      "property": "string",
+      "value": "string"
+    }
+  ]
+}
+```
+
+## Requirements
+
+- Add two functions to `src/moderation`: `checkAccountLabels` and `checkRecordLabels`
+- Functions must be exportable and asynchronous
+- Use rate limiting via the limits set in `src/limits.ts`
