@@ -4,7 +4,12 @@
       "mcp__search_atproto_docs__search_documentation",
       "mcp__task-master-ai__initialize_project",
       "mcp__task-master-ai__add_task",
-      "mcp__task-master-ai__parse_prd"
+      "mcp__task-master-ai__parse_prd",
+      "mcp__git-mcp-server__git_branch",
+      "mcp__git-mcp-server__git_set_working_dir",
+      "mcp__git-mcp-server__git_checkout",
+      "mcp__git-mcp-server__git_add",
+      "mcp__git-mcp-server__git_commit"
     ],
     "deny": [],
     "ask": []
