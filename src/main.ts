@@ -13,7 +13,7 @@ import {
   METRICS_PORT,
   WANTED_COLLECTION,
 } from "./config.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";

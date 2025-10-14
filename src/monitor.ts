@@ -1,6 +1,6 @@
 import { describe } from "node:test";
 import { PROFILE_CHECKS } from "./constants.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import { createAccountReport, createAccountLabel } from "./moderation.js";
 
 export const monitorDescription = async (
