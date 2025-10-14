@@ -580,7 +580,7 @@ export const POST_CHECKS: Checks[] = [
     ),
     whitelist: new RegExp("zionist|zionism|Kike Hernandez", "i"),
   },
-  {
+  /*{
     language: ["eng"],
     label: "discourse-bait",
     comment: "Contains discourse bait",
@@ -598,7 +598,7 @@ export const POST_CHECKS: Checks[] = [
       "did:plc:oky5czdrnfjpqslsw2a5iclo",
       "did:plc:oisofpd7lj26yvgiivf3lxsi",
     ],
-  },
+  },*/
   {
     language: ["eng"],
     label: "dehumanizing-rhetoric",
