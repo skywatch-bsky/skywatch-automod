@@ -18,7 +18,6 @@ import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
-import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 
 let cursor = 0;
@@ -195,14 +194,6 @@ jetstream.onUpdate(
           event.commit.record.description as string,
         );
       }
-
-      if (event.commit.record.joinedViaStarterPack) {
-        checkStarterPack(
-          event.did,
-          event.time_us,
-          event.commit.record.joinedViaStarterPack.uri,
-        );
-      }
     } catch (error) {
       logger.error(`Error checking profile:  ${error}`);
     }
@@ -227,14 +218,6 @@ jetstream.onCreate(
           event.time_us,
           event.commit.record.displayName as string,
           event.commit.record.description as string,
-        );
-      }
-
-      if (event.commit.record.joinedViaStarterPack) {
-        checkStarterPack(
-          event.did,
-          event.time_us,
-          event.commit.record.joinedViaStarterPack.uri,
         );
       }
     } catch (error) {
