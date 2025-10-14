@@ -40,6 +40,7 @@
     "bottleneck": "^2.19.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
+    "franc": "^6.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "p-ratelimit": "^1.0.1",
