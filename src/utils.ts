@@ -1,6 +1,6 @@
-import { homoglyphMap } from "./homoglyphs.js";
 import logger from "./logger.js";
 
+import { homoglyphMap } from "./homoglyphs.js";
 
 /**
  * Normalizes a string by converting it to lowercase, replacing homoglyphs,
@@ -42,7 +42,7 @@ export function normalizeUnicode(text: string): string {
 
 export async function getFinalUrl(url: string): Promise<string> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => { controller.abort(); }, 10000); // 10-second timeout
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
 
   try {
     const response = await fetch(url, {
@@ -65,7 +65,7 @@ export async function getFinalUrl(url: string): Promise<string> {
 }
 
 export async function getLanguage(profile: string): Promise<string> {
-  if (typeof profile !== "string") {
+  if (typeof profile !== "string" || profile === null) {
     logger.warn(
       "[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to 'eng'.",
       profile,

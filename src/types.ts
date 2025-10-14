@@ -8,6 +8,7 @@ export interface Checks {
   commentAcct: boolean;
   reportPost?: boolean;
   toLabel: boolean;
+  duration?: number;
   check: RegExp;
   whitelist?: RegExp;
   ignoredDIDs?: string[];
