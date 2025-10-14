@@ -1,22 +1,16 @@
 import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
-import { countStarterPacks } from "./count.js";
+import { Post } from "./types.js";
 import logger from "./logger.js";
+import { countStarterPacks } from "./count.js";
 import {
   createPostLabel,
   createAccountReport,
   createAccountComment,
   createPostReport,
 } from "./moderation.js";
-import type { Post } from "./types.js";
 import { getFinalUrl, getLanguage } from "./utils.js";
 
 export const checkPosts = async (post: Post[]) => {
-  // Get a list of labels
-  const labels: string[] = Array.from(
-    POST_CHECKS,
-    (postCheck) => postCheck.label,
-  );
-
   const urlRegex = /https?:\/\/[^\s]+/g;
 
   // Check for link shorteners
@@ -45,77 +39,74 @@ export const checkPosts = async (post: Post[]) => {
   // Get the post's language
   const lang = await getLanguage(post[0].text);
 
-  // iterate through the labels
-  labels.forEach((label) => {
-    const checkPost = POST_CHECKS.find(
-      (postCheck) => postCheck.label === label,
-    );
-
-    if (checkPost?.language || checkPost?.language !== undefined) {
-      if (!checkPost?.language.includes(lang)) {
+  // iterate through the checks
+  POST_CHECKS.forEach((checkPost) => {
+    if (checkPost.language) {
+      if (!checkPost.language.includes(lang)) {
         return;
       }
     }
 
-    if (checkPost?.ignoredDIDs) {
-      if (checkPost?.ignoredDIDs.includes(post[0].did)) {
+    if (checkPost.ignoredDIDs) {
+      if (checkPost.ignoredDIDs.includes(post[0].did)) {
         logger.info(`[CHECKPOSTS]: Whitelisted DID: ${post[0].did}`);
         return;
       }
     }
 
-    if (checkPost!.check.test(post[0].text)) {
+    if (checkPost.check.test(post[0].text)) {
       // Check if post is whitelisted
-      if (checkPost?.whitelist) {
-        if (checkPost?.whitelist.test(post[0].text)) {
-          logger.info("[CHECKPOSTS]: Whitelisted phrase found\"");
+      if (checkPost.whitelist) {
+        if (checkPost.whitelist.test(post[0].text)) {
+          logger.info(`[CHECKPOSTS]: Whitelisted phrase found"`);
           return;
         }
       }
 
       countStarterPacks(post[0].did, post[0].time);
 
-      if (checkPost!.toLabel) {
+      if (checkPost.toLabel === true) {
         logger.info(
-          `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost!.label}`,
+          `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost.label}`,
         );
         createPostLabel(
           post[0].atURI,
           post[0].cid,
-          checkPost!.label,
-          `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${checkPost.label}`,
+          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          checkPost.duration,
         );
       }
 
-      if (checkPost!.reportPost === true) {
+      if (checkPost.reportPost === true) {
         logger.info(
-          `[CHECKPOSTS]: Reporting ${post[0].atURI} for ${checkPost!.label}`,
+          `[CHECKPOSTS]: Reporting ${post[0].atURI} for ${checkPost.label}`,
         );
         logger.info(`Reporting: ${post[0].atURI}`);
         createPostReport(
           post[0].atURI,
           post[0].cid,
-          `${post[0].time}: ${checkPost!.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
 
-      if (checkPost!.reportAcct) {
+      if (checkPost.reportAcct === true) {
         logger.info(
-          `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
+          `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost.label} in ${post[0].atURI}`,
         );
         createAccountReport(
           post[0].did,
-          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
 
-      if (checkPost!.commentAcct) {
+      if (checkPost.commentAcct === true) {
         logger.info(
-          `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost!.label} in ${post[0].atURI}`,
+          `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost.label} in ${post[0].atURI}`,
         );
         createAccountComment(
           post[0].did,
-          `${post[0].time}: ${checkPost?.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
     }

@@ -5,7 +5,11 @@
       "mcp__git-mcp-server__git_add",
       "mcp__git-mcp-server__git_commit",
       "mcp__git-mcp-server__git_push",
-      "mcp__github__create_pull_request"
+      "mcp__github__create_pull_request",
+      "mcp__git-mcp-server__git_diff",
+      "mcp__git-mcp-server__git_status",
+      "mcp__git-mcp-server__git_log",
+      "mcp__git-mcp-server__git_set_working_dir"
     ],
     "deny": [],
     "ask": []
