@@ -1,6 +1,6 @@
 import { login } from "./agent.js";
 import { langs, PROFILE_CHECKS } from "./constants.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import {
   createAccountReport,
   createAccountLabel,

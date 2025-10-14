@@ -1,6 +1,6 @@
 import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
 import { Post } from "./types.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import { countStarterPacks } from "./count.js";
 import {
   createPostLabel,

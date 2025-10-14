@@ -1,5 +1,5 @@
 import { isLoggedIn, agent } from "./agent.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import { limit } from "./limits.js";
 import { createAccountLabel } from "./moderation.js";
 

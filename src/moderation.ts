@@ -1,7 +1,7 @@
 import { agent, isLoggedIn } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import { LISTS } from "./lists.js";
 
 const doesLabelExist = (
@@ -25,9 +25,7 @@ export const createPostLabel = async (
 
   const hasLabel = await checkRecordLabels(uri, label);
   if (hasLabel) {
-    logger.info(
-      `Post ${uri} already has label ${label}, skipping`,
-    );
+    logger.info(`Post ${uri} already has label ${label}, skipping`);
     return;
   }
 
@@ -90,9 +88,7 @@ export const createAccountLabel = async (
 
   const hasLabel = await checkAccountLabels(did, label);
   if (hasLabel) {
-    logger.info(
-      `Account ${did} already has label ${label}, skipping`,
-    );
+    logger.info(`Account ${did} already has label ${label}, skipping`);
     return;
   }
 
@@ -271,7 +267,9 @@ export const checkAccountLabels = async (
 
       return doesLabelExist(response.data.labels, label);
     } catch (e) {
-      logger.error(`Failed to check account labels for ${did} with error: ${e}`);
+      logger.error(
+        `Failed to check account labels for ${did} with error: ${e}`,
+      );
       return false;
     }
   });
@@ -299,37 +297,6 @@ export const checkRecordLabels = async (
     } catch (e) {
       logger.error(`Failed to check record labels for ${uri} with error: ${e}`);
       return false;
-    }
-  });
-};
-
-export const addToList = async (label: string, did: string) => {
-  await isLoggedIn;
-
-  const newList = LISTS.find((list) => list.label === label);
-  if (!newList) {
-    logger.warn(
-      `List not found for ${label}. Likely a label not associated with a list`,
-    );
-    return;
-  }
-  logger.info(`New label added to list: ${newList.label}`);
-
-  const listUri = `at://${MOD_DID!}/app.bsky.graph.list/${newList.rkey}`;
-
-  await limit(async () => {
-    try {
-      await agent.com.atproto.repo.createRecord({
-        collection: "app.bsky.graph.listitem",
-        repo: `${MOD_DID!}`,
-        record: {
-          subject: did,
-          list: listUri,
-          createdAt: new Date().toISOString(),
-        },
-      });
-    } catch (e) {
-      console.error(e);
     }
   });
 };
