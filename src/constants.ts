@@ -652,7 +652,7 @@ export const POST_CHECKS: Checks[] = [
     commentAcct: false,
     toLabel: true,
     check: new RegExp(
-      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:antimagaclub\\.com|pleniiixa\\.blogspot\\.com|testyourself\\.now|tinyurl\\.com/stdTestSafe|discord\\.me/rabbi|rabbirothschild\\.blogspot\\.com)|Pete Hegseth fired the commander of the Navy SEALS the same day he fired the director of the Defense Intelligence Agency",
+      "\\b(?:https?:\\/\\/)?([^.]+\\.)?(?:antimagaclub\\.com|pleniiixa\\.blogspot\\.com|testyourself\\.now|tinyurl\\.com/stdTestSafe|discord\\.me/rabbi|rabbirothschild\\.blogspot\\.com|tinyurl\\.com/supportwomens)|Pete Hegseth fired the commander of the Navy SEALS the same day he fired the director of the Defense Intelligence Agency",
       "i",
     ),
     ignoredDIDs: ["did:plc:m6k7ju4wcwnwa67mnhgjc2vc"], // Labeled already but hasn't been taken down
