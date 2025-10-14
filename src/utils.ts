@@ -56,9 +56,9 @@ export async function getFinalUrl(url: string): Promise<string> {
     clearTimeout(timeoutId); // Clear the timeout if fetch fails
     // Log the error with more specific information if it's a timeout
     if (error instanceof Error && error.name === "AbortError") {
-      logger.warn(`Timeout fetching URL: ${url}`, error);
+      logger.warn({ process: "UTILS", url, error }, "Timeout fetching URL");
     } else {
-      logger.warn(`Error fetching URL: ${url}`, error);
+      logger.warn({ process: "UTILS", url, error }, "Error fetching URL");
     }
     throw error; // Re-throw the error to be caught by the caller
   }
@@ -66,10 +66,7 @@ export async function getFinalUrl(url: string): Promise<string> {
 
 export async function getLanguage(profile: string): Promise<string> {
   if (typeof profile !== "string") {
-    logger.warn(
-      "[GETLANGUAGE] getLanguage called with invalid profile data, defaulting to 'eng'.",
-      profile,
-    );
+    logger.warn({ process: "UTILS", profile }, "getLanguage called with invalid profile data, defaulting to 'eng'");
     return "eng"; // Default or throw an error
   }
 

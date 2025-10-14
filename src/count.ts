@@ -7,9 +7,7 @@ export const countStarterPacks = async (did: string, time: number) => {
   await isLoggedIn;
 
   if (did in ["did:plc:gpunjjgvlyb4racypz3yfiq4"]) {
-    logger.info(
-      `[COUNTSTARTERPACKS]: ${time}: Account ${did} is a whitelisted.`,
-    );
+    logger.debug({ process: "COUNTSTARTERPACKS", did, time }, "Account is whitelisted");
     return;
   }
 
@@ -26,9 +24,7 @@ export const countStarterPacks = async (did: string, time: number) => {
         );
       }
     } catch (error) {
-      logger.error(
-        `[COUNTSTARTERPACKS]: Error checking associated accounts: ${error}`,
-      );
+      logger.error({ process: "COUNTSTARTERPACKS", error }, "Error checking associated accounts");
     }
   });
 };

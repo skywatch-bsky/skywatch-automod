@@ -30,7 +30,8 @@ export const checkPosts = async (post: Post[]) => {
       }
     } catch (error) {
       logger.error(
-        `[CHECKPOSTS]: Failed to resolve shortened URL: ${post[0].text} with error: ${error}`,
+        { process: "CHECKPOSTS", text: post[0].text, error },
+        "Failed to resolve shortened URL",
       );
       // Keep the original URL if resolution fails
     }
@@ -49,7 +50,10 @@ export const checkPosts = async (post: Post[]) => {
 
     if (checkPost.ignoredDIDs) {
       if (checkPost.ignoredDIDs.includes(post[0].did)) {
-        logger.info(`[CHECKPOSTS]: Whitelisted DID: ${post[0].did}`);
+        logger.debug(
+          { process: "CHECKPOSTS", did: post[0].did, atURI: post[0].atURI },
+          "Whitelisted DID",
+        );
         return;
       }
     }
@@ -58,7 +62,10 @@ export const checkPosts = async (post: Post[]) => {
       // Check if post is whitelisted
       if (checkPost.whitelist) {
         if (checkPost.whitelist.test(post[0].text)) {
-          logger.info(`[CHECKPOSTS]: Whitelisted phrase found"`);
+          logger.debug(
+            { process: "CHECKPOSTS", did: post[0].did, atURI: post[0].atURI },
+            "Whitelisted phrase found",
+          );
           return;
         }
       }
@@ -67,7 +74,13 @@ export const checkPosts = async (post: Post[]) => {
 
       if (checkPost.toLabel === true) {
         logger.info(
-          `[CHECKPOSTS]: Labeling ${post[0].atURI} for ${checkPost.label}`,
+          {
+            process: "CHECKPOSTS",
+            label: checkPost.label,
+            did: post[0].did,
+            atURI: post[0].atURI,
+          },
+          "Labeling post",
         );
         createPostLabel(
           post[0].atURI,
@@ -80,9 +93,14 @@ export const checkPosts = async (post: Post[]) => {
 
       if (checkPost.reportPost === true) {
         logger.info(
-          `[CHECKPOSTS]: Reporting ${post[0].atURI} for ${checkPost.label}`,
+          {
+            process: "CHECKPOSTS",
+            label: checkPost.label,
+            did: post[0].did,
+            atURI: post[0].atURI,
+          },
+          "Reporting post",
         );
-        logger.info(`Reporting: ${post[0].atURI}`);
         createPostReport(
           post[0].atURI,
           post[0].cid,
@@ -92,7 +110,13 @@ export const checkPosts = async (post: Post[]) => {
 
       if (checkPost.reportAcct === true) {
         logger.info(
-          `[CHECKPOSTS]: Reporting on ${post[0].did} for ${checkPost.label} in ${post[0].atURI}`,
+          {
+            process: "CHECKPOSTS",
+            label: checkPost.label,
+            did: post[0].did,
+            atURI: post[0].atURI,
+          },
+          "Reporting account",
         );
         createAccountReport(
           post[0].did,
@@ -102,7 +126,13 @@ export const checkPosts = async (post: Post[]) => {
 
       if (checkPost.commentAcct === true) {
         logger.info(
-          `[CHECKPOSTS]: Commenting on ${post[0].did} for ${checkPost.label} in ${post[0].atURI}`,
+          {
+            process: "CHECKPOSTS",
+            label: checkPost.label,
+            did: post[0].did,
+            atURI: post[0].atURI,
+          },
+          "Commenting on account",
         );
         createAccountComment(
           post[0].did,
