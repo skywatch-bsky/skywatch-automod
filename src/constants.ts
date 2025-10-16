@@ -117,6 +117,7 @@ export const PROFILE_CHECKS: Checks[] = [
     whitelist: new RegExp("(anti|[🚫]|DNI)[ -:]?groyper", "i"),
     ignoredDIDs: [
       "did:plc:lmuoejh44euyubyxynofwavg", // Has "Anti-Groyper" in their profile and this was getting flagged before I refactored the whitelist regex.
+      "did:plc:6shlnipfibgipafcp77wy7qr", // No idea why this is getting flagged.
     ],
   },
   {
@@ -148,6 +149,7 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
       "did:plc:rxfutzaujbo5tv3nsrzfgvqe", // Not MAGA
+      "did:plc:6shlnipfibgipafcp77wy7qr",
     ],
   },
   {
