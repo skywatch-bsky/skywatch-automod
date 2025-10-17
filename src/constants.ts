@@ -150,6 +150,9 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
       "did:plc:rxfutzaujbo5tv3nsrzfgvqe", // Not MAGA
       "did:plc:6shlnipfibgipafcp77wy7qr",
+      "did:plc:b2ecyhl2z2tro25ltrcyiytd", // DHS
+      "did:plc:iw2wxg46hm4ezguswhwej6t6", // actual whitehouse
+      "did:plc:fhnl65q3us5evynqc4f2qak6", // HHS
     ],
   },
   {
@@ -182,6 +185,9 @@ export const PROFILE_CHECKS: Checks[] = [
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
       "did:plc:rxfutzaujbo5tv3nsrzfgvqe", // Not MAGA
       "did:plc:wrprhfzhsa4f3fvjgqm2sos7", // False positive
+      "did:plc:iw2wxg46hm4ezguswhwej6t6", // actual whitehouse
+      "did:plc:b2ecyhl2z2tro25ltrcyiytd", // DHS
+      "did:plc:fhnl65q3us5evynqc4f2qak6", // HHS
     ],
   },
   {
@@ -386,6 +392,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:izhxao5rdfmmaho532pf3c33", // Gag account
       "did:plc:k6iz3efpj4prqkincrejjkew", // Keeps getting flagged for no discernable reason
       "did:plc:omwssnbnwy3lse5decneobbr", // Parody - Obnoxious but parody
+      "did:plc:iw2wxg46hm4ezguswhwej6t6", // actual whitehouse
     ],
   },
   {
