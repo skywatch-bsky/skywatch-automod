@@ -1,6 +1,5 @@
 import {
   CommitCreateEvent,
-  CommitUpdate,
   CommitUpdateEvent,
   IdentityEvent,
   Jetstream,
@@ -19,6 +18,7 @@ import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
+import { checkFacetSpam } from "./rules/facets/facets.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -115,6 +115,16 @@ jetstream.onCreate(
 
     // Check if the record has facets
     if (hasFacets) {
+      // Check for facet spam (hidden mentions with duplicate byte positions)
+      tasks.push(
+        checkFacetSpam(
+          event.did,
+          event.time_us,
+          atURI,
+          event.commit.record.facets!,
+        ),
+      );
+
       const hasLinkType = event.commit.record.facets!.some((facet) =>
         facet.features.some(
           (feature) => feature.$type === "app.bsky.richtext.facet#link",
