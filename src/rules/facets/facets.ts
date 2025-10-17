@@ -10,6 +10,11 @@ export const FACET_SPAM_LABEL = "suspect-inauthentic";
 export const FACET_SPAM_COMMENT =
   "Abusive facet usage detected (hidden mentions)";
 
+// Allowlist for DIDs with legitimate duplicate facet use cases
+export const FACET_SPAM_ALLOWLIST: string[] = [
+  // Add DIDs here that should be exempt from facet spam detection
+];
+
 /**
  * Checks if a post contains facet spam by detecting multiple facets
  * with identical byte positions (indicating hidden/abusive mentions)
@@ -20,6 +25,15 @@ export const checkFacetSpam = async (
   atURI: string,
   facets: Facet[],
 ): Promise<void> => {
+  // Check allowlist
+  if (FACET_SPAM_ALLOWLIST.includes(did)) {
+    logger.debug(
+      { process: "FACET_SPAM", did, atURI },
+      "Allowlisted DID",
+    );
+    return;
+  }
+
   if (!facets || facets.length === 0) {
     return;
   }
