@@ -92,6 +92,44 @@ describe("checkFacetSpam", () => {
 
       expect(createAccountLabel).not.toHaveBeenCalled();
     });
+
+    it("should not label when duplicate tags/links at same position (bot bugs)", async () => {
+      const facets: Facet[] = [
+        {
+          index: { byteStart: 38, byteEnd: 43 },
+          features: [{ $type: "app.bsky.richtext.facet#tag", tag: "news" }],
+        },
+        {
+          index: { byteStart: 38, byteEnd: 43 },
+          features: [{ $type: "app.bsky.richtext.facet#tag", tag: "News" }],
+        },
+      ];
+
+      await checkFacetSpam(TEST_DID, TEST_TIME, TEST_URI, facets);
+
+      // Should not trigger - only mentions are checked
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.info).not.toHaveBeenCalled();
+    });
+
+    it("should not label when duplicate links at same position", async () => {
+      const facets: Facet[] = [
+        {
+          index: { byteStart: 0, byteEnd: 10 },
+          features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://example.com" }],
+        },
+        {
+          index: { byteStart: 0, byteEnd: 10 },
+          features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://example.org" }],
+        },
+      ];
+
+      await checkFacetSpam(TEST_DID, TEST_TIME, TEST_URI, facets);
+
+      // Should not trigger - only mentions are checked
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.info).not.toHaveBeenCalled();
+    });
   });
 
   describe("when spam is detected", () => {
@@ -178,11 +216,15 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).toHaveBeenCalledOnce();
     });
 
-    it("should handle different feature types at same position", async () => {
+    it("should handle mixed feature types - only mentions at same position count", async () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 1 },
           features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+        },
+        {
+          index: { byteStart: 0, byteEnd: 1 },
+          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
@@ -192,7 +234,7 @@ describe("checkFacetSpam", () => {
 
       await checkFacetSpam(TEST_DID, TEST_TIME, TEST_URI, facets);
 
-      // Should still detect as spam regardless of feature type
+      // Should detect spam (2 mentions at same position)
       expect(createAccountLabel).toHaveBeenCalledOnce();
     });
   });
