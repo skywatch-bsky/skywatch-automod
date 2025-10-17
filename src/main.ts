@@ -13,12 +13,11 @@ import {
   METRICS_PORT,
   WANTED_COLLECTION,
 } from "./config.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
 import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
-import { checkStarterPack, checkNewStarterPack } from "./checkStarterPack.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 
 let cursor = 0;
@@ -29,18 +28,22 @@ function epochUsToDateTime(cursor: number): string {
 }
 
 try {
-  logger.info("Trying to read cursor from cursor.txt...");
+  logger.info({ process: "MAIN" }, "Trying to read cursor from cursor.txt");
   cursor = Number(fs.readFileSync("cursor.txt", "utf8"));
-  logger.info(`Cursor found: ${cursor} (${epochUsToDateTime(cursor)})`);
+  logger.info(
+    { process: "MAIN", cursor, datetime: epochUsToDateTime(cursor) },
+    "Cursor found",
+  );
 } catch (error) {
   if (error instanceof Error && "code" in error && error.code === "ENOENT") {
     cursor = Math.floor(Date.now() * 1000);
     logger.info(
-      `Cursor not found in cursor.txt, setting cursor to: ${cursor} (${epochUsToDateTime(cursor)})`,
+      { process: "MAIN", cursor, datetime: epochUsToDateTime(cursor) },
+      "Cursor not found in cursor.txt, setting cursor",
     );
     fs.writeFileSync("cursor.txt", cursor.toString(), "utf8");
   } else {
-    logger.error(error);
+    logger.error({ process: "MAIN", error }, "Failed to read cursor");
     process.exit(1);
   }
 }
@@ -54,20 +57,36 @@ const jetstream = new Jetstream({
 jetstream.on("open", () => {
   if (jetstream.cursor) {
     logger.info(
-      `Connected to Jetstream at ${FIREHOSE_URL} with cursor ${jetstream.cursor} (${epochUsToDateTime(jetstream.cursor)})`,
+      {
+        process: "MAIN",
+        url: FIREHOSE_URL,
+        cursor: jetstream.cursor,
+        datetime: epochUsToDateTime(jetstream.cursor),
+      },
+      "Connected to Jetstream with cursor",
     );
   } else {
     logger.info(
-      `Connected to Jetstream at ${FIREHOSE_URL}, waiting for cursor...`,
+      { process: "MAIN", url: FIREHOSE_URL },
+      "Connected to Jetstream, waiting for cursor",
     );
   }
   cursorUpdateInterval = setInterval(() => {
     if (jetstream.cursor) {
       logger.info(
-        `Cursor updated to: ${jetstream.cursor} (${epochUsToDateTime(jetstream.cursor)})`,
+        {
+          process: "MAIN",
+          cursor: jetstream.cursor,
+          datetime: epochUsToDateTime(jetstream.cursor),
+        },
+        "Cursor updated",
       );
       fs.writeFile("cursor.txt", jetstream.cursor.toString(), (err) => {
-        if (err) logger.error(err);
+        if (err)
+          logger.error(
+            { process: "MAIN", error: err },
+            "Failed to write cursor",
+          );
       });
     }
   }, CURSOR_UPDATE_INTERVAL);
@@ -75,11 +94,11 @@ jetstream.on("open", () => {
 
 jetstream.on("close", () => {
   clearInterval(cursorUpdateInterval);
-  logger.info("Jetstream connection closed.");
+  logger.info({ process: "MAIN" }, "Jetstream connection closed");
 });
 
 jetstream.on("error", (error) => {
-  logger.error(`Jetstream error: ${error.message}`);
+  logger.error({ process: "MAIN", error: error.message }, "Jetstream error");
 });
 
 // Check for post updates
@@ -195,16 +214,8 @@ jetstream.onUpdate(
           event.commit.record.description as string,
         );
       }
-
-      if (event.commit.record.joinedViaStarterPack) {
-        checkStarterPack(
-          event.did,
-          event.time_us,
-          event.commit.record.joinedViaStarterPack.uri,
-        );
-      }
     } catch (error) {
-      logger.error(`Error checking profile:  ${error}`);
+      logger.error({ process: "MAIN", error }, "Error checking profile");
     }
   },
 );
@@ -229,56 +240,8 @@ jetstream.onCreate(
           event.commit.record.description as string,
         );
       }
-
-      if (event.commit.record.joinedViaStarterPack) {
-        checkStarterPack(
-          event.did,
-          event.time_us,
-          event.commit.record.joinedViaStarterPack.uri,
-        );
-      }
     } catch (error) {
-      logger.error(`Error checking profile:  ${error}`);
-    }
-  },
-);
-
-jetstream.onCreate(
-  "app.bsky.graph.starterpack",
-  async (event: CommitCreateEvent<"app.bsky.graph.starterpack">) => {
-    try {
-      const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-
-      checkNewStarterPack(
-        event.did,
-        event.time_us,
-        atURI,
-        event.commit.cid,
-        event.commit.record.name,
-        event.commit.record.description,
-      );
-    } catch (error) {
-      logger.error(`Error checking starterpack:  ${error}`);
-    }
-  },
-);
-
-jetstream.onUpdate(
-  "app.bsky.graph.starterpack",
-  async (event: CommitUpdateEvent<"app.bsky.graph.starterpack">) => {
-    try {
-      const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-
-      checkNewStarterPack(
-        event.did,
-        event.time_us,
-        atURI,
-        event.commit.cid,
-        event.commit.record.name,
-        event.commit.record.description,
-      );
-    } catch (error) {
-      logger.error(`Error checking starterpack:  ${error}`);
+      logger.error({ process: "MAIN", error }, "Error checking profile");
     }
   },
 );
@@ -304,12 +267,12 @@ jetstream.start();
 
 function shutdown() {
   try {
-    logger.info("Shutting down gracefully...");
+    logger.info({ process: "MAIN" }, "Shutting down gracefully");
     fs.writeFileSync("cursor.txt", jetstream.cursor!.toString(), "utf8");
     jetstream.close();
     metricsServer.close();
   } catch (error) {
-    logger.error(`Error shutting down gracefully: ${error}`);
+    logger.error({ process: "MAIN", error }, "Error shutting down gracefully");
     process.exit(1);
   }
 }

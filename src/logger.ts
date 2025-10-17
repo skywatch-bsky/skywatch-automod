@@ -1,19 +1,12 @@
-import { pino } from "pino";
+import pino from "pino";
 
-const logger = pino({
-  level: process.env.LOG_LEVEL ?? "info",
-  transport:
-    process.env.NODE_ENV !== "production"
-      ? {
-          target: "pino-pretty",
-          options: {
-            colorize: true,
-            translateTime: "SYS:standard",
-            ignore: "pid,hostname",
-          },
-        }
-      : undefined,
-  timestamp: pino.stdTimeFunctions.isoTime,
+export const logger = pino({
+  level: process.env.LOG_LEVEL || "info",
+  formatters: {
+    level: (label) => {
+      return { level: label };
+    },
+  },
+  timestamp: () => `,"time":"${new Date().toISOString()}"`,
+  base: undefined, // removes pid and hostname
 });
-
-export default logger;
