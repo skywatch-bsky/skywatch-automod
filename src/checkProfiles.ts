@@ -1,6 +1,5 @@
-import { login } from "./agent.js";
-import { langs, PROFILE_CHECKS } from "./constants.js";
-import logger from "./logger.js";
+import { PROFILE_CHECKS } from "./constants.js";
+import { logger } from "./logger.js";
 import {
   createAccountReport,
   createAccountLabel,
@@ -27,7 +26,7 @@ export const checkDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`[CHECKDESCRIPTION]: Whitelisted DID: ${did}`);
+        logger.debug({ process: "CHECKDESCRIPTION", did, time, displayName, description }, "Whitelisted DID");
         return;
       }
     }
@@ -38,7 +37,7 @@ export const checkDescription = async (
           // Check if description is whitelisted
           if (checkProfiles.whitelist) {
             if (checkProfiles.whitelist.test(description)) {
-              logger.info(`[CHECKDESCRIPTION]: Whitelisted phrase found.`);
+              logger.debug({ process: "CHECKDESCRIPTION", did, time, displayName, description }, "Whitelisted phrase found");
               return;
             }
           }
@@ -49,9 +48,7 @@ export const checkDescription = async (
               `${checkProfiles.label}`,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              `[CHECKDESCRIPTION]: Labeling ${did} for ${checkProfiles.label}`,
-            );
+            logger.info({ process: "CHECKDESCRIPTION", did, time, displayName, description, label: checkProfiles.label }, "Labeling account");
           }
 
           if (checkProfiles.reportAcct === true) {
@@ -59,9 +56,7 @@ export const checkDescription = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              `[CHECKDESCRIPTION]: Reporting ${did} for ${checkProfiles.label}`,
-            );
+            logger.info({ process: "CHECKDESCRIPTION", did, time, displayName, description, label: checkProfiles.label }, "Reporting account");
           }
 
           if (checkProfiles.commentAcct === true) {
@@ -69,9 +64,7 @@ export const checkDescription = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              `[CHECKDESCRIPTION]: Commenting on ${did} for ${checkProfiles.label}`,
-            );
+            logger.info({ process: "CHECKDESCRIPTION", did, time, displayName, description, label: checkProfiles.label }, "Commenting on account");
           }
         }
       }
@@ -98,7 +91,7 @@ export const checkDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.info(`[CHECKDISPLAYNAME]: Whitelisted DID: ${did}`);
+        logger.debug({ process: "CHECKDISPLAYNAME", did, time, displayName, description }, "Whitelisted DID");
         return;
       }
     }
@@ -109,7 +102,7 @@ export const checkDisplayName = async (
           // Check if displayName is whitelisted
           if (checkProfiles.whitelist) {
             if (checkProfiles.whitelist.test(displayName)) {
-              logger.info(`[CHECKDISPLAYNAME]: Whitelisted phrase found.`);
+              logger.debug({ process: "CHECKDISPLAYNAME", did, time, displayName, description }, "Whitelisted phrase found");
               return;
             }
           }
@@ -120,9 +113,7 @@ export const checkDisplayName = async (
               `${checkProfiles.label}`,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              `[CHECKDISPLAYNAME]: Labeling ${did} for ${checkProfiles.label}`,
-            );
+            logger.info({ process: "CHECKDISPLAYNAME", did, time, displayName, description, label: checkProfiles.label }, "Labeling account");
           }
 
           if (checkProfiles.reportAcct === true) {
@@ -130,9 +121,7 @@ export const checkDisplayName = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              `[CHECKDISPLAYNAME]: Reporting ${did} for ${checkProfiles.label}`,
-            );
+            logger.info({ process: "CHECKDISPLAYNAME", did, time, displayName, description, label: checkProfiles.label }, "Reporting account");
           }
 
           if (checkProfiles.commentAcct === true) {
@@ -140,9 +129,7 @@ export const checkDisplayName = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              `[CHECKDISPLAYNAME]: Commenting on ${did} for ${checkProfiles.label}`,
-            );
+            logger.info({ process: "CHECKDISPLAYNAME", did, time, displayName, description, label: checkProfiles.label }, "Commenting on account");
           }
         }
       }

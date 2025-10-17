@@ -1,5 +1,5 @@
 import { HANDLE_CHECKS } from "./constants.js";
-import logger from "./logger.js";
+import { logger } from "./logger.js";
 import {
   createAccountReport,
   createAccountComment,
@@ -15,7 +15,10 @@ export const checkHandle = async (
   HANDLE_CHECKS.forEach((checkList) => {
     if (checkList.ignoredDIDs) {
       if (checkList.ignoredDIDs.includes(did)) {
-        logger.info(`Whitelisted DID: ${did}`);
+        logger.debug(
+          { process: "CHECKHANDLE", did, handle, time },
+          "Whitelisted DID",
+        );
         return;
       }
     }
@@ -24,13 +27,19 @@ export const checkHandle = async (
       // False-positive checks
       if (checkList.whitelist) {
         if (checkList.whitelist.test(handle)) {
-          logger.info(`Whitelisted phrase found for: ${handle}`);
+          logger.debug(
+            { process: "CHECKHANDLE", did, handle, time },
+            "Whitelisted phrase found",
+          );
           return;
         }
       }
 
       if (checkList.toLabel === true) {
-        logger.info(`[CHECKHANDLE]: Labeling ${did} for ${checkList.label}`);
+        logger.info(
+          { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
+          "Labeling account",
+        );
         {
           createAccountLabel(
             did,
@@ -41,13 +50,17 @@ export const checkHandle = async (
       }
 
       if (checkList.reportAcct === true) {
-        logger.info(`[CHECKHANDLE]: Reporting ${did} for ${checkList.label}`);
+        logger.info(
+          { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
+          "Reporting account",
+        );
         createAccountReport(did, `${time}: ${checkList.comment} - ${handle}`);
       }
 
       if (checkList.commentAcct === true) {
         logger.info(
-          `[CHECKHANDLE]: Commenting on ${did} for ${checkList.label}`,
+          { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
+          "Commenting on account",
         );
         createAccountComment(did, `${time}: ${checkList.comment} - ${handle}`);
       }
