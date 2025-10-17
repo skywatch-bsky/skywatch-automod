@@ -25,31 +25,36 @@ export const checkFacetSpam = async (
   }
 
   // Group mention facets by their byte position (byteStart:byteEnd)
-  // Only check mentions as duplicate tags/links are often bot bugs, not malicious
-  const positionMap = new Map<string, number>();
+  // Track unique DIDs per position - only flag if DIFFERENT DIDs at same position
+  // Same DID duplicated = bug, different DIDs = spam
+  const positionMap = new Map<string, Set<string>>();
 
   for (const facet of facets) {
-    // Only count mentions for spam detection
-    const hasMention = facet.features.some(
+    // Only check mentions for spam detection
+    const mentionFeature = facet.features.find(
       (feature) => feature.$type === "app.bsky.richtext.facet#mention"
     );
 
-    if (hasMention) {
+    if (mentionFeature && "did" in mentionFeature) {
       const key = `${facet.index.byteStart}:${facet.index.byteEnd}`;
-      positionMap.set(key, (positionMap.get(key) || 0) + 1);
+      if (!positionMap.has(key)) {
+        positionMap.set(key, new Set());
+      }
+      positionMap.get(key)!.add(mentionFeature.did as string);
     }
   }
 
-  // Check if any position has more than the threshold
-  for (const [position, count] of positionMap.entries()) {
-    if (count > FACET_SPAM_THRESHOLD) {
+  // Check if any position has more than the threshold unique DIDs
+  for (const [position, dids] of positionMap.entries()) {
+    const uniqueCount = dids.size;
+    if (uniqueCount > FACET_SPAM_THRESHOLD) {
       logger.info(
         {
           process: "FACET_SPAM",
           did,
           atURI,
           position,
-          count,
+          count: uniqueCount,
         },
         "Facet spam detected",
       );
@@ -57,7 +62,7 @@ export const checkFacetSpam = async (
       await createAccountLabel(
         did,
         FACET_SPAM_LABEL,
-        `${time}: ${FACET_SPAM_COMMENT} - ${count} facets at position ${position} in ${atURI}`,
+        `${time}: ${FACET_SPAM_COMMENT} - ${uniqueCount} unique mentions at position ${position} in ${atURI}`,
       );
 
       // Only label once per post even if multiple positions are suspicious

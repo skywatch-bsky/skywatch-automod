@@ -130,6 +130,29 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
     });
+
+    it("should not label when same DID mentioned multiple times at same position (software bug)", async () => {
+      const facets: Facet[] = [
+        {
+          index: { byteStart: 0, byteEnd: 1 },
+          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+        },
+        {
+          index: { byteStart: 0, byteEnd: 1 },
+          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+        },
+        {
+          index: { byteStart: 0, byteEnd: 1 },
+          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+        },
+      ];
+
+      await checkFacetSpam(TEST_DID, TEST_TIME, TEST_URI, facets);
+
+      // Should not trigger - only 1 unique DID
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.info).not.toHaveBeenCalled();
+    });
   });
 
   describe("when spam is detected", () => {
@@ -161,7 +184,7 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         TEST_DID,
         FACET_SPAM_LABEL,
-        `${TEST_TIME}: ${FACET_SPAM_COMMENT} - 2 facets at position 0:1 in ${TEST_URI}`
+        `${TEST_TIME}: ${FACET_SPAM_COMMENT} - 2 unique mentions at position 0:1 in ${TEST_URI}`
       );
     });
 
