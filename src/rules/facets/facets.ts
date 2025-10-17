@@ -24,12 +24,20 @@ export const checkFacetSpam = async (
     return;
   }
 
-  // Group facets by their byte position (byteStart:byteEnd)
+  // Group mention facets by their byte position (byteStart:byteEnd)
+  // Only check mentions as duplicate tags/links are often bot bugs, not malicious
   const positionMap = new Map<string, number>();
 
   for (const facet of facets) {
-    const key = `${facet.index.byteStart}:${facet.index.byteEnd}`;
-    positionMap.set(key, (positionMap.get(key) || 0) + 1);
+    // Only count mentions for spam detection
+    const hasMention = facet.features.some(
+      (feature) => feature.$type === "app.bsky.richtext.facet#mention"
+    );
+
+    if (hasMention) {
+      const key = `${facet.index.byteStart}:${facet.index.byteEnd}`;
+      positionMap.set(key, (positionMap.get(key) || 0) + 1);
+    }
   }
 
   // Check if any position has more than the threshold
