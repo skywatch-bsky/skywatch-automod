@@ -9,8 +9,17 @@ import {
   createPostReport,
 } from "./moderation.js";
 import { getFinalUrl, getLanguage } from "./utils.js";
+import { GLOBAL_ALLOW } from "./constants.js";
 
 export const checkPosts = async (post: Post[]) => {
+  if (!GLOBAL_ALLOW.includes(post[0].did)) {
+    logger.warn(
+      { process: "CHECKPOSTS", did: post[0].did, atURI: post[0].atURI },
+      "Global AllowListed DID",
+    );
+    return;
+  }
+
   const urlRegex = /https?:\/\/[^\s]+/g;
 
   // Check for link shorteners
