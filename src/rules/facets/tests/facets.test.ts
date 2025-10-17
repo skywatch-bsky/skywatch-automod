@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { checkFacetSpam, FACET_SPAM_THRESHOLD, FACET_SPAM_LABEL, FACET_SPAM_COMMENT } from "../facets.js";
+import { checkFacetSpam, FACET_SPAM_THRESHOLD, FACET_SPAM_LABEL, FACET_SPAM_COMMENT, FACET_SPAM_ALLOWLIST } from "../facets.js";
 import { Facet } from "../../../types.js";
 
 // Mock dependencies
