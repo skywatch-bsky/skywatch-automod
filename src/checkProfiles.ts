@@ -6,6 +6,7 @@ import {
   createAccountComment,
 } from "./moderation.js";
 import { getLanguage } from "./utils.js";
+import { GLOBAL_ALLOW } from "./constants.js";
 
 export const checkDescription = async (
   did: string,
@@ -14,6 +15,15 @@ export const checkDescription = async (
   description: string,
 ) => {
   const lang = await getLanguage(description);
+
+  // Check if DID is whitelisted
+  if (!GLOBAL_ALLOW.includes(did)) {
+    logger.warn(
+      { process: "CHECKDESCRIPTION", did, time, displayName, description },
+      "Global AllowListed DID",
+    );
+    return;
+  }
 
   // iterate through the checks
   PROFILE_CHECKS.forEach((checkProfiles) => {
@@ -26,7 +36,10 @@ export const checkDescription = async (
     // Check if DID is whitelisted
     if (checkProfiles.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.debug({ process: "CHECKDESCRIPTION", did, time, displayName, description }, "Whitelisted DID");
+        logger.debug(
+          { process: "CHECKDESCRIPTION", did, time, displayName, description },
+          "Whitelisted DID",
+        );
         return;
       }
     }
@@ -37,7 +50,16 @@ export const checkDescription = async (
           // Check if description is whitelisted
           if (checkProfiles.whitelist) {
             if (checkProfiles.whitelist.test(description)) {
-              logger.debug({ process: "CHECKDESCRIPTION", did, time, displayName, description }, "Whitelisted phrase found");
+              logger.debug(
+                {
+                  process: "CHECKDESCRIPTION",
+                  did,
+                  time,
+                  displayName,
+                  description,
+                },
+                "Whitelisted phrase found",
+              );
               return;
             }
           }
@@ -48,7 +70,17 @@ export const checkDescription = async (
               `${checkProfiles.label}`,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info({ process: "CHECKDESCRIPTION", did, time, displayName, description, label: checkProfiles.label }, "Labeling account");
+            logger.info(
+              {
+                process: "CHECKDESCRIPTION",
+                did,
+                time,
+                displayName,
+                description,
+                label: checkProfiles.label,
+              },
+              "Labeling account",
+            );
           }
 
           if (checkProfiles.reportAcct === true) {
@@ -56,7 +88,17 @@ export const checkDescription = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info({ process: "CHECKDESCRIPTION", did, time, displayName, description, label: checkProfiles.label }, "Reporting account");
+            logger.info(
+              {
+                process: "CHECKDESCRIPTION",
+                did,
+                time,
+                displayName,
+                description,
+                label: checkProfiles.label,
+              },
+              "Reporting account",
+            );
           }
 
           if (checkProfiles.commentAcct === true) {
@@ -64,7 +106,17 @@ export const checkDescription = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info({ process: "CHECKDESCRIPTION", did, time, displayName, description, label: checkProfiles.label }, "Commenting on account");
+            logger.info(
+              {
+                process: "CHECKDESCRIPTION",
+                did,
+                time,
+                displayName,
+                description,
+                label: checkProfiles.label,
+              },
+              "Commenting on account",
+            );
           }
         }
       }
@@ -78,6 +130,15 @@ export const checkDisplayName = async (
   displayName: string,
   description: string,
 ) => {
+  // Check if DID is whitelisted
+  if (!GLOBAL_ALLOW.includes(did)) {
+    logger.warn(
+      { process: "CHECKDISPLAYNAME", did, time, displayName, description },
+      "Global AllowListed DID",
+    );
+    return;
+  }
+
   const lang = await getLanguage(description);
 
   // iterate through the checks
@@ -91,7 +152,10 @@ export const checkDisplayName = async (
     // Check if DID is whitelisted
     if (checkProfiles.ignoredDIDs) {
       if (checkProfiles.ignoredDIDs.includes(did)) {
-        logger.debug({ process: "CHECKDISPLAYNAME", did, time, displayName, description }, "Whitelisted DID");
+        logger.debug(
+          { process: "CHECKDISPLAYNAME", did, time, displayName, description },
+          "Whitelisted DID",
+        );
         return;
       }
     }
@@ -102,7 +166,16 @@ export const checkDisplayName = async (
           // Check if displayName is whitelisted
           if (checkProfiles.whitelist) {
             if (checkProfiles.whitelist.test(displayName)) {
-              logger.debug({ process: "CHECKDISPLAYNAME", did, time, displayName, description }, "Whitelisted phrase found");
+              logger.debug(
+                {
+                  process: "CHECKDISPLAYNAME",
+                  did,
+                  time,
+                  displayName,
+                  description,
+                },
+                "Whitelisted phrase found",
+              );
               return;
             }
           }
@@ -113,7 +186,17 @@ export const checkDisplayName = async (
               `${checkProfiles.label}`,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info({ process: "CHECKDISPLAYNAME", did, time, displayName, description, label: checkProfiles.label }, "Labeling account");
+            logger.info(
+              {
+                process: "CHECKDISPLAYNAME",
+                did,
+                time,
+                displayName,
+                description,
+                label: checkProfiles.label,
+              },
+              "Labeling account",
+            );
           }
 
           if (checkProfiles.reportAcct === true) {
@@ -121,7 +204,17 @@ export const checkDisplayName = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info({ process: "CHECKDISPLAYNAME", did, time, displayName, description, label: checkProfiles.label }, "Reporting account");
+            logger.info(
+              {
+                process: "CHECKDISPLAYNAME",
+                did,
+                time,
+                displayName,
+                description,
+                label: checkProfiles.label,
+              },
+              "Reporting account",
+            );
           }
 
           if (checkProfiles.commentAcct === true) {
@@ -129,7 +222,17 @@ export const checkDisplayName = async (
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info({ process: "CHECKDISPLAYNAME", did, time, displayName, description, label: checkProfiles.label }, "Commenting on account");
+            logger.info(
+              {
+                process: "CHECKDISPLAYNAME",
+                did,
+                time,
+                displayName,
+                description,
+                label: checkProfiles.label,
+              },
+              "Commenting on account",
+            );
           }
         }
       }
