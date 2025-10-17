@@ -48,3 +48,13 @@ export interface List {
   label: string;
   rkey: string;
 }
+
+export interface FacetIndex {
+  byteStart: number;
+  byteEnd: number;
+}
+
+export interface Facet {
+  index: FacetIndex;
+  features: Array<{ $type: string; [key: string]: any }>;
+}
