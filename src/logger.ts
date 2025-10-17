@@ -1,4 +1,4 @@
-import { pino } from "pino";
+import pino from "pino";
 
 export const logger = pino({
   level: process.env.LOG_LEVEL || "info",
@@ -7,6 +7,6 @@ export const logger = pino({
       return { level: label };
     },
   },
-  timestamp: pino.stdTimeFunctions.isoTime,
+  timestamp: () => `,"time":"${new Date().toISOString()}"`,
   base: undefined, // removes pid and hostname
 });

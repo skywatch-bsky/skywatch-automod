@@ -2,7 +2,6 @@ import { agent, isLoggedIn } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
 import { logger } from "./logger.js";
-import { LISTS } from "./lists.js";
 
 const doesLabelExist = (
   labels: { val: string }[] | undefined,
@@ -25,7 +24,10 @@ export const createPostLabel = async (
 
   const hasLabel = await checkRecordLabels(uri, label);
   if (hasLabel) {
-    logger.debug({ process: "MODERATION", uri, label }, "Post already has label, skipping");
+    logger.debug(
+      { process: "MODERATION", uri, label },
+      "Post already has label, skipping",
+    );
     return;
   }
 
@@ -74,7 +76,10 @@ export const createPostLabel = async (
         },
       );
     } catch (e) {
-      logger.error({ process: "MODERATION", error: e }, "Failed to create post label");
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to create post label",
+      );
     }
   });
 };
@@ -88,7 +93,10 @@ export const createAccountLabel = async (
 
   const hasLabel = await checkAccountLabels(did, label);
   if (hasLabel) {
-    logger.debug({ process: "MODERATION", did, label }, "Account already has label, skipping");
+    logger.debug(
+      { process: "MODERATION", did, label },
+      "Account already has label, skipping",
+    );
     return;
   }
 
@@ -124,7 +132,10 @@ export const createAccountLabel = async (
         },
       );
     } catch (e) {
-      logger.error({ process: "MODERATION", error: e }, "Failed to create account label");
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to create account label",
+      );
     }
   });
 };
@@ -167,7 +178,10 @@ export const createPostReport = async (
         },
       );
     } catch (e) {
-      logger.error({ process: "MODERATION", error: e }, "Failed to create post label");
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to create post label",
+      );
     }
   });
 };
@@ -204,7 +218,10 @@ export const createAccountComment = async (did: string, comment: string) => {
         },
       );
     } catch (e) {
-      logger.error({ process: "MODERATION", error: e }, "Failed to create account comment");
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to create account comment",
+      );
     }
   });
 };
@@ -242,7 +259,10 @@ export const createAccountReport = async (did: string, comment: string) => {
         },
       );
     } catch (e) {
-      logger.error({ process: "MODERATION", error: e }, "Failed to create account report");
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to create account report",
+      );
     }
   });
 };
@@ -267,7 +287,10 @@ export const checkAccountLabels = async (
 
       return doesLabelExist(response.data.labels, label);
     } catch (e) {
-      logger.error({ process: "MODERATION", did, error: e }, "Failed to check account labels");
+      logger.error(
+        { process: "MODERATION", did, error: e },
+        "Failed to check account labels",
+      );
       return false;
     }
   });
@@ -293,7 +316,10 @@ export const checkRecordLabels = async (
 
       return doesLabelExist(response.data.labels, label);
     } catch (e) {
-      logger.error({ process: "MODERATION", uri, error: e }, "Failed to check record labels");
+      logger.error(
+        { process: "MODERATION", uri, error: e },
+        "Failed to check record labels",
+      );
       return false;
     }
   });

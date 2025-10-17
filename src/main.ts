@@ -30,7 +30,10 @@ function epochUsToDateTime(cursor: number): string {
 try {
   logger.info({ process: "MAIN" }, "Trying to read cursor from cursor.txt");
   cursor = Number(fs.readFileSync("cursor.txt", "utf8"));
-  logger.info({ process: "MAIN", cursor, datetime: epochUsToDateTime(cursor) }, "Cursor found");
+  logger.info(
+    { process: "MAIN", cursor, datetime: epochUsToDateTime(cursor) },
+    "Cursor found",
+  );
 } catch (error) {
   if (error instanceof Error && "code" in error && error.code === "ENOENT") {
     cursor = Math.floor(Date.now() * 1000);
@@ -54,7 +57,12 @@ const jetstream = new Jetstream({
 jetstream.on("open", () => {
   if (jetstream.cursor) {
     logger.info(
-      { process: "MAIN", url: FIREHOSE_URL, cursor: jetstream.cursor, datetime: epochUsToDateTime(jetstream.cursor) },
+      {
+        process: "MAIN",
+        url: FIREHOSE_URL,
+        cursor: jetstream.cursor,
+        datetime: epochUsToDateTime(jetstream.cursor),
+      },
       "Connected to Jetstream with cursor",
     );
   } else {
@@ -66,11 +74,19 @@ jetstream.on("open", () => {
   cursorUpdateInterval = setInterval(() => {
     if (jetstream.cursor) {
       logger.info(
-        { process: "MAIN", cursor: jetstream.cursor, datetime: epochUsToDateTime(jetstream.cursor) },
+        {
+          process: "MAIN",
+          cursor: jetstream.cursor,
+          datetime: epochUsToDateTime(jetstream.cursor),
+        },
         "Cursor updated",
       );
       fs.writeFile("cursor.txt", jetstream.cursor.toString(), (err) => {
-        if (err) logger.error({ process: "MAIN", error: err }, "Failed to write cursor");
+        if (err)
+          logger.error(
+            { process: "MAIN", error: err },
+            "Failed to write cursor",
+          );
       });
     }
   }, CURSOR_UPDATE_INTERVAL);
@@ -226,46 +242,6 @@ jetstream.onCreate(
       }
     } catch (error) {
       logger.error({ process: "MAIN", error }, "Error checking profile");
-    }
-  },
-);
-
-jetstream.onCreate(
-  "app.bsky.graph.starterpack",
-  async (event: CommitCreateEvent<"app.bsky.graph.starterpack">) => {
-    try {
-      const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-
-      checkNewStarterPack(
-        event.did,
-        event.time_us,
-        atURI,
-        event.commit.cid,
-        event.commit.record.name,
-        event.commit.record.description,
-      );
-    } catch (error) {
-      logger.error({ process: "MAIN", error }, "Error checking starterpack");
-    }
-  },
-);
-
-jetstream.onUpdate(
-  "app.bsky.graph.starterpack",
-  async (event: CommitUpdateEvent<"app.bsky.graph.starterpack">) => {
-    try {
-      const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-
-      checkNewStarterPack(
-        event.did,
-        event.time_us,
-        atURI,
-        event.commit.cid,
-        event.commit.record.name,
-        event.commit.record.description,
-      );
-    } catch (error) {
-      logger.error({ process: "MAIN", error }, "Error checking starterpack");
     }
   },
 );
