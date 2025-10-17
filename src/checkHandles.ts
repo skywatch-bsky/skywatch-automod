@@ -5,12 +5,22 @@ import {
   createAccountComment,
   createAccountLabel,
 } from "./moderation.js";
+import { GLOBAL_ALLOW } from "./constants.js";
 
 export const checkHandle = async (
   did: string,
   handle: string,
   time: number,
 ) => {
+  // Check if DID is whitelisted
+  if (!GLOBAL_ALLOW.includes(did)) {
+    logger.warn(
+      { process: "CHECKHANDLE", did, handle, time },
+      "Global AllowListed DID",
+    );
+    return;
+  }
+
   // iterate through the checks
   HANDLE_CHECKS.forEach((checkList) => {
     if (checkList.ignoredDIDs) {
