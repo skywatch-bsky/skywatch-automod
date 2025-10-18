@@ -571,5 +571,143 @@ describe("Account Age Module", () => {
         expect.stringContaining("Account created within monitored range"),
       );
     });
+
+    it("should label account when reply is to a monitored post URI", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredPostURIs: [
+          "at://did:plc:monitored/app.bsky.feed.post/specificpost",
+        ],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "brigading-suspect",
+        comment: "New account replying to targeted post",
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label does NOT exist
+      (checkAccountLabels as any).mockResolvedValueOnce(false);
+
+      await checkAccountAge({
+        replyToDid: "did:plc:someone",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+        replyToPostURI: "at://did:plc:monitored/app.bsky.feed.post/specificpost",
+      });
+
+      expect(createAccountLabel).toHaveBeenCalledWith(
+        "did:plc:newaccount",
+        "brigading-suspect",
+        expect.stringContaining("Account created within monitored range"),
+      );
+    });
+
+    it("should not label when reply is to different post URI", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredPostURIs: [
+          "at://did:plc:monitored/app.bsky.feed.post/specificpost",
+        ],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "brigading-suspect",
+        comment: "New account replying to targeted post",
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      await checkAccountAge({
+        replyToDid: "did:plc:someone",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+        replyToPostURI: "at://did:plc:other/app.bsky.feed.post/differentpost",
+      });
+
+      expect(createAccountLabel).not.toHaveBeenCalled();
+    });
+
+    it("should match either monitored DID or post URI", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored1"],
+        monitoredPostURIs: [
+          "at://did:plc:monitored2/app.bsky.feed.post/specificpost",
+        ],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "multi-monitor",
+        comment: "New account replying to monitored target",
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label does NOT exist
+      (checkAccountLabels as any).mockResolvedValueOnce(false);
+
+      // Test matching by post URI even though DID doesn't match
+      await checkAccountAge({
+        replyToDid: "did:plc:someone-else",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+        replyToPostURI:
+          "at://did:plc:monitored2/app.bsky.feed.post/specificpost",
+      });
+
+      expect(createAccountLabel).toHaveBeenCalledWith(
+        "did:plc:newaccount",
+        "multi-monitor",
+        expect.stringContaining("Account created within monitored range"),
+      );
+    });
+
+    it("should work without replyToPostURI (backward compatibility)", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "window-reply",
+        comment: "New account reply",
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label does NOT exist
+      (checkAccountLabels as any).mockResolvedValueOnce(false);
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+        // No replyToPostURI provided
+      });
+
+      expect(createAccountLabel).toHaveBeenCalledWith(
+        "did:plc:newaccount",
+        "window-reply",
+        expect.stringContaining("Account created within monitored range"),
+      );
+    });
   });
 });

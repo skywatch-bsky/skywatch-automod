@@ -60,7 +60,8 @@ export interface Facet {
 }
 
 export interface AccountAgeCheck {
-  monitoredDIDs: string[]; // DIDs to monitor for replies
+  monitoredDIDs?: string[]; // DIDs to monitor for replies (optional if monitoredPostURIs is provided)
+  monitoredPostURIs?: string[]; // Specific post URIs to monitor for replies (optional if monitoredDIDs is provided)
   anchorDate: string; // ISO 8601 date string (e.g., "2025-01-15")
   maxAgeDays: number; // Maximum account age in days
   label: string; // Label to apply if account is too new
