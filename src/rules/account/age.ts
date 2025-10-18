@@ -1,8 +1,9 @@
-import { agent, isLoggedIn } from "../agent.js";
-import { logger } from "../logger.js";
-import { createAccountLabel } from "../moderation.js";
+import { agent, isLoggedIn } from "../../agent.js";
+import { logger } from "../../logger.js";
+import { createAccountLabel } from "../../moderation.js";
 import { ACCOUNT_AGE_CHECKS } from "./ageConstants.js";
-import { PLC_URL } from "../config.js";
+import { PLC_URL } from "../../config.js";
+import { GLOBAL_ALLOW } from "../../constants.js";
 
 interface ReplyContext {
   replyToDid: string;
@@ -95,6 +96,15 @@ export const checkAccountAge = async (
 ): Promise<void> => {
   // Skip if no checks configured
   if (ACCOUNT_AGE_CHECKS.length === 0) {
+    return;
+  }
+
+  // Skip if DID is globally allowlisted
+  if (GLOBAL_ALLOW.includes(context.replyingDid)) {
+    logger.debug(
+      { process: "ACCOUNT_AGE", did: context.replyingDid, atURI: context.atURI },
+      "Global allowlisted DID",
+    );
     return;
   }
 

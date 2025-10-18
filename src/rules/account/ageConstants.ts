@@ -1,4 +1,4 @@
-import { AccountAgeCheck } from "../types.js";
+import { AccountAgeCheck } from "../../types.js";
 
 /**
  * Account age monitoring configurations
