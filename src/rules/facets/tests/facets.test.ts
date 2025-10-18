@@ -153,6 +153,34 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).not.toHaveBeenCalled();
       expect(logger.info).not.toHaveBeenCalled();
     });
+
+    it("should not label when DID is on allowlist", async () => {
+      // Add test DID to allowlist temporarily
+      FACET_SPAM_ALLOWLIST.push(TEST_DID);
+
+      const facets: Facet[] = [
+        {
+          index: { byteStart: 0, byteEnd: 1 },
+          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+        },
+        {
+          index: { byteStart: 0, byteEnd: 1 },
+          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+        },
+      ];
+
+      await checkFacetSpam(TEST_DID, TEST_TIME, TEST_URI, facets);
+
+      // Should not trigger - allowlisted
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.debug).toHaveBeenCalledWith(
+        { process: "FACET_SPAM", did: TEST_DID, atURI: TEST_URI },
+        "Allowlisted DID"
+      );
+
+      // Clean up
+      FACET_SPAM_ALLOWLIST.pop();
+    });
   });
 
   describe("when spam is detected", () => {
