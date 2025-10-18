@@ -114,6 +114,19 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
       continue;
     }
 
+    // Skip if check has expired
+    if (check.expires) {
+      const expiresDate = new Date(check.expires);
+      const now = new Date();
+      if (now > expiresDate) {
+        logger.debug(
+          { process: "ACCOUNT_AGE", expires: check.expires },
+          "Check has expired, skipping",
+        );
+        continue;
+      }
+    }
+
     logger.debug(
       {
         process: "ACCOUNT_AGE",
