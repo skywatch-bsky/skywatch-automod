@@ -58,3 +58,12 @@ export interface Facet {
   index: FacetIndex;
   features: Array<{ $type: string; [key: string]: any }>;
 }
+
+export interface AccountAgeCheck {
+  monitoredDIDs: string[]; // DIDs to monitor for replies
+  anchorDate: string; // ISO 8601 date string (e.g., "2025-01-15")
+  maxAgeDays: number; // Maximum account age in days
+  label: string; // Label to apply if account is too new
+  comment: string; // Comment for the label
+}
+

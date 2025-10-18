@@ -19,6 +19,7 @@ import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
+import { checkAccountAge } from "./account/age.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -112,6 +113,21 @@ jetstream.onCreate(
     const hasText = event.commit.record.hasOwnProperty("text");
 
     const tasks: Promise<void>[] = [];
+
+    // Check account age for replies to monitored DIDs
+    if (event.commit.record.reply) {
+      const parentUri = event.commit.record.reply.parent.uri;
+      const replyToDid = parentUri.split("/")[2]; // Extract DID from at://did/...
+
+      tasks.push(
+        checkAccountAge({
+          replyToDid,
+          replyingDid: event.did,
+          atURI,
+          time: event.time_us,
+        }),
+      );
+    }
 
     // Check if the record has facets
     if (hasFacets) {
