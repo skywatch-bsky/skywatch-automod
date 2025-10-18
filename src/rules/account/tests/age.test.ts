@@ -25,6 +25,7 @@ vi.mock("../../../logger.js", () => ({
 
 vi.mock("../../../moderation.js", () => ({
   createAccountLabel: vi.fn(),
+  checkAccountLabels: vi.fn(),
 }));
 
 vi.mock("../../../constants.js", () => ({
@@ -36,7 +37,10 @@ global.fetch = vi.fn();
 
 import { agent } from "../../../agent.js";
 import { logger } from "../../../logger.js";
-import { createAccountLabel } from "../../../moderation.js";
+import {
+  createAccountLabel,
+  checkAccountLabels,
+} from "../../../moderation.js";
 import { GLOBAL_ALLOW } from "../../../constants.js";
 
 describe("Account Age Module", () => {
@@ -362,6 +366,84 @@ describe("Account Age Module", () => {
         "did:plc:newaccount",
         "label1",
         expect.any(String),
+      );
+    });
+
+    it("should skip labeling if label already exists on account", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "window-reply",
+        comment: "Account created in window",
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label already exists
+      (checkAccountLabels as any).mockResolvedValueOnce(true);
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:alreadylabeled",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+      });
+
+      expect(checkAccountLabels).toHaveBeenCalledWith(
+        "did:plc:alreadylabeled",
+        "window-reply",
+      );
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.debug).toHaveBeenCalledWith(
+        {
+          process: "ACCOUNT_AGE",
+          replyingDid: "did:plc:alreadylabeled",
+          label: "window-reply",
+        },
+        "Label already exists, skipping duplicate",
+      );
+    });
+
+    it("should create label if it does not already exist", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "window-reply",
+        comment: "Account created in window",
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label does NOT exist
+      (checkAccountLabels as any).mockResolvedValueOnce(false);
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:newlabel",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+      });
+
+      expect(checkAccountLabels).toHaveBeenCalledWith(
+        "did:plc:newlabel",
+        "window-reply",
+      );
+      expect(createAccountLabel).toHaveBeenCalledWith(
+        "did:plc:newlabel",
+        "window-reply",
+        expect.stringContaining("Account created within monitored range"),
       );
     });
 
