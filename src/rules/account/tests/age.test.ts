@@ -101,19 +101,19 @@ describe("Account Age Module", () => {
       const result = await getAccountCreationDate("did:plc:test123");
 
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://plc.wtf/did:plc:test123",
+        "https://plc.directory/did:plc:test123/log/audit",
       );
       expect(result).toEqual(new Date("2025-01-10T12:00:00.000Z"));
     });
 
-    it("should fall back to profile.indexedAt if plc lookup fails", async () => {
+    it("should fall back to profile.createdAt if plc lookup fails", async () => {
       (global.fetch as any).mockResolvedValueOnce({
         ok: false,
       });
 
       (agent.getProfile as any).mockResolvedValueOnce({
         data: {
-          indexedAt: "2025-01-12T10:00:00.000Z",
+          createdAt: "2025-01-12T10:00:00.000Z",
         },
       });
 

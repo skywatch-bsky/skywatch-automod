@@ -25,7 +25,7 @@ export const getAccountCreationDate = async (
     // For plc DIDs, try to extract creation from the DID document
     if (did.startsWith("did:plc:")) {
       try {
-        const response = await fetch(`https://${PLC_URL}/${did}`);
+        const response = await fetch(`https://${PLC_URL}/${did}/log/audit`);
         if (response.ok) {
           const didDoc = await response.json();
 
@@ -53,14 +53,11 @@ export const getAccountCreationDate = async (
     // Fallback: try getting profile for any DID type
     try {
       const profile = await agent.getProfile({ actor: did });
-      if (profile.data.indexedAt) {
-        return new Date(profile.data.indexedAt);
+      if (profile.data.createdAt) {
+        return new Date(profile.data.createdAt);
       }
     } catch (profileError) {
-      logger.debug(
-        { process: "ACCOUNT_AGE", did },
-        "Failed to get profile",
-      );
+      logger.debug({ process: "ACCOUNT_AGE", did }, "Failed to get profile");
     }
 
     logger.warn(
@@ -91,9 +88,7 @@ export const calculateAccountAge = (
 /**
  * Checks if a reply meets age criteria and applies labels accordingly
  */
-export const checkAccountAge = async (
-  context: ReplyContext,
-): Promise<void> => {
+export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
   // Skip if no checks configured
   if (ACCOUNT_AGE_CHECKS.length === 0) {
     return;
@@ -102,7 +97,11 @@ export const checkAccountAge = async (
   // Skip if DID is globally allowlisted
   if (GLOBAL_ALLOW.includes(context.replyingDid)) {
     logger.debug(
-      { process: "ACCOUNT_AGE", did: context.replyingDid, atURI: context.atURI },
+      {
+        process: "ACCOUNT_AGE",
+        did: context.replyingDid,
+        atURI: context.atURI,
+      },
       "Global allowlisted DID",
     );
     return;
