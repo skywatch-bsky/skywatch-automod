@@ -472,5 +472,104 @@ describe("Account Age Module", () => {
         "Global allowlisted DID",
       );
     });
+
+    it("should skip if check has expired", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "window-reply",
+        comment: "Account created in window",
+        expires: "2025-10-01", // Already expired
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+      });
+
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.debug).toHaveBeenCalledWith(
+        { process: "ACCOUNT_AGE", expires: "2025-10-01" },
+        "Check has expired, skipping",
+      );
+    });
+
+    it("should apply label if check has not expired", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "window-reply",
+        comment: "Account created in window",
+        expires: "2026-01-01", // Future date
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label does NOT exist
+      (checkAccountLabels as any).mockResolvedValueOnce(false);
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+      });
+
+      expect(createAccountLabel).toHaveBeenCalledWith(
+        "did:plc:newaccount",
+        "window-reply",
+        expect.stringContaining("Account created within monitored range"),
+      );
+    });
+
+    it("should apply label if no expires field is set", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-10-15",
+        maxAgeDays: 7,
+        label: "window-reply",
+        comment: "Account created in window",
+        // No expires field
+      });
+
+      // Mock account created within window
+      const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockDidDoc,
+      });
+
+      // Mock that label does NOT exist
+      (checkAccountLabels as any).mockResolvedValueOnce(false);
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:newaccount",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+      });
+
+      expect(createAccountLabel).toHaveBeenCalledWith(
+        "did:plc:newaccount",
+        "window-reply",
+        expect.stringContaining("Account created within monitored range"),
+      );
+    });
   });
 });

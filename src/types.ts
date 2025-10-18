@@ -65,5 +65,6 @@ export interface AccountAgeCheck {
   maxAgeDays: number; // Maximum account age in days
   label: string; // Label to apply if account is too new
   comment: string; // Comment for the label
+  expires?: string; // Optional expiration date (ISO 8601) - check will be skipped after this date
 }
 
