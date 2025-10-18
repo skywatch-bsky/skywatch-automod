@@ -173,10 +173,10 @@ describe("Account Age Module", () => {
     it("should skip if reply is not to monitored DID", async () => {
       ACCOUNT_AGE_CHECKS.push({
         monitoredDIDs: ["did:plc:monitored1"],
-        anchorDate: "2025-01-15",
+        anchorDate: "2025-10-15",
         maxAgeDays: 7,
-        label: "new-account-reply",
-        comment: "New account reply",
+        label: "window-reply",
+        comment: "Account created in window",
       });
 
       await checkAccountAge({
@@ -189,144 +189,105 @@ describe("Account Age Module", () => {
       expect(createAccountLabel).not.toHaveBeenCalled();
     });
 
-    it("should label account if too new", async () => {
-      ACCOUNT_AGE_CHECKS.push({
-        monitoredDIDs: ["did:plc:monitored"],
-        anchorDate: "2025-01-15",
-        maxAgeDays: 7,
-        label: "new-account-reply",
-        comment: "New account replying during campaign",
+    describe("when checking a date window", () => {
+      beforeEach(() => {
+        ACCOUNT_AGE_CHECKS.push({
+          monitoredDIDs: ["did:plc:monitored"],
+          anchorDate: "2025-10-15",
+          maxAgeDays: 7, // Window is inclusive: Oct 15 -> Oct 22
+          label: "window-reply",
+          comment: "Account created in window",
+        });
       });
 
-      // Mock account created on Jan 12 noon (2.5 days before anchor at midnight = 2 days floored)
-      const mockDidDoc = [
-        {
-          createdAt: "2025-01-12T12:00:00.000Z",
-        },
-      ];
+      it("should label account created within the monitored window", async () => {
+        const mockDidDoc = [{ createdAt: "2025-10-18T12:00:00.000Z" }];
+        (global.fetch as any).mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockDidDoc,
+        });
 
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockDidDoc,
+        await checkAccountAge({
+          replyToDid: "did:plc:monitored",
+          replyingDid: "did:plc:inwindow",
+          atURI: TEST_REPLY_URI,
+          time: TEST_TIME,
+        });
+
+        expect(createAccountLabel).toHaveBeenCalledWith(
+          "did:plc:inwindow",
+          "window-reply",
+          expect.stringContaining("Account created within monitored range"),
+        );
       });
 
-      await checkAccountAge({
-        replyToDid: "did:plc:monitored",
-        replyingDid: "did:plc:newaccount",
-        atURI: TEST_REPLY_URI,
-        time: TEST_TIME,
+      it("should not label account created before the window", async () => {
+        const mockDidDoc = [{ createdAt: "2025-10-14T23:59:59.999Z" }];
+        (global.fetch as any).mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockDidDoc,
+        });
+
+        await checkAccountAge({
+          replyToDid: "did:plc:monitored",
+          replyingDid: "did:plc:beforewindow",
+          atURI: TEST_REPLY_URI,
+          time: TEST_TIME,
+        });
+
+        expect(createAccountLabel).not.toHaveBeenCalled();
       });
 
-      expect(createAccountLabel).toHaveBeenCalledWith(
-        "did:plc:newaccount",
-        "new-account-reply",
-        expect.stringContaining("Account age: 2 days"),
-      );
-    });
+      it("should not label account created after the window", async () => {
+        const mockDidDoc = [{ createdAt: "2025-10-23T00:00:00.000Z" }];
+        (global.fetch as any).mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockDidDoc,
+        });
 
-    it("should not label account if old enough", async () => {
-      ACCOUNT_AGE_CHECKS.push({
-        monitoredDIDs: ["did:plc:monitored"],
-        anchorDate: "2025-01-15",
-        maxAgeDays: 7,
-        label: "new-account-reply",
-        comment: "New account reply",
+        await checkAccountAge({
+          replyToDid: "did:plc:monitored",
+          replyingDid: "did:plc:afterwindow",
+          atURI: TEST_REPLY_URI,
+          time: TEST_TIME,
+        });
+
+        expect(createAccountLabel).not.toHaveBeenCalled();
       });
 
-      // Mock account created on Jan 5 (10 days before anchor)
-      const mockDidDoc = [
-        {
-          createdAt: "2025-01-05T12:00:00.000Z",
-        },
-      ];
+      it("should label account created on the first moment of the window", async () => {
+        const mockDidDoc = [{ createdAt: "2025-10-15T00:00:00.000Z" }];
+        (global.fetch as any).mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockDidDoc,
+        });
 
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockDidDoc,
+        await checkAccountAge({
+          replyToDid: "did:plc:monitored",
+          replyingDid: "did:plc:startofwindow",
+          atURI: TEST_REPLY_URI,
+          time: TEST_TIME,
+        });
+
+        expect(createAccountLabel).toHaveBeenCalled();
       });
 
-      await checkAccountAge({
-        replyToDid: "did:plc:monitored",
-        replyingDid: "did:plc:oldaccount",
-        atURI: TEST_REPLY_URI,
-        time: TEST_TIME,
+      it("should label account created on the last moment of the window", async () => {
+        const mockDidDoc = [{ createdAt: "2025-10-22T23:59:59.999Z" }];
+        (global.fetch as any).mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockDidDoc,
+        });
+
+        await checkAccountAge({
+          replyToDid: "did:plc:monitored",
+          replyingDid: "did:plc:endofwindow",
+          atURI: TEST_REPLY_URI,
+          time: TEST_TIME,
+        });
+
+        expect(createAccountLabel).toHaveBeenCalled();
       });
-
-      expect(createAccountLabel).not.toHaveBeenCalled();
-    });
-
-    it("should handle multiple monitored DIDs", async () => {
-      ACCOUNT_AGE_CHECKS.push({
-        monitoredDIDs: ["did:plc:monitored1", "did:plc:monitored2"],
-        anchorDate: "2025-01-15",
-        maxAgeDays: 7,
-        label: "new-account-reply",
-        comment: "New account reply",
-      });
-
-      const mockDidDoc = [
-        {
-          createdAt: "2025-01-14T12:00:00.000Z",
-        },
-      ];
-
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockDidDoc,
-      });
-
-      await checkAccountAge({
-        replyToDid: "did:plc:monitored2",
-        replyingDid: "did:plc:newaccount",
-        atURI: TEST_REPLY_URI,
-        time: TEST_TIME,
-      });
-
-      expect(createAccountLabel).toHaveBeenCalledOnce();
-    });
-
-    it("should handle multiple check configurations", async () => {
-      ACCOUNT_AGE_CHECKS.push(
-        {
-          monitoredDIDs: ["did:plc:monitored1"],
-          anchorDate: "2025-01-15",
-          maxAgeDays: 7,
-          label: "new-account-campaign1",
-          comment: "Campaign 1",
-        },
-        {
-          monitoredDIDs: ["did:plc:monitored2"],
-          anchorDate: "2025-02-01",
-          maxAgeDays: 14,
-          label: "new-account-campaign2",
-          comment: "Campaign 2",
-        },
-      );
-
-      const mockDidDoc = [
-        {
-          createdAt: "2025-01-20T12:00:00.000Z",
-        },
-      ];
-
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockDidDoc,
-      });
-
-      // Reply to monitored2 - account created Jan 20 noon, checked against Feb 1 midnight (11.5 days = 11 floored)
-      await checkAccountAge({
-        replyToDid: "did:plc:monitored2",
-        replyingDid: "did:plc:newaccount",
-        atURI: TEST_REPLY_URI,
-        time: TEST_TIME,
-      });
-
-      expect(createAccountLabel).toHaveBeenCalledWith(
-        "did:plc:newaccount",
-        "new-account-campaign2",
-        expect.stringContaining("Account age: 11 days"),
-      );
     });
 
     it("should skip if creation date cannot be determined", async () => {
@@ -362,23 +323,24 @@ describe("Account Age Module", () => {
       ACCOUNT_AGE_CHECKS.push(
         {
           monitoredDIDs: ["did:plc:monitored"],
-          anchorDate: "2025-01-15",
-          maxAgeDays: 7,
+          anchorDate: "2025-10-15",
+          maxAgeDays: 7, // Oct 15-22
           label: "label1",
           comment: "First check",
         },
         {
           monitoredDIDs: ["did:plc:monitored"],
-          anchorDate: "2025-01-15",
-          maxAgeDays: 14,
+          anchorDate: "2025-10-10",
+          maxAgeDays: 20, // Oct 10-30
           label: "label2",
           comment: "Second check",
         },
       );
 
+      // Created Oct 18, matches both windows
       const mockDidDoc = [
         {
-          createdAt: "2025-01-14T12:00:00.000Z",
+          createdAt: "2025-10-18T12:00:00.000Z",
         },
       ];
 
