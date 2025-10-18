@@ -1,6 +1,6 @@
 import { agent, isLoggedIn } from "../../agent.js";
 import { logger } from "../../logger.js";
-import { createAccountLabel } from "../../moderation.js";
+import { createAccountLabel, checkAccountLabels } from "../../moderation.js";
 import { ACCOUNT_AGE_CHECKS } from "./ageConstants.js";
 import { PLC_URL } from "../../config.js";
 import { GLOBAL_ALLOW } from "../../constants.js";
@@ -156,6 +156,25 @@ export const checkAccountAge = async (
 
     // Check if account was created within the window
     if (creationDate >= windowStart && creationDate <= windowEnd) {
+      // Check if the label already exists to prevent duplicates
+      const labelExists = await checkAccountLabels(
+        context.replyingDid,
+        check.label,
+      );
+
+      if (labelExists) {
+        logger.debug(
+          {
+            process: "ACCOUNT_AGE",
+            replyingDid: context.replyingDid,
+            label: check.label,
+          },
+          "Label already exists, skipping duplicate",
+        );
+        // Only apply one label per reply
+        return;
+      }
+
       logger.info(
         {
           process: "ACCOUNT_AGE",
