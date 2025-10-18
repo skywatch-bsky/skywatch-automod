@@ -137,40 +137,39 @@ export const checkAccountAge = async (
       continue;
     }
 
-    // Calculate age at anchor date
-    const anchorDate = new Date(check.anchorDate);
-    const accountAge = calculateAccountAge(creationDate, anchorDate);
+    // Define the flagging window
+    const windowStart = new Date(check.anchorDate);
+    const windowEnd = new Date(windowStart);
+    windowEnd.setUTCDate(windowEnd.getUTCDate() + check.maxAgeDays);
+    windowEnd.setUTCHours(23, 59, 59, 999);
 
     logger.debug(
       {
         process: "ACCOUNT_AGE",
         replyingDid: context.replyingDid,
         creationDate: creationDate.toISOString(),
-        anchorDate: check.anchorDate,
-        accountAge,
-        threshold: check.maxAgeDays,
+        windowStart: windowStart.toISOString(),
+        windowEnd: windowEnd.toISOString(),
       },
-      "Account age calculated",
+      "Checking if account creation date is within the window",
     );
 
-    // Check if account is too new
-    if (accountAge < check.maxAgeDays) {
+    // Check if account was created within the window
+    if (creationDate >= windowStart && creationDate <= windowEnd) {
       logger.info(
         {
           process: "ACCOUNT_AGE",
           replyingDid: context.replyingDid,
           replyToDid: context.replyToDid,
-          accountAge,
-          threshold: check.maxAgeDays,
           atURI: context.atURI,
         },
-        "Labeling new account replying to monitored DID",
+        "Labeling account created within the monitored date range",
       );
 
       await createAccountLabel(
         context.replyingDid,
         check.label,
-        `${context.time}: ${check.comment} - Account age: ${accountAge} days (threshold: ${check.maxAgeDays} days) - Reply: ${context.atURI}`,
+        `${context.time}: ${check.comment} - Account created within monitored range - Reply: ${context.atURI}`,
       );
 
       // Only apply one label per reply
