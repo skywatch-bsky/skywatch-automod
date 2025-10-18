@@ -21,5 +21,6 @@ export const ACCOUNT_AGE_CHECKS: AccountAgeCheck[] = [
   //   maxAgeDays: 7, // Flag accounts less than 7 days old
   //   label: "new-account-reply",
   //   comment: "New account replying to monitored user during campaign",
+  //   expires: "2025-02-15", // Optional: automatically stop this check after this date
   // },
 ];
