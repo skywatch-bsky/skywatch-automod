@@ -11,7 +11,7 @@ import { AccountAgeCheck } from "../../types.js";
  * - Flag sock puppet accounts created to participate in coordinated harassment
  */
 export const ACCOUNT_AGE_CHECKS: AccountAgeCheck[] = [
-  // Example configuration (disabled by default)
+  // Example: Monitor replies to specific accounts
   // {
   //   monitoredDIDs: [
   //     "did:plc:example123", // High-profile account 1
@@ -22,5 +22,18 @@ export const ACCOUNT_AGE_CHECKS: AccountAgeCheck[] = [
   //   label: "new-account-reply",
   //   comment: "New account replying to monitored user during campaign",
   //   expires: "2025-02-15", // Optional: automatically stop this check after this date
+  // },
+  //
+  // Example: Monitor replies to specific posts
+  // {
+  //   monitoredPostURIs: [
+  //     "at://did:plc:example123/app.bsky.feed.post/abc123",
+  //     "at://did:plc:example456/app.bsky.feed.post/def456",
+  //   ],
+  //   anchorDate: "2025-01-15",
+  //   maxAgeDays: 7,
+  //   label: "brigading-suspect",
+  //   comment: "New account replying to specific targeted post",
+  //   expires: "2025-02-15",
   // },
 ];

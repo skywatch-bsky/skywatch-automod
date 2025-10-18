@@ -10,6 +10,7 @@ interface ReplyContext {
   replyingDid: string;
   atURI: string;
   time: number;
+  replyToPostURI?: string; // The URI of the post being replied to (optional)
 }
 
 /**
@@ -109,8 +110,15 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
 
   // Check each configuration
   for (const check of ACCOUNT_AGE_CHECKS) {
-    // Check if this reply is to a monitored DID
-    if (!check.monitoredDIDs.includes(context.replyToDid)) {
+    // Check if this reply matches monitored DIDs or post URIs
+    const matchesDID =
+      check.monitoredDIDs && check.monitoredDIDs.includes(context.replyToDid);
+    const matchesPostURI =
+      check.monitoredPostURIs &&
+      context.replyToPostURI &&
+      check.monitoredPostURIs.includes(context.replyToPostURI);
+
+    if (!matchesDID && !matchesPostURI) {
       continue;
     }
 
