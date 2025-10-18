@@ -17,7 +17,7 @@ export const checkDescription = async (
   const lang = await getLanguage(description);
 
   // Check if DID is whitelisted
-  if (!GLOBAL_ALLOW.includes(did)) {
+  if (GLOBAL_ALLOW.includes(did)) {
     logger.warn(
       { process: "CHECKDESCRIPTION", did, time, displayName, description },
       "Global AllowListed DID",
@@ -131,7 +131,7 @@ export const checkDisplayName = async (
   description: string,
 ) => {
   // Check if DID is whitelisted
-  if (!GLOBAL_ALLOW.includes(did)) {
+  if (GLOBAL_ALLOW.includes(did)) {
     logger.warn(
       { process: "CHECKDISPLAYNAME", did, time, displayName, description },
       "Global AllowListed DID",
