@@ -7,14 +7,14 @@ import {
 import { ACCOUNT_AGE_CHECKS } from "../ageConstants.js";
 
 // Mock dependencies
-vi.mock("../../agent.js", () => ({
+vi.mock("../../../agent.js", () => ({
   agent: {
     getProfile: vi.fn(),
   },
   isLoggedIn: Promise.resolve(true),
 }));
 
-vi.mock("../../logger.js", () => ({
+vi.mock("../../../logger.js", () => ({
   logger: {
     info: vi.fn(),
     debug: vi.fn(),
@@ -23,16 +23,21 @@ vi.mock("../../logger.js", () => ({
   },
 }));
 
-vi.mock("../../moderation.js", () => ({
+vi.mock("../../../moderation.js", () => ({
   createAccountLabel: vi.fn(),
+}));
+
+vi.mock("../../../constants.js", () => ({
+  GLOBAL_ALLOW: [],
 }));
 
 // Mock fetch for DID document lookups
 global.fetch = vi.fn();
 
-import { agent } from "../../agent.js";
-import { logger } from "../../logger.js";
-import { createAccountLabel } from "../../moderation.js";
+import { agent } from "../../../agent.js";
+import { logger } from "../../../logger.js";
+import { createAccountLabel } from "../../../moderation.js";
+import { GLOBAL_ALLOW } from "../../../constants.js";
 
 describe("Account Age Module", () => {
   beforeEach(() => {
@@ -150,6 +155,8 @@ describe("Account Age Module", () => {
     beforeEach(() => {
       // Clear the ACCOUNT_AGE_CHECKS array and add test config
       ACCOUNT_AGE_CHECKS.length = 0;
+      // Clear the GLOBAL_ALLOW array
+      GLOBAL_ALLOW.length = 0;
     });
 
     it("should skip if no checks configured", async () => {
@@ -393,6 +400,32 @@ describe("Account Age Module", () => {
         "did:plc:newaccount",
         "label1",
         expect.any(String),
+      );
+    });
+
+    it("should skip if replying DID is globally allowlisted", async () => {
+      ACCOUNT_AGE_CHECKS.push({
+        monitoredDIDs: ["did:plc:monitored"],
+        anchorDate: "2025-01-15",
+        maxAgeDays: 7,
+        label: "new-account-reply",
+        comment: "New account reply",
+      });
+
+      // Add replying DID to global allowlist
+      GLOBAL_ALLOW.push("did:plc:allowlisted");
+
+      await checkAccountAge({
+        replyToDid: "did:plc:monitored",
+        replyingDid: "did:plc:allowlisted",
+        atURI: TEST_REPLY_URI,
+        time: TEST_TIME,
+      });
+
+      expect(createAccountLabel).not.toHaveBeenCalled();
+      expect(logger.debug).toHaveBeenCalledWith(
+        { process: "ACCOUNT_AGE", did: "did:plc:allowlisted", atURI: TEST_REPLY_URI },
+        "Global allowlisted DID",
       );
     });
   });

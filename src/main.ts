@@ -19,7 +19,7 @@ import { checkPosts } from "./checkPosts.js";
 import { checkHandle } from "./checkHandles.js";
 import { checkDescription, checkDisplayName } from "./checkProfiles.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
-import { checkAccountAge } from "./account/age.js";
+import { checkAccountAge } from "./rules/account/age.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
