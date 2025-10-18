@@ -12,7 +12,7 @@ export const METRICS_PORT = process.env.METRICS_PORT
   : 4101; // Left this intact from the code I adapted this from
 export const FIREHOSE_URL =
   process.env.FIREHOSE_URL ?? "wss://jetstream.atproto.tools/subscribe";
-export const PLC_URL = process.env.PLC_URL ?? "plc.wtf";
+export const PLC_URL = process.env.PLC_URL ?? "plc.directory";
 export const WANTED_COLLECTION = [
   "app.bsky.feed.post",
   "app.bsky.actor.defs",
