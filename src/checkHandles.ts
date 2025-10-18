@@ -13,7 +13,7 @@ export const checkHandle = async (
   time: number,
 ) => {
   // Check if DID is whitelisted
-  if (!GLOBAL_ALLOW.includes(did)) {
+  if (GLOBAL_ALLOW.includes(did)) {
     logger.warn(
       { process: "CHECKHANDLE", did, handle, time },
       "Global AllowListed DID",
