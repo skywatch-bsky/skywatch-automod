@@ -121,12 +121,40 @@ jetstream.onCreate(
 
       tasks.push(
         checkAccountAge({
+          actorDid: event.did,
           replyToDid,
-          replyingDid: event.did,
+          replyToPostURI: parentUri,
           atURI,
           time: event.time_us,
         }),
       );
+    }
+
+    // Check account age for quote posts
+    if (hasEmbed) {
+      const embed = event.commit.record.embed;
+      if (
+        embed &&
+        (embed.$type === "app.bsky.embed.record" ||
+          embed.$type === "app.bsky.embed.recordWithMedia")
+      ) {
+        const record =
+          embed.$type === "app.bsky.embed.record" ? embed.record : embed.record.record;
+        if (record && record.uri) {
+          const quotedPostURI = record.uri;
+          const quotedDid = quotedPostURI.split("/")[2]; // Extract DID from at://did/...
+
+          tasks.push(
+            checkAccountAge({
+              actorDid: event.did,
+              quotedDid,
+              quotedPostURI,
+              atURI,
+              time: event.time_us,
+            }),
+          );
+        }
+      }
     }
 
     // Check if the record has facets
