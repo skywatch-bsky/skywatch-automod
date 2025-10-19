@@ -42,6 +42,7 @@ export const homoglyphMap: Record<string, string> = {
   ａ: "a",
   "@": "a",
   "4": "a",
+  а: "a", // cyrillic a
 
   // Confusables for 'e'
   "3": "e",
@@ -88,6 +89,7 @@ export const homoglyphMap: Record<string, string> = {
   ꬴ: "e",
   ꬳ: "e",
   ｅ: "e",
+  ё: "e", // cyrillic io
 
   // Confusables for 'g'
   ǵ: "g",
@@ -139,6 +141,7 @@ export const homoglyphMap: Record<string, string> = {
   ı: "i",
   ｉ: "i",
   "1": "i",
+  і: "i", // cyrillic i
   ĺ: "l",
   ľ: "l",
   ļ: "l",
@@ -252,6 +255,7 @@ export const homoglyphMap: Record<string, string> = {
   ⱺ: "o",
   ｏ: "o",
   "0": "o",
+  о: "o", // cyrillic o
 
   // Confusables for 'r'
   ŕ: "r",
@@ -305,4 +309,5 @@ export const homoglyphMap: Record<string, string> = {
   ᵵ: "t",
   ƫ: "t",
   ȶ: "t",
+  т: "t", // cyrillic t
 };
