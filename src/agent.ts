@@ -12,6 +12,4 @@ export const login = () =>
     password: BSKY_PASSWORD,
   });
 
-export const isLoggedIn = login()
-  .then(() => true)
-  .catch(() => false);
+export const isLoggedIn = login();
