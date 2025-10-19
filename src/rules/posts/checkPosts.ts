@@ -1,15 +1,16 @@
 import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
-import { Post } from "./types.js";
-import { logger } from "./logger.js";
-import { countStarterPacks } from "./count.js";
+import { Post } from "../../types.js";
+import { logger } from "../../logger.js";
+import { countStarterPacks } from "../account/countStarterPacks.js";
 import {
   createPostLabel,
   createAccountReport,
   createAccountComment,
   createPostReport,
-} from "./moderation.js";
-import { getFinalUrl, getLanguage } from "./utils.js";
-import { GLOBAL_ALLOW } from "./constants.js";
+} from "../../moderation.js";
+import { getLanguage } from "../../utils/getLanguage.js";
+import { getFinalUrl } from "../../utils/getFinalUrl.js";
+import { GLOBAL_ALLOW } from "../../constants.js";
 
 export const checkPosts = async (post: Post[]) => {
   if (GLOBAL_ALLOW.includes(post[0].did)) {
@@ -20,26 +21,49 @@ export const checkPosts = async (post: Post[]) => {
     return;
   }
 
-  const urlRegex = /https?:\/\/[^\s]+/g;
+  const urlRegex = /https?:\/\/[^\s]+/gi;
 
   // Check for link shorteners
   if (LINK_SHORTENER.test(post[0].text)) {
     try {
       const url = post[0].text.match(urlRegex);
       if (url && LINK_SHORTENER.test(url[0])) {
-        // logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
+        logger.debug(
+          { process: "CHECKPOSTS", url: url[0], did: post[0].did },
+          "Resolving shortened URL",
+        );
+
         const finalUrl = await getFinalUrl(url[0]);
-        if (finalUrl) {
-          const originalUrl = post[0].text;
+        if (finalUrl && finalUrl !== url[0]) {
           post[0].text = post[0].text.replace(url[0], finalUrl);
-          /* logger.info(
-            `[CHECKPOSTS]: Shortened URL resolved: ${originalUrl} -> ${finalUrl}`,
-            ); */
+          logger.debug(
+            {
+              process: "CHECKPOSTS",
+              originalUrl: url[0],
+              resolvedUrl: finalUrl,
+              did: post[0].did,
+            },
+            "Shortened URL resolved",
+          );
         }
       }
     } catch (error) {
+      const errorInfo =
+        error instanceof Error
+          ? {
+              name: error.name,
+              message: error.message,
+            }
+          : { error: String(error) };
+
       logger.error(
-        { process: "CHECKPOSTS", text: post[0].text, error },
+        {
+          process: "CHECKPOSTS",
+          text: post[0].text,
+          did: post[0].did,
+          atURI: post[0].atURI,
+          ...errorInfo,
+        },
         "Failed to resolve shortened URL",
       );
       // Keep the original URL if resolution fails

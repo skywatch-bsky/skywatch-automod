@@ -1,11 +1,11 @@
 import { HANDLE_CHECKS } from "./constants.js";
-import { logger } from "./logger.js";
+import { logger } from "../../logger.js";
 import {
   createAccountReport,
   createAccountComment,
   createAccountLabel,
-} from "./moderation.js";
-import { GLOBAL_ALLOW } from "./constants.js";
+} from "../../moderation.js";
+import { GLOBAL_ALLOW } from "../../constants.js";
 
 export const checkHandle = async (
   did: string,
