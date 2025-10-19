@@ -28,6 +28,7 @@
     "@types/supertest": "^6.0.3",
     "@vitest/ui": "^1.6.0",
     "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.6.2",
     "supertest": "^7.1.4",
     "tsx": "^4.20.5",
