@@ -91,7 +91,7 @@ export async function addPostAndCheckThresholdWithClient(
   atURI: string,
   config: TrackedLabelConfig,
 ): Promise<number> {
-  const key = `post-labels:${did}:${config.label}`;
+  const key = `post-labels:${did}:${config.accountLabel}`;
   const now = Date.now();
   const pipeline = client.pipeline();
 
@@ -136,19 +136,23 @@ export async function addPostAndCheckThresholdWithClient(
  * Add a post to the tracked label set and check if threshold is met.
  *
  * This function uses a Redis pipeline to atomically:
- * 1. Add the post's atURI to a sorted set (keyed by did and label)
+ * 1. Add the post's atURI to a sorted set (keyed by did and accountLabel)
  * 2. Remove posts older than the configured window (if windowDays is set)
  * 3. Set a sliding 30-day TTL on the key for automatic cleanup
  * 4. Get the current count of posts in the set
  *
- * Redis Key Pattern: `post-labels:{did}:{label}`
+ * Redis Key Pattern: `post-labels:{did}:{accountLabel}`
+ * Note: Multiple post labels can contribute to the same account label threshold.
+ * For example, posts labeled "alt-tech", "disinfo", or "fringe-media" can all
+ * increment the counter for the "amplifier" account label.
+ *
  * Sorted Set Score: Timestamp (for chronological ordering and window filtering)
  * Sorted Set Member: atURI of the labeled post
  *
  * @param did - The DID of the account
  * @param atURI - The AT URI of the labeled post
  * @param config - The tracked label configuration
- * @returns The current count of tracked posts for this did/label combination
+ * @returns The current count of tracked posts for this did/accountLabel combination
  * @throws Error if Redis operations fail
  */
 export async function addPostAndCheckThreshold(

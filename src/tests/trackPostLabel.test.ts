@@ -27,6 +27,13 @@ vi.mock("../config.js", () => ({
       reportAcct: true,
       commentAcct: true,
     },
+    {
+      label: ["alt-tech", "disinformation-network", "fringe-media"],
+      threshold: 3,
+      accountLabel: "amplifier",
+      accountComment: "Account amplifies problematic content",
+      windowDays: 5,
+    },
   ] as TrackedLabelConfig[],
 }));
 
@@ -209,11 +216,12 @@ describe("trackPostLabel", () => {
           process: "TRACK_LABEL",
           did: testDid,
           label: "spam",
+          accountLabel: "repeat-spammer",
           atURI: testAtURI,
           name: "Error",
           message: "Redis connection failed",
         }),
-        "Failed to track post label",
+        "Failed to track post label for repeat-spammer",
       );
     });
 
@@ -224,9 +232,10 @@ describe("trackPostLabel", () => {
 
       expect(logger.error).toHaveBeenCalledWith(
         expect.objectContaining({
+          accountLabel: "repeat-spammer",
           error: "string error",
         }),
-        "Failed to track post label",
+        "Failed to track post label for repeat-spammer",
       );
     });
 
@@ -284,6 +293,55 @@ describe("trackPostLabel", () => {
         "",
         testAtURI,
         expect.any(Object),
+      );
+    });
+  });
+
+  describe("multi-label tracking", () => {
+    it("should match label against array of labels", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(2);
+
+      const result = await trackPostLabel(testDid, testAtURI, "alt-tech");
+
+      expect(result).toBeNull();
+      expect(addPostAndCheckThreshold).toHaveBeenCalledWith(
+        testDid,
+        testAtURI,
+        expect.objectContaining({
+          label: ["alt-tech", "disinformation-network", "fringe-media"],
+          accountLabel: "amplifier",
+        }),
+      );
+    });
+
+    it("should trigger threshold for any label in array", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(3);
+
+      const result = await trackPostLabel(testDid, testAtURI, "fringe-media");
+
+      expect(result).not.toBeNull();
+      expect(result?.config.accountLabel).toBe("amplifier");
+    });
+
+    it("should track different labels in same config", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(1);
+
+      await trackPostLabel(testDid, testAtURI, "alt-tech");
+      await trackPostLabel(testDid, testAtURI, "disinformation-network");
+
+      // Both should call addPostAndCheckThreshold with the same config
+      expect(addPostAndCheckThreshold).toHaveBeenCalledTimes(2);
+      expect(addPostAndCheckThreshold).toHaveBeenNthCalledWith(
+        1,
+        testDid,
+        testAtURI,
+        expect.objectContaining({ accountLabel: "amplifier" }),
+      );
+      expect(addPostAndCheckThreshold).toHaveBeenNthCalledWith(
+        2,
+        testDid,
+        testAtURI,
+        expect.objectContaining({ accountLabel: "amplifier" }),
       );
     });
   });

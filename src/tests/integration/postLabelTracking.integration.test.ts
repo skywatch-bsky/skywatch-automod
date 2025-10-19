@@ -58,7 +58,7 @@ describe("Post Label Tracking Integration Tests", () => {
       expect(count).toBe(1);
 
       // Verify data in Redis
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${testConfig.accountLabel}`;
       const members = await testRedis.zrange(key, 0, -1);
       expect(members).toEqual([atURI1]);
     });
@@ -101,7 +101,7 @@ describe("Post Label Tracking Integration Tests", () => {
       expect(count1).toBe(1);
       expect(count2).toBe(1);
 
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${testConfig.accountLabel}`;
       const members = await testRedis.zrange(key, 0, -1);
       expect(members).toHaveLength(1);
     });
@@ -111,7 +111,7 @@ describe("Post Label Tracking Integration Tests", () => {
 
       await addPostAndCheckThresholdWithClient(testRedis, testDid, atURI, testConfig);
 
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${testConfig.accountLabel}`;
       const ttl = await testRedis.ttl(key);
 
       // TTL should be close to 30 days (2592000 seconds)
@@ -127,7 +127,7 @@ describe("Post Label Tracking Integration Tests", () => {
 
       const now = Date.now();
       const twoDaysAgo = now - 2 * 24 * 60 * 60 * 1000;
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${configWithWindow.accountLabel}`;
 
       // Manually add old post
       await testRedis.zadd(
@@ -164,7 +164,7 @@ describe("Post Label Tracking Integration Tests", () => {
       // Last result should be 10
       expect(results[results.length - 1]).toBe(10);
 
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${testConfig.accountLabel}`;
       const count = await testRedis.zcard(key);
       expect(count).toBe(10);
     });
@@ -180,8 +180,8 @@ describe("Post Label Tracking Integration Tests", () => {
       expect(count1).toBe(1);
       expect(count2).toBe(1);
 
-      const key1 = `post-labels:${did1}:spam`;
-      const key2 = `post-labels:${did2}:spam`;
+      const key1 = `post-labels:${did1}:${testConfig.accountLabel}`;
+      const key2 = `post-labels:${did2}:${testConfig.accountLabel}`;
 
       const members1 = await testRedis.zrange(key1, 0, -1);
       const members2 = await testRedis.zrange(key2, 0, -1);
@@ -190,24 +190,81 @@ describe("Post Label Tracking Integration Tests", () => {
       expect(members2).toHaveLength(1);
     });
 
-    it("should isolate counts by label", async () => {
-      const spamConfig = { ...testConfig, label: "spam" };
-      const scamConfig = { ...testConfig, label: "scam" };
+    it("should isolate counts by accountLabel", async () => {
+      const spamConfig = {
+        label: "spam",
+        threshold: 3,
+        accountLabel: "repeat-spammer",
+        accountComment: "Spam account"
+      };
+      const scamConfig = {
+        label: "scam",
+        threshold: 3,
+        accountLabel: "repeat-scammer",
+        accountComment: "Scam account"
+      };
       const atURI = "at://did:plc:test/app.bsky.feed.post/abc1";
 
-      const spamCount = await addPostAndCheckThresholdWithClient(testRedis, 
+      const spamCount = await addPostAndCheckThresholdWithClient(testRedis,
         testDid,
         atURI,
         spamConfig,
       );
-      const scamCount = await addPostAndCheckThresholdWithClient(testRedis, 
+      const scamCount = await addPostAndCheckThresholdWithClient(testRedis,
         testDid,
         atURI,
         scamConfig,
       );
 
+      // Different accountLabels should create separate counters
       expect(spamCount).toBe(1);
       expect(scamCount).toBe(1);
+
+      const key1 = `post-labels:${testDid}:${spamConfig.accountLabel}`;
+      const key2 = `post-labels:${testDid}:${scamConfig.accountLabel}`;
+      const members1 = await testRedis.zrange(key1, 0, -1);
+      const members2 = await testRedis.zrange(key2, 0, -1);
+
+      expect(members1).toHaveLength(1);
+      expect(members2).toHaveLength(1);
+    });
+
+    it("should combine counts when multiple labels share the same accountLabel", async () => {
+      const sharedAccountLabel = "amplifier";
+      const altTechConfig = {
+        label: "alt-tech",
+        threshold: 3,
+        accountLabel: sharedAccountLabel,
+        accountComment: "Amplifier account"
+      };
+      const disinfoConfig = {
+        label: "disinformation-network",
+        threshold: 3,
+        accountLabel: sharedAccountLabel,
+        accountComment: "Amplifier account"
+      };
+
+      const atURI1 = "at://did:plc:test/app.bsky.feed.post/abc1";
+      const atURI2 = "at://did:plc:test/app.bsky.feed.post/abc2";
+
+      const count1 = await addPostAndCheckThresholdWithClient(testRedis,
+        testDid,
+        atURI1,
+        altTechConfig,
+      );
+      const count2 = await addPostAndCheckThresholdWithClient(testRedis,
+        testDid,
+        atURI2,
+        disinfoConfig,
+      );
+
+      // Same accountLabel should increment the same counter
+      expect(count1).toBe(1);
+      expect(count2).toBe(2); // Should be 2, not 1!
+
+      const key = `post-labels:${testDid}:${sharedAccountLabel}`;
+      const members = await testRedis.zrange(key, 0, -1);
+      expect(members).toHaveLength(2);
     });
   });
 
@@ -281,7 +338,7 @@ describe("Post Label Tracking Integration Tests", () => {
         windowDays: 7, // 1 week window
       };
 
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${config.accountLabel}`;
       const now = Date.now();
       const tenDaysAgo = now - 10 * 24 * 60 * 60 * 1000;
       const fiveDaysAgo = now - 5 * 24 * 60 * 60 * 1000;
@@ -315,7 +372,7 @@ describe("Post Label Tracking Integration Tests", () => {
         // No windowDays
       };
 
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${config.accountLabel}`;
       const now = Date.now();
       const longAgo = now - 100 * 24 * 60 * 60 * 1000; // 100 days ago
 
@@ -344,7 +401,7 @@ describe("Post Label Tracking Integration Tests", () => {
         accountComment: "Test",
       };
 
-      const key = `post-labels:${testDid}:spam`;
+      const key = `post-labels:${testDid}:${config.accountLabel}`;
 
       // Add first post
       await addPostAndCheckThresholdWithClient(testRedis, testDid, "at://post1", config);
