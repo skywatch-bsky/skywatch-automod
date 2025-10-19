@@ -13,6 +13,7 @@ export const METRICS_PORT = process.env.METRICS_PORT
 export const FIREHOSE_URL =
   process.env.FIREHOSE_URL ?? "wss://jetstream.atproto.tools/subscribe";
 export const PLC_URL = process.env.PLC_URL ?? "plc.directory";
+export const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
 export const WANTED_COLLECTION = [
   "app.bsky.feed.post",
   "app.bsky.actor.defs",

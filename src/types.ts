@@ -68,3 +68,13 @@ export interface AccountAgeCheck {
   comment: string; // Comment for the label
   expires?: string; // Optional expiration date (ISO 8601) - check will be skipped after this date
 }
+
+export interface TrackedLabelConfig {
+  label: string; // Label to track (e.g., "spam")
+  threshold: number; // Number of posts before account labeling
+  accountLabel: string; // Label to apply to account (e.g., "repeat-offender")
+  accountComment: string; // Comment for account label
+  windowDays?: number; // Optional: only count posts from last N days
+  reportAcct?: boolean; // Optional: also report account
+  commentAcct?: boolean; // Optional: also comment on account
+}
