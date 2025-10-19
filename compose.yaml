@@ -63,8 +63,10 @@ services:
     # This links the `cursor.txt` file from your host into the container at `/app/cursor.txt`.
     # Persisting this file allows the automod to resume from where it left off
     # after a restart, preventing it from reprocessing old events or skipping new ones.
+    # Also persist session.json to avoid hitting login rate limits.
     volumes:
       - ./cursor.txt:/app/cursor.txt
+      - ./session.json:/app/session.json
 
 volumes:
   redis-data:
