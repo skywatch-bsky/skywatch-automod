@@ -5,7 +5,7 @@ import {
   createAccountLabel,
   createAccountComment,
 } from "../../moderation.js";
-import { getLanguage } from "../../utils.js";
+import { getLanguage } from "../../utils/getLanguage.js";
 import { GLOBAL_ALLOW } from "../../constants.js";
 
 export const checkDescription = async (

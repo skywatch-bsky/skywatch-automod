@@ -1,4 +1,4 @@
-import { POST_CHECKS } from "./constants.js";
+import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
 import { Post } from "../../types.js";
 import { logger } from "../../logger.js";
 import { countStarterPacks } from "../account/countStarterPacks.js";
@@ -10,7 +10,7 @@ import {
 } from "../../moderation.js";
 import { getLanguage } from "../../utils/getLanguage.js";
 import { getFinalUrl } from "../../utils/getFinalUrl.js";
-import { LINK_SHORTENER, GLOBAL_ALLOW } from "../../constants.js";
+import { GLOBAL_ALLOW } from "../../constants.js";
 
 export const checkPosts = async (post: Post[]) => {
   if (GLOBAL_ALLOW.includes(post[0].did)) {
@@ -39,8 +39,16 @@ export const checkPosts = async (post: Post[]) => {
         }
       }
     } catch (error) {
+      const errorInfo =
+        error instanceof Error
+          ? {
+              name: error.name,
+              message: error.message,
+            }
+          : { error: String(error) };
+
       logger.error(
-        { process: "CHECKPOSTS", text: post[0].text, error },
+        { process: "CHECKPOSTS", text: post[0].text, ...errorInfo },
         "Failed to resolve shortened URL",
       );
       // Keep the original URL if resolution fails
