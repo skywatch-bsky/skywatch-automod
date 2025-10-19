@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "label": "alt-tech",
+    "threshold": 5,
+    "accountLabel": "amplifier",
+    "accountComment": "Account has posted spam content multiple times",
+    "windowDays": 5,
+    "reportAcct": true,
+    "commentAcct": false
+  },
+  {
+    "label": "disinformation-network",
+    "threshold": 5,
+    "accountLabel": "amplifier",
+    "accountComment": "Account has posted spam content multiple times",
+    "windowDays": 5,
+    "reportAcct": true,
+    "commentAcct": false
+  },
+  {
+    "label": "fringe-media",
+    "threshold": 5,
+    "accountLabel": "amplifier",
+    "accountComment": "Account has posted spam content multiple times",
+    "windowDays": 5,
+    "reportAcct": true,
+    "commentAcct": false
+  },
+  {
+    "label": "follow-farming",
+    "threshold": 5,
+    "accountLabel": "follow-farming",
+    "accountComment": "Account has posted spam content multiple times",
+    "windowDays": 5,
+    "reportAcct": true,
+    "commentAcct": false
+  }
+]
