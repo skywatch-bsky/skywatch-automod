@@ -169,3 +169,47 @@ Use this endpoint for:
 - Kubernetes liveness/readiness probes
 - Load balancer health checks
 - Uptime monitoring systems
+
+## Testing
+
+### Unit Tests
+
+Run unit tests with:
+
+```bash
+bun run test:run
+```
+
+For watch mode during development:
+
+```bash
+bun test
+```
+
+For coverage report:
+
+```bash
+bun run test:coverage
+```
+
+### Integration Tests
+
+Integration tests use [testcontainers](https://testcontainers.com/) to spin up a real Redis instance. **Docker must be running** for integration tests to work.
+
+Run integration tests:
+
+```bash
+# Requires Docker to be running
+bun run test:run src/tests/integration/
+```
+
+Integration tests verify:
+- Full post label tracking workflow with real Redis
+- Threshold detection and triggering
+- Time window filtering (windowDays)
+- TTL behavior and key expiration
+- Concurrent post handling
+- Isolation by DID and label
+- Graceful error handling
+
+**Note:** Integration tests take longer (~2-3s) due to container startup time.

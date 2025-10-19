@@ -75,32 +75,25 @@ export async function isRedisConnected(): Promise<boolean> {
 }
 
 /**
- * Add a post to the tracked label set and check if threshold is met.
+ * Internal helper that performs the post tracking logic with a custom Redis client.
+ * Used by addPostAndCheckThreshold and for testing purposes.
  *
- * This function uses a Redis pipeline to atomically:
- * 1. Add the post's atURI to a sorted set (keyed by did and label)
- * 2. Remove posts older than the configured window (if windowDays is set)
- * 3. Set a sliding 30-day TTL on the key for automatic cleanup
- * 4. Get the current count of posts in the set
- *
- * Redis Key Pattern: `post-labels:{did}:{label}`
- * Sorted Set Score: Timestamp (for chronological ordering and window filtering)
- * Sorted Set Member: atURI of the labeled post
- *
+ * @param client - Redis client to use
  * @param did - The DID of the account
  * @param atURI - The AT URI of the labeled post
  * @param config - The tracked label configuration
  * @returns The current count of tracked posts for this did/label combination
  * @throws Error if Redis operations fail
  */
-export async function addPostAndCheckThreshold(
+export async function addPostAndCheckThresholdWithClient(
+  client: Redis,
   did: string,
   atURI: string,
   config: TrackedLabelConfig,
 ): Promise<number> {
   const key = `post-labels:${did}:${config.label}`;
   const now = Date.now();
-  const pipeline = redis.pipeline();
+  const pipeline = client.pipeline();
 
   // Add the new post (timestamp as score, atURI as member)
   pipeline.zadd(key, now, atURI);
@@ -137,6 +130,33 @@ export async function addPostAndCheckThreshold(
   }
 
   return count as number;
+}
+
+/**
+ * Add a post to the tracked label set and check if threshold is met.
+ *
+ * This function uses a Redis pipeline to atomically:
+ * 1. Add the post's atURI to a sorted set (keyed by did and label)
+ * 2. Remove posts older than the configured window (if windowDays is set)
+ * 3. Set a sliding 30-day TTL on the key for automatic cleanup
+ * 4. Get the current count of posts in the set
+ *
+ * Redis Key Pattern: `post-labels:{did}:{label}`
+ * Sorted Set Score: Timestamp (for chronological ordering and window filtering)
+ * Sorted Set Member: atURI of the labeled post
+ *
+ * @param did - The DID of the account
+ * @param atURI - The AT URI of the labeled post
+ * @param config - The tracked label configuration
+ * @returns The current count of tracked posts for this did/label combination
+ * @throws Error if Redis operations fail
+ */
+export async function addPostAndCheckThreshold(
+  did: string,
+  atURI: string,
+  config: TrackedLabelConfig,
+): Promise<number> {
+  return addPostAndCheckThresholdWithClient(redis, did, atURI, config);
 }
 
 /**
