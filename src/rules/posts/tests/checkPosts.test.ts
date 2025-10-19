@@ -89,6 +89,14 @@ vi.mock("../../../constants.js", () => ({
   GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
 
+vi.mock("../../../trackPostLabel.js", () => ({
+  trackPostLabel: vi.fn(),
+}));
+
+vi.mock("../../../triggerAccountLabel.js", () => ({
+  triggerAccountLabel: vi.fn(),
+}));
+
 import { logger } from "../../../logger.js";
 import { countStarterPacks } from "../../account/countStarterPacks.js";
 import {
@@ -99,10 +107,20 @@ import {
 } from "../../../moderation.js";
 import { getLanguage } from "../../../utils/getLanguage.js";
 import { getFinalUrl } from "../../../utils/getFinalUrl.js";
+import { trackPostLabel } from "../../../trackPostLabel.js";
+import { triggerAccountLabel } from "../../../triggerAccountLabel.js";
 
 describe("checkPosts", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Set default mock implementations
+    vi.mocked(trackPostLabel).mockResolvedValue(null);
+    vi.mocked(triggerAccountLabel).mockResolvedValue({
+      success: true,
+      did: "did:plc:test123",
+      label: "test-label",
+      labeled: true,
+    });
   });
 
   const createMockPost = (overrides?: Partial<Post>): Post[] => [
@@ -441,6 +459,115 @@ describe("checkPosts", () => {
         expect.objectContaining({ label: "all-actions" }),
         "Commenting on account",
       );
+    });
+  });
+
+  describe("Post label tracking integration", () => {
+    it("should call trackPostLabel when a post is labeled", async () => {
+      const post = createMockPost({ text: "spam post" });
+      vi.mocked(trackPostLabel).mockResolvedValue(null);
+
+      await checkPosts(post);
+
+      // Wait for promise to resolve
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(trackPostLabel).toHaveBeenCalledWith(
+        post[0].did,
+        post[0].atURI,
+        "test-label",
+      );
+    });
+
+    it("should not call trackPostLabel for non-labeled posts", async () => {
+      const post = createMockPost({ text: "normal post" });
+
+      await checkPosts(post);
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(trackPostLabel).not.toHaveBeenCalled();
+    });
+
+    it("should call triggerAccountLabel when threshold is met", async () => {
+      const post = createMockPost({ text: "spam post" });
+      const mockAction = {
+        type: "label-account" as const,
+        did: post[0].did,
+        config: {
+          label: "spam",
+          threshold: 5,
+          accountLabel: "repeat-spammer",
+          accountComment: "Account has posted spam multiple times",
+        },
+        currentCount: 5,
+      };
+
+      vi.mocked(trackPostLabel).mockResolvedValue(mockAction);
+      vi.mocked(triggerAccountLabel).mockResolvedValue({
+        success: true,
+        did: post[0].did,
+        label: "repeat-spammer",
+        labeled: true,
+      });
+
+      await checkPosts(post);
+
+      // Wait for promise to resolve
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(trackPostLabel).toHaveBeenCalledWith(
+        post[0].did,
+        post[0].atURI,
+        "test-label",
+      );
+      expect(triggerAccountLabel).toHaveBeenCalledWith(mockAction);
+    });
+
+    it("should not call triggerAccountLabel when threshold is not met", async () => {
+      const post = createMockPost({ text: "spam post" });
+
+      vi.mocked(trackPostLabel).mockResolvedValue(null);
+
+      await checkPosts(post);
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(trackPostLabel).toHaveBeenCalled();
+      expect(triggerAccountLabel).not.toHaveBeenCalled();
+    });
+
+    it("should track labels when multiple patterns match", async () => {
+      const post = createMockPost({ text: "spam post" });
+      vi.mocked(trackPostLabel).mockResolvedValue(null);
+
+      await checkPosts(post);
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Should track at least the "test-label" (spam pattern)
+      expect(trackPostLabel).toHaveBeenCalled();
+      expect(trackPostLabel).toHaveBeenCalledWith(
+        post[0].did,
+        post[0].atURI,
+        "test-label",
+      );
+    });
+
+    it("should handle trackPostLabel errors gracefully", async () => {
+      const post = createMockPost({ text: "spam post" });
+
+      vi.mocked(trackPostLabel).mockRejectedValue(
+        new Error("Redis connection failed"),
+      );
+
+      // Should not throw
+      await expect(checkPosts(post)).resolves.not.toThrow();
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(trackPostLabel).toHaveBeenCalled();
+      expect(triggerAccountLabel).not.toHaveBeenCalled();
     });
   });
 });

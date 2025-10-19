@@ -11,6 +11,8 @@ import {
 import { getLanguage } from "../../utils/getLanguage.js";
 import { getFinalUrl } from "../../utils/getFinalUrl.js";
 import { GLOBAL_ALLOW } from "../../constants.js";
+import { trackPostLabel } from "../../trackPostLabel.js";
+import { triggerAccountLabel } from "../../triggerAccountLabel.js";
 
 export const checkPosts = async (post: Post[]) => {
   if (GLOBAL_ALLOW.includes(post[0].did)) {
@@ -122,6 +124,18 @@ export const checkPosts = async (post: Post[]) => {
           `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           checkPost.duration,
         );
+
+        // Track labeled post and potentially trigger account-level action
+        trackPostLabel(post[0].did, post[0].atURI, checkPost.label)
+          .then((action) => {
+            if (action) {
+              triggerAccountLabel(action);
+            }
+          })
+          .catch((error) => {
+            // Errors are already logged in trackPostLabel, silently ignore here
+            // to prevent unhandled rejection warnings
+          });
       }
 
       if (checkPost.reportPost === true) {
