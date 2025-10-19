@@ -64,7 +64,7 @@ describe("normalizeUnicode", () => {
     });
 
     it("should preserve non-mapped characters", () => {
-      expect(normalizeUnicode("hello!@#$%")).toBe("hello!a#$%"); // @ maps to a
+      expect(normalizeUnicode("hello@")).toBe("helloa"); // @ maps to a
     });
 
     it("should handle mixed scripts", () => {

@@ -310,4 +310,7 @@ export const homoglyphMap: Record<string, string> = {
   ƫ: "t",
   ȶ: "t",
   т: "t", // cyrillic t
+
+  // Confusables for 'z'
+  "2": "z",
 };
