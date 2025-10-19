@@ -3,10 +3,12 @@ import { logger } from "../../logger.js";
 import { limit } from "../../limits.js";
 import { createAccountLabel } from "../../moderation.js";
 
+const ALLOWED_DIDS = ["did:plc:gpunjjgvlyb4racypz3yfiq4"];
+
 export const countStarterPacks = async (did: string, time: number) => {
   await isLoggedIn;
 
-  if (did in ["did:plc:gpunjjgvlyb4racypz3yfiq4"]) {
+  if (ALLOWED_DIDS.includes(did)) {
     logger.debug(
       { process: "COUNTSTARTERPACKS", did, time },
       "Account is whitelisted",
@@ -20,15 +22,33 @@ export const countStarterPacks = async (did: string, time: number) => {
       const starterPacks = profile.data.associated?.starterPacks;
 
       if (starterPacks && starterPacks.valueOf() > 20) {
+        logger.info(
+          {
+            process: "COUNTSTARTERPACKS",
+            did,
+            time,
+            starterPackCount: starterPacks.valueOf(),
+          },
+          "Labeling account with excessive starter packs",
+        );
+
         createAccountLabel(
           did,
           "follow-farming",
-          `[COUNTSTARTERPACKS]: ${time}: Account ${did} has ${starterPacks} starter packs.`,
+          `${time}: Account has ${starterPacks} starter packs`,
         );
       }
     } catch (error) {
+      const errorInfo =
+        error instanceof Error
+          ? {
+              name: error.name,
+              message: error.message,
+            }
+          : { error: String(error) };
+
       logger.error(
-        { process: "COUNTSTARTERPACKS", error },
+        { process: "COUNTSTARTERPACKS", did, time, ...errorInfo },
         "Error checking associated accounts",
       );
     }
