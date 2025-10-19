@@ -6,6 +6,7 @@
     "moduleResolution": "NodeNext",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "types": ["node"]
+    "skipLibCheck": true,
+    "types": ["node", "vitest/globals"]
   }
 }

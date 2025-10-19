@@ -27,7 +27,7 @@ describe('Agent', () => {
       }
     }))
 
-    const { agent, login } = await import('../agent')
+    const { agent, login } = await import('../agent.js')
 
     // Check that the agent was created with the correct service URL
     expect(mockConstructor).toHaveBeenCalledWith({ service: 'https://pds.test.com' })
