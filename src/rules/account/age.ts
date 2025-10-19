@@ -5,10 +5,19 @@ import { ACCOUNT_AGE_CHECKS } from "./ageConstants.js";
 import { PLC_URL } from "../../config.js";
 import { GLOBAL_ALLOW } from "../../constants.js";
 
-interface ReplyContext {
-  replyToDid: string;
-  replyingDid: string;
-  atURI: string;
+interface InteractionContext {
+  // For replies
+  replyToDid?: string;
+  replyingDid?: string;
+  replyToPostURI?: string; // The URI of the post being replied to (optional)
+
+  // For quote posts
+  quotedDid?: string; // DID of the account whose post is being quoted
+  quotedPostURI?: string; // URI of the post being quoted
+
+  // Common fields (required)
+  actorDid: string; // The DID performing the action (replying or quoting)
+  atURI: string; // URI of the reply or quote post
   time: number;
 }
 
@@ -86,20 +95,22 @@ export const calculateAccountAge = (
 };
 
 /**
- * Checks if a reply meets age criteria and applies labels accordingly
+ * Checks if a reply or quote post meets age criteria and applies labels accordingly
  */
-export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
+export const checkAccountAge = async (
+  context: InteractionContext,
+): Promise<void> => {
   // Skip if no checks configured
   if (ACCOUNT_AGE_CHECKS.length === 0) {
     return;
   }
 
   // Skip if DID is globally allowlisted
-  if (GLOBAL_ALLOW.includes(context.replyingDid)) {
+  if (GLOBAL_ALLOW.includes(context.actorDid)) {
     logger.debug(
       {
         process: "ACCOUNT_AGE",
-        did: context.replyingDid,
+        did: context.actorDid,
         atURI: context.atURI,
       },
       "Global allowlisted DID",
@@ -109,8 +120,32 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
 
   // Check each configuration
   for (const check of ACCOUNT_AGE_CHECKS) {
-    // Check if this reply is to a monitored DID
-    if (!check.monitoredDIDs.includes(context.replyToDid)) {
+    // Check if this interaction matches monitored DIDs or post URIs
+    // For replies: check replyToDid and replyToPostURI
+    // For quotes: check quotedDid and quotedPostURI
+    const matchesReplyDID =
+      check.monitoredDIDs &&
+      context.replyToDid &&
+      check.monitoredDIDs.includes(context.replyToDid);
+    const matchesReplyPostURI =
+      check.monitoredPostURIs &&
+      context.replyToPostURI &&
+      check.monitoredPostURIs.includes(context.replyToPostURI);
+    const matchesQuoteDID =
+      check.monitoredDIDs &&
+      context.quotedDid &&
+      check.monitoredDIDs.includes(context.quotedDid);
+    const matchesQuotePostURI =
+      check.monitoredPostURIs &&
+      context.quotedPostURI &&
+      check.monitoredPostURIs.includes(context.quotedPostURI);
+
+    if (
+      !matchesReplyDID &&
+      !matchesReplyPostURI &&
+      !matchesQuoteDID &&
+      !matchesQuotePostURI
+    ) {
       continue;
     }
 
@@ -130,19 +165,20 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
     logger.debug(
       {
         process: "ACCOUNT_AGE",
-        replyingDid: context.replyingDid,
+        actorDid: context.actorDid,
         replyToDid: context.replyToDid,
+        quotedDid: context.quotedDid,
       },
-      "Checking account age for reply to monitored DID",
+      "Checking account age for interaction with monitored target",
     );
 
     // Get account creation date
-    const creationDate = await getAccountCreationDate(context.replyingDid);
+    const creationDate = await getAccountCreationDate(context.actorDid);
     if (!creationDate) {
       logger.warn(
         {
           process: "ACCOUNT_AGE",
-          replyingDid: context.replyingDid,
+          actorDid: context.actorDid,
         },
         "Could not determine creation date, skipping",
       );
@@ -158,7 +194,7 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
     logger.debug(
       {
         process: "ACCOUNT_AGE",
-        replyingDid: context.replyingDid,
+        actorDid: context.actorDid,
         creationDate: creationDate.toISOString(),
         windowStart: windowStart.toISOString(),
         windowEnd: windowEnd.toISOString(),
@@ -170,7 +206,7 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
     if (creationDate >= windowStart && creationDate <= windowEnd) {
       // Check if the label already exists to prevent duplicates
       const labelExists = await checkAccountLabels(
-        context.replyingDid,
+        context.actorDid,
         check.label,
       );
 
@@ -178,32 +214,33 @@ export const checkAccountAge = async (context: ReplyContext): Promise<void> => {
         logger.debug(
           {
             process: "ACCOUNT_AGE",
-            replyingDid: context.replyingDid,
+            actorDid: context.actorDid,
             label: check.label,
           },
           "Label already exists, skipping duplicate",
         );
-        // Only apply one label per reply
+        // Only apply one label per interaction
         return;
       }
 
       logger.info(
         {
           process: "ACCOUNT_AGE",
-          replyingDid: context.replyingDid,
+          actorDid: context.actorDid,
           replyToDid: context.replyToDid,
+          quotedDid: context.quotedDid,
           atURI: context.atURI,
         },
         "Labeling account created within the monitored date range",
       );
 
       await createAccountLabel(
-        context.replyingDid,
+        context.actorDid,
         check.label,
-        `${context.time}: ${check.comment} - Account created within monitored range - Reply: ${context.atURI}`,
+        `${context.time}: ${check.comment} - Account created within monitored range - Interaction: ${context.atURI}`,
       );
 
-      // Only apply one label per reply
+      // Only apply one label per interaction
       return;
     }
   }
