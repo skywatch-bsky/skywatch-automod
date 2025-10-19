@@ -8,7 +8,8 @@ import {
   createAccountComment,
   createPostReport,
 } from "../../moderation.js";
-import { getFinalUrl, getLanguage } from "../../utils.js";
+import { getLanguage } from "../../utils/getLanguage.js";
+import { getFinalUrl } from "../../utils/getFinalUrl.js";
 import { LINK_SHORTENER, GLOBAL_ALLOW } from "../../constants.js";
 
 export const checkPosts = async (post: Post[]) => {
