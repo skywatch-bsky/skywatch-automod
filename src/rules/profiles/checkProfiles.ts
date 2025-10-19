@@ -1,12 +1,12 @@
-import { PROFILE_CHECKS } from "./constants.js";
-import { logger } from "./logger.js";
+import { PROFILE_CHECKS } from "../../rules/profiles/constants.js";
+import { logger } from "../../logger.js";
 import {
   createAccountReport,
   createAccountLabel,
   createAccountComment,
-} from "./moderation.js";
-import { getLanguage } from "./utils.js";
-import { GLOBAL_ALLOW } from "./constants.js";
+} from "../../moderation.js";
+import { getLanguage } from "../../utils.js";
+import { GLOBAL_ALLOW } from "../../constants.js";
 
 export const checkDescription = async (
   did: string,

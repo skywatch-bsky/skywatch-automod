@@ -15,9 +15,12 @@ import {
 import { logger } from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
 import { Post, LinkFeature, Handle } from "./types.js";
-import { checkPosts } from "./checkPosts.js";
-import { checkHandle } from "./checkHandles.js";
-import { checkDescription, checkDisplayName } from "./checkProfiles.js";
+import { checkPosts } from "./rules/posts/checkPosts.js";
+import { checkHandle } from "./rules/handles/checkHandles.js";
+import {
+  checkDescription,
+  checkDisplayName,
+} from "./rules/profiles/checkProfiles.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
 import { checkAccountAge } from "./rules/account/age.js";
 
@@ -139,7 +142,9 @@ jetstream.onCreate(
           embed.$type === "app.bsky.embed.recordWithMedia")
       ) {
         const record =
-          embed.$type === "app.bsky.embed.record" ? embed.record : embed.record.record;
+          embed.$type === "app.bsky.embed.record"
+            ? embed.record
+            : embed.record.record;
         if (record && record.uri) {
           const quotedPostURI = record.uri;
           const quotedDid = quotedPostURI.split("/")[2]; // Extract DID from at://did/...

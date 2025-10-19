@@ -1,13 +1,16 @@
-import { isLoggedIn, agent } from "./agent.js";
-import { logger } from "./logger.js";
-import { limit } from "./limits.js";
-import { createAccountLabel } from "./moderation.js";
+import { isLoggedIn, agent } from "../../agent.js";
+import { logger } from "../../logger.js";
+import { limit } from "../../limits.js";
+import { createAccountLabel } from "../../moderation.js";
 
 export const countStarterPacks = async (did: string, time: number) => {
   await isLoggedIn;
 
   if (did in ["did:plc:gpunjjgvlyb4racypz3yfiq4"]) {
-    logger.debug({ process: "COUNTSTARTERPACKS", did, time }, "Account is whitelisted");
+    logger.debug(
+      { process: "COUNTSTARTERPACKS", did, time },
+      "Account is whitelisted",
+    );
     return;
   }
 
@@ -24,7 +27,10 @@ export const countStarterPacks = async (did: string, time: number) => {
         );
       }
     } catch (error) {
-      logger.error({ process: "COUNTSTARTERPACKS", error }, "Error checking associated accounts");
+      logger.error(
+        { process: "COUNTSTARTERPACKS", error },
+        "Error checking associated accounts",
+      );
     }
   });
 };
