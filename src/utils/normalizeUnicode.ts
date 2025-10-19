@@ -39,5 +39,3 @@ export function normalizeUnicode(text: string): string {
   // Final NFKC normalization to handle any remaining special characters.
   return withoutDiacritics.normalize("NFKC");
 }
-
-

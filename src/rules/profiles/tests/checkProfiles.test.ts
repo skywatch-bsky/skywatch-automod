@@ -454,7 +454,12 @@ describe("checkProfiles", () => {
       });
 
       it("should not label profiles without matching display names", async () => {
-        await checkDisplayName(mockDid, mockTime, "Normal User", mockDescription);
+        await checkDisplayName(
+          mockDid,
+          mockTime,
+          "Normal User",
+          mockDescription,
+        );
 
         expect(createAccountLabel).not.toHaveBeenCalledWith(
           mockDid,
@@ -491,12 +496,7 @@ describe("checkProfiles", () => {
       it("should check language-specific patterns for matching languages", async () => {
         vi.mocked(getLanguage).mockResolvedValue("eng");
 
-        await checkDisplayName(
-          mockDid,
-          mockTime,
-          "hello world",
-          "description",
-        );
+        await checkDisplayName(mockDid, mockTime, "hello world", "description");
 
         // language-specific check has description: true, displayName: false
         // so it won't match on displayName

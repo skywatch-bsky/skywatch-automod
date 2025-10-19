@@ -37,10 +37,7 @@ global.fetch = vi.fn();
 
 import { agent } from "../../../agent.js";
 import { logger } from "../../../logger.js";
-import {
-  createAccountLabel,
-  checkAccountLabels,
-} from "../../../moderation.js";
+import { createAccountLabel, checkAccountLabels } from "../../../moderation.js";
 import { GLOBAL_ALLOW } from "../../../constants.js";
 
 describe("Account Age Module", () => {
@@ -214,7 +211,7 @@ describe("Account Age Module", () => {
 
         await checkAccountAge({
           actorDid: "did:plc:inwindow",
-        replyToDid: "did:plc:monitored",
+          replyToDid: "did:plc:monitored",
           replyingDid: "did:plc:inwindow",
           atURI: TEST_REPLY_URI,
           time: TEST_TIME,
@@ -236,7 +233,7 @@ describe("Account Age Module", () => {
 
         await checkAccountAge({
           actorDid: "did:plc:beforewindow",
-        replyToDid: "did:plc:monitored",
+          replyToDid: "did:plc:monitored",
           replyingDid: "did:plc:beforewindow",
           atURI: TEST_REPLY_URI,
           time: TEST_TIME,
@@ -254,7 +251,7 @@ describe("Account Age Module", () => {
 
         await checkAccountAge({
           actorDid: "did:plc:afterwindow",
-        replyToDid: "did:plc:monitored",
+          replyToDid: "did:plc:monitored",
           replyingDid: "did:plc:afterwindow",
           atURI: TEST_REPLY_URI,
           time: TEST_TIME,
@@ -272,7 +269,7 @@ describe("Account Age Module", () => {
 
         await checkAccountAge({
           actorDid: "did:plc:startofwindow",
-        replyToDid: "did:plc:monitored",
+          replyToDid: "did:plc:monitored",
           replyingDid: "did:plc:startofwindow",
           atURI: TEST_REPLY_URI,
           time: TEST_TIME,
@@ -290,7 +287,7 @@ describe("Account Age Module", () => {
 
         await checkAccountAge({
           actorDid: "did:plc:endofwindow",
-        replyToDid: "did:plc:monitored",
+          replyToDid: "did:plc:monitored",
           replyingDid: "did:plc:endofwindow",
           atURI: TEST_REPLY_URI,
           time: TEST_TIME,
@@ -479,7 +476,11 @@ describe("Account Age Module", () => {
 
       expect(createAccountLabel).not.toHaveBeenCalled();
       expect(logger.debug).toHaveBeenCalledWith(
-        { process: "ACCOUNT_AGE", did: "did:plc:allowlisted", atURI: TEST_REPLY_URI },
+        {
+          process: "ACCOUNT_AGE",
+          did: "did:plc:allowlisted",
+          atURI: TEST_REPLY_URI,
+        },
         "Global allowlisted DID",
       );
     });
@@ -613,7 +614,8 @@ describe("Account Age Module", () => {
         replyingDid: "did:plc:newaccount",
         atURI: TEST_REPLY_URI,
         time: TEST_TIME,
-        replyToPostURI: "at://did:plc:monitored/app.bsky.feed.post/specificpost",
+        replyToPostURI:
+          "at://did:plc:monitored/app.bsky.feed.post/specificpost",
       });
 
       expect(createAccountLabel).toHaveBeenCalledWith(
@@ -763,9 +765,7 @@ describe("Account Age Module", () => {
 
     it("should label account when quoting a monitored post URI", async () => {
       ACCOUNT_AGE_CHECKS.push({
-        monitoredPostURIs: [
-          "at://did:plc:target/app.bsky.feed.post/targeted",
-        ],
+        monitoredPostURIs: ["at://did:plc:target/app.bsky.feed.post/targeted"],
         anchorDate: "2025-10-15",
         maxAgeDays: 7,
         label: "brigading-suspect",

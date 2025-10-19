@@ -62,10 +62,7 @@ export const HANDLE_CHECKS: Checks[] = [
     reportAcct: false,
     commentAcct: false,
     toLabel: true,
-    check: new RegExp(
-      "[a-z]{2,}[0-9]{6,}|random.*?numbers.*?[0-9]{4,}",
-      "i",
-    ),
+    check: new RegExp("[a-z]{2,}[0-9]{6,}|random.*?numbers.*?[0-9]{4,}", "i"),
     whitelist: new RegExp("year[0-9]{4}", "i"),
     ignoredDIDs: [
       "did:plc:example789", // Legitimate account with number pattern

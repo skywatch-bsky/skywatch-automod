@@ -16,7 +16,5 @@
     "ask": []
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "git-mcp-server"
-  ]
+  "enabledMcpjsonServers": ["git-mcp-server"]
 }

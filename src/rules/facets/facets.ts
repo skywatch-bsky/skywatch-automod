@@ -27,10 +27,7 @@ export const checkFacetSpam = async (
 ): Promise<void> => {
   // Check allowlist
   if (FACET_SPAM_ALLOWLIST.includes(did)) {
-    logger.debug(
-      { process: "FACET_SPAM", did, atURI },
-      "Allowlisted DID",
-    );
+    logger.debug({ process: "FACET_SPAM", did, atURI }, "Allowlisted DID");
     return;
   }
 
@@ -46,7 +43,7 @@ export const checkFacetSpam = async (
   for (const facet of facets) {
     // Only check mentions for spam detection
     const mentionFeature = facet.features.find(
-      (feature) => feature.$type === "app.bsky.richtext.facet#mention"
+      (feature) => feature.$type === "app.bsky.richtext.facet#mention",
     );
 
     if (mentionFeature && "did" in mentionFeature) {

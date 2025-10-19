@@ -56,7 +56,8 @@ describe("getLanguage", () => {
     });
 
     it("should detect Japanese text", async () => {
-      const text = "これは日本語のテストです。十分なテキストで言語を検出します。";
+      const text =
+        "これは日本語のテストです。十分なテキストで言語を検出します。";
       const result = await getLanguage(text);
       expect(result).toBe("jpn");
     });
@@ -118,22 +119,19 @@ describe("getLanguage", () => {
 
   describe("trimming behavior", () => {
     it("should trim leading whitespace", async () => {
-      const text =
-        "   Hello world, this is a test of the English language.";
+      const text = "   Hello world, this is a test of the English language.";
       const result = await getLanguage(text);
       expect(result).toBe("eng");
     });
 
     it("should trim trailing whitespace", async () => {
-      const text =
-        "Hello world, this is a test of the English language.   ";
+      const text = "Hello world, this is a test of the English language.   ";
       const result = await getLanguage(text);
       expect(result).toBe("eng");
     });
 
     it("should trim both leading and trailing whitespace", async () => {
-      const text =
-        "   Hello world, this is a test of the English language.   ";
+      const text = "   Hello world, this is a test of the English language.   ";
       const result = await getLanguage(text);
       expect(result).toBe("eng");
     });
@@ -148,8 +146,7 @@ describe("getLanguage", () => {
     });
 
     it("should handle code mixed with text", async () => {
-      const text =
-        "Here is some English text with const x = 123; code in it.";
+      const text = "Here is some English text with const x = 123; code in it.";
       const result = await getLanguage(text);
       expect(result).toBe("eng");
     });

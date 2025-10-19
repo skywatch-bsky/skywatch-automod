@@ -148,7 +148,9 @@ describe("checkPosts", () => {
 
   describe("URL shortener resolution", () => {
     it("should resolve shortened URLs", async () => {
-      const post = createMockPost({ text: "Check this out https://tinyurl.com/test123" });
+      const post = createMockPost({
+        text: "Check this out https://tinyurl.com/test123",
+      });
       vi.mocked(getFinalUrl).mockResolvedValue("https://example.com/full-url");
 
       await checkPosts(post);
