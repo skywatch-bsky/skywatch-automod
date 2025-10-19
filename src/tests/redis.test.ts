@@ -80,16 +80,16 @@ describe("redis", () => {
 
       expect(count).toBe(3);
       expect(mockPipeline.zadd).toHaveBeenCalledWith(
-        `post-labels:${mockDid}:${mockConfig.label}`,
+        `post-labels:${mockDid}:${mockConfig.accountLabel}`,
         expect.any(Number),
         mockAtURI,
       );
       expect(mockPipeline.expire).toHaveBeenCalledWith(
-        `post-labels:${mockDid}:${mockConfig.label}`,
+        `post-labels:${mockDid}:${mockConfig.accountLabel}`,
         30 * 24 * 60 * 60,
       );
       expect(mockPipeline.zcard).toHaveBeenCalledWith(
-        `post-labels:${mockDid}:${mockConfig.label}`,
+        `post-labels:${mockDid}:${mockConfig.accountLabel}`,
       );
     });
 
@@ -118,7 +118,7 @@ describe("redis", () => {
       expect(count).toBe(5);
       const cutoffTime = now - 30 * 24 * 60 * 60 * 1000;
       expect(mockPipeline.zremrangebyscore).toHaveBeenCalledWith(
-        `post-labels:${mockDid}:${configWithWindow.label}`,
+        `post-labels:${mockDid}:${configWithWindow.accountLabel}`,
         "-inf",
         cutoffTime,
       );
@@ -181,7 +181,7 @@ describe("redis", () => {
 
       await addPostAndCheckThreshold(mockDid, mockAtURI, mockConfig);
 
-      const expectedKey = `post-labels:${mockDid}:${mockConfig.label}`;
+      const expectedKey = `post-labels:${mockDid}:${mockConfig.accountLabel}`;
       expect(mockPipeline.zadd).toHaveBeenCalledWith(
         expectedKey,
         expect.any(Number),

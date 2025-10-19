@@ -48,9 +48,29 @@ export function validateTrackedLabelConfig(
   const c = config as Record<string, unknown>;
 
   // Required fields
-  if (typeof c.label !== "string" || c.label.trim() === "") {
+  // Label can be a string or array of strings
+  if (typeof c.label === "string") {
+    if (c.label.trim() === "") {
+      throw new Error(
+        `Configuration at index ${index} has invalid 'label': string cannot be empty`,
+      );
+    }
+  } else if (Array.isArray(c.label)) {
+    if (c.label.length === 0) {
+      throw new Error(
+        `Configuration at index ${index} has invalid 'label': array cannot be empty`,
+      );
+    }
+    for (let i = 0; i < c.label.length; i++) {
+      if (typeof c.label[i] !== "string" || c.label[i].trim() === "") {
+        throw new Error(
+          `Configuration at index ${index} has invalid 'label[${i}]': must be a non-empty string`,
+        );
+      }
+    }
+  } else {
     throw new Error(
-      `Configuration at index ${index} has invalid 'label': must be a non-empty string`,
+      `Configuration at index ${index} has invalid 'label': must be a string or array of strings`,
     );
   }
 

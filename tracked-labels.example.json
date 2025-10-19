@@ -33,5 +33,14 @@
     "windowDays": 7,
     "reportAcct": true,
     "commentAcct": true
+  },
+  {
+    "label": ["alt-tech", "disinformation-network", "fringe-media"],
+    "threshold": 5,
+    "accountLabel": "amplifier",
+    "accountComment": "Account amplifies content from alternative tech platforms, disinformation networks, or fringe media sources",
+    "windowDays": 5,
+    "reportAcct": true,
+    "commentAcct": false
   }
 ]

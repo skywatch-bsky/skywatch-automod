@@ -70,7 +70,7 @@ export interface AccountAgeCheck {
 }
 
 export interface TrackedLabelConfig {
-  label: string; // Label to track (e.g., "spam")
+  label: string | string[]; // Label(s) to track (e.g., "spam" or ["alt-tech", "disinfo"])
   threshold: number; // Number of posts before account labeling
   accountLabel: string; // Label to apply to account (e.g., "repeat-offender")
   accountComment: string; // Comment for account label

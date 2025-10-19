@@ -63,6 +63,26 @@ describe("config validation", () => {
           validateTrackedLabelConfig(fullConfig, 0),
         ).not.toThrow();
       });
+
+      it("should accept label as array of strings", () => {
+        const configWithArray = {
+          ...validConfig,
+          label: ["alt-tech", "disinformation-network", "fringe-media"],
+        };
+        expect(() =>
+          validateTrackedLabelConfig(configWithArray, 0),
+        ).not.toThrow();
+      });
+
+      it("should accept label as single-item array", () => {
+        const configWithSingleArray = {
+          ...validConfig,
+          label: ["spam"],
+        };
+        expect(() =>
+          validateTrackedLabelConfig(configWithSingleArray, 0),
+        ).not.toThrow();
+      });
     });
 
     describe("invalid configurations - not an object", () => {
@@ -102,27 +122,55 @@ describe("config validation", () => {
         const { label, ...configWithoutLabel } = validConfig;
         expect(() =>
           validateTrackedLabelConfig(configWithoutLabel, 0),
-        ).toThrow("invalid 'label': must be a non-empty string");
+        ).toThrow("invalid 'label': must be a string or array of strings");
       });
 
       it("should reject non-string label", () => {
         const config = { ...validConfig, label: 123 };
         expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
-          "invalid 'label': must be a non-empty string",
+          "invalid 'label': must be a string or array of strings",
         );
       });
 
       it("should reject empty string label", () => {
         const config = { ...validConfig, label: "" };
         expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
-          "invalid 'label': must be a non-empty string",
+          "invalid 'label': string cannot be empty",
         );
       });
 
       it("should reject whitespace-only label", () => {
         const config = { ...validConfig, label: "   " };
         expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
-          "invalid 'label': must be a non-empty string",
+          "invalid 'label': string cannot be empty",
+        );
+      });
+
+      it("should reject empty array label", () => {
+        const config = { ...validConfig, label: [] };
+        expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
+          "invalid 'label': array cannot be empty",
+        );
+      });
+
+      it("should reject array with non-string element", () => {
+        const config = { ...validConfig, label: ["spam", 123, "scam"] };
+        expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
+          "invalid 'label[1]': must be a non-empty string",
+        );
+      });
+
+      it("should reject array with empty string element", () => {
+        const config = { ...validConfig, label: ["spam", "", "scam"] };
+        expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
+          "invalid 'label[1]': must be a non-empty string",
+        );
+      });
+
+      it("should reject array with whitespace-only element", () => {
+        const config = { ...validConfig, label: ["spam", "   ", "scam"] };
+        expect(() => validateTrackedLabelConfig(config, 0)).toThrow(
+          "invalid 'label[1]': must be a non-empty string",
         );
       });
     });
