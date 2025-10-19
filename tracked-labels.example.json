@@ -1,0 +1,37 @@
+[
+  {
+    "label": "spam",
+    "threshold": 5,
+    "accountLabel": "repeat-spammer",
+    "accountComment": "Account has posted spam content multiple times",
+    "windowDays": 30,
+    "reportAcct": true,
+    "commentAcct": false
+  },
+  {
+    "label": "scam",
+    "threshold": 3,
+    "accountLabel": "repeat-scammer",
+    "accountComment": "Account has posted scam content multiple times",
+    "windowDays": 14,
+    "reportAcct": true,
+    "commentAcct": true
+  },
+  {
+    "label": "misinformation",
+    "threshold": 10,
+    "accountLabel": "frequent-misinfo",
+    "accountComment": "Account frequently posts misleading or false information",
+    "reportAcct": false,
+    "commentAcct": false
+  },
+  {
+    "label": "harassment",
+    "threshold": 2,
+    "accountLabel": "repeat-harasser",
+    "accountComment": "Account has harassed other users multiple times",
+    "windowDays": 7,
+    "reportAcct": true,
+    "commentAcct": true
+  }
+]
