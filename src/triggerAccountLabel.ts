@@ -4,6 +4,7 @@ import {
   createAccountReport,
   createAccountComment,
 } from "./moderation.js";
+import { accountActionsCounter } from "./metrics.js";
 import type { AccountLabelAction } from "./trackPostLabel.js";
 
 /**
@@ -57,6 +58,11 @@ export async function triggerAccountLabel(
     // Step 1: Always label the account
     await createAccountLabel(did, config.accountLabel, config.accountComment);
     result.labeled = true;
+    accountActionsCounter.inc({
+      action_type: "label",
+      label_type: config.label,
+      success: "true",
+    });
 
     logger.info(
       {
@@ -71,6 +77,11 @@ export async function triggerAccountLabel(
     if (config.reportAcct) {
       await createAccountReport(did, config.accountComment);
       result.reported = true;
+      accountActionsCounter.inc({
+        action_type: "report",
+        label_type: config.label,
+        success: "true",
+      });
 
       logger.info(
         {
@@ -85,6 +96,11 @@ export async function triggerAccountLabel(
     if (config.commentAcct) {
       await createAccountComment(did, config.accountComment);
       result.commented = true;
+      accountActionsCounter.inc({
+        action_type: "comment",
+        label_type: config.label,
+        success: "true",
+      });
 
       logger.info(
         {
@@ -120,6 +136,13 @@ export async function triggerAccountLabel(
 
     result.error =
       error instanceof Error ? error.message : String(error);
+
+    // Track failure metric
+    accountActionsCounter.inc({
+      action_type: result.labeled ? "report_or_comment" : "label",
+      label_type: config.label,
+      success: "false",
+    });
 
     logger.error(
       {

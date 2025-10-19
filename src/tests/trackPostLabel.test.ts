@@ -34,10 +34,20 @@ vi.mock("../redis.js", () => ({
   addPostAndCheckThreshold: vi.fn(),
 }));
 
+vi.mock("../metrics.js", () => ({
+  postsTrackedCounter: {
+    inc: vi.fn(),
+  },
+  thresholdsMetCounter: {
+    inc: vi.fn(),
+  },
+}));
+
 // Now import after mocks are set up
 import { trackPostLabel } from "../trackPostLabel.js";
 import { logger } from "../logger.js";
 import { addPostAndCheckThreshold } from "../redis.js";
+import { postsTrackedCounter, thresholdsMetCounter } from "../metrics.js";
 
 describe("trackPostLabel", () => {
   const testDid = "did:plc:test123";
@@ -275,6 +285,66 @@ describe("trackPostLabel", () => {
         testAtURI,
         expect.any(Object),
       );
+    });
+  });
+
+  describe("metrics tracking", () => {
+    it("should increment postsTrackedCounter when post is tracked", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(2);
+
+      await trackPostLabel(testDid, testAtURI, "spam");
+
+      expect(postsTrackedCounter.inc).toHaveBeenCalledWith({
+        label_type: "spam",
+      });
+    });
+
+    it("should increment postsTrackedCounter for different labels", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(1);
+
+      await trackPostLabel(testDid, testAtURI, "scam");
+
+      expect(postsTrackedCounter.inc).toHaveBeenCalledWith({
+        label_type: "scam",
+      });
+    });
+
+    it("should increment thresholdsMetCounter when threshold is met", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(5);
+
+      await trackPostLabel(testDid, testAtURI, "spam");
+
+      expect(thresholdsMetCounter.inc).toHaveBeenCalledWith({
+        label_type: "spam",
+        account_label: "repeat-spammer",
+      });
+    });
+
+    it("should not increment thresholdsMetCounter when below threshold", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockResolvedValue(3);
+
+      await trackPostLabel(testDid, testAtURI, "spam");
+
+      expect(postsTrackedCounter.inc).toHaveBeenCalled();
+      expect(thresholdsMetCounter.inc).not.toHaveBeenCalled();
+    });
+
+    it("should not increment metrics for untracked labels", async () => {
+      await trackPostLabel(testDid, testAtURI, "untracked");
+
+      expect(postsTrackedCounter.inc).not.toHaveBeenCalled();
+      expect(thresholdsMetCounter.inc).not.toHaveBeenCalled();
+    });
+
+    it("should not increment metrics on error", async () => {
+      vi.mocked(addPostAndCheckThreshold).mockRejectedValue(
+        new Error("Redis error"),
+      );
+
+      await trackPostLabel(testDid, testAtURI, "spam");
+
+      expect(postsTrackedCounter.inc).not.toHaveBeenCalled();
+      expect(thresholdsMetCounter.inc).not.toHaveBeenCalled();
     });
   });
 });

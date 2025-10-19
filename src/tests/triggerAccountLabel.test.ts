@@ -16,6 +16,12 @@ vi.mock("../moderation.js", () => ({
   createAccountComment: vi.fn(),
 }));
 
+vi.mock("../metrics.js", () => ({
+  accountActionsCounter: {
+    inc: vi.fn(),
+  },
+}));
+
 // Import after mocks
 import { triggerAccountLabel } from "../triggerAccountLabel.js";
 import { logger } from "../logger.js";
@@ -24,6 +30,7 @@ import {
   createAccountReport,
   createAccountComment,
 } from "../moderation.js";
+import { accountActionsCounter } from "../metrics.js";
 
 describe("triggerAccountLabel", () => {
   const testDid = "did:plc:test123";
@@ -448,6 +455,214 @@ describe("triggerAccountLabel", () => {
         }),
         expect.any(String),
       );
+    });
+  });
+
+  describe("metrics tracking", () => {
+    it("should increment accountActionsCounter for successful label", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "spam",
+          threshold: 5,
+          accountLabel: "repeat-spammer",
+          accountComment: "Test",
+        },
+        currentCount: 5,
+      };
+
+      vi.mocked(createAccountLabel).mockResolvedValue(undefined);
+
+      await triggerAccountLabel(action);
+
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "spam",
+        success: "true",
+      });
+    });
+
+    it("should increment accountActionsCounter for successful report", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "scam",
+          threshold: 3,
+          accountLabel: "repeat-scammer",
+          accountComment: "Test",
+          reportAcct: true,
+        },
+        currentCount: 3,
+      };
+
+      vi.mocked(createAccountLabel).mockResolvedValue(undefined);
+      vi.mocked(createAccountReport).mockResolvedValue(undefined);
+
+      await triggerAccountLabel(action);
+
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "scam",
+        success: "true",
+      });
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "report",
+        label_type: "scam",
+        success: "true",
+      });
+    });
+
+    it("should increment accountActionsCounter for successful comment", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "misinformation",
+          threshold: 10,
+          accountLabel: "frequent-misinfo",
+          accountComment: "Test",
+          commentAcct: true,
+        },
+        currentCount: 10,
+      };
+
+      vi.mocked(createAccountLabel).mockResolvedValue(undefined);
+      vi.mocked(createAccountComment).mockResolvedValue(undefined);
+
+      await triggerAccountLabel(action);
+
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "misinformation",
+        success: "true",
+      });
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "comment",
+        label_type: "misinformation",
+        success: "true",
+      });
+    });
+
+    it("should increment all three metrics for full config", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "harassment",
+          threshold: 2,
+          accountLabel: "repeat-harasser",
+          accountComment: "Test",
+          reportAcct: true,
+          commentAcct: true,
+        },
+        currentCount: 2,
+      };
+
+      vi.mocked(createAccountLabel).mockResolvedValue(undefined);
+      vi.mocked(createAccountReport).mockResolvedValue(undefined);
+      vi.mocked(createAccountComment).mockResolvedValue(undefined);
+
+      await triggerAccountLabel(action);
+
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "harassment",
+        success: "true",
+      });
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "report",
+        label_type: "harassment",
+        success: "true",
+      });
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "comment",
+        label_type: "harassment",
+        success: "true",
+      });
+    });
+
+    it("should increment failure metric when label fails", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "spam",
+          threshold: 5,
+          accountLabel: "repeat-spammer",
+          accountComment: "Test",
+        },
+        currentCount: 5,
+      };
+
+      vi.mocked(createAccountLabel).mockRejectedValue(new Error("Label failed"));
+
+      await triggerAccountLabel(action);
+
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "spam",
+        success: "false",
+      });
+    });
+
+    it("should increment failure metric when report fails after successful label", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "scam",
+          threshold: 3,
+          accountLabel: "repeat-scammer",
+          accountComment: "Test",
+          reportAcct: true,
+        },
+        currentCount: 3,
+      };
+
+      vi.mocked(createAccountLabel).mockResolvedValue(undefined);
+      vi.mocked(createAccountReport).mockRejectedValue(new Error("Report failed"));
+
+      await triggerAccountLabel(action);
+
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "scam",
+        success: "true",
+      });
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "report_or_comment",
+        label_type: "scam",
+        success: "false",
+      });
+    });
+
+    it("should not increment metrics when reportAcct is false", async () => {
+      const action: AccountLabelAction = {
+        type: "label-account",
+        did: testDid,
+        config: {
+          label: "spam",
+          threshold: 5,
+          accountLabel: "repeat-spammer",
+          accountComment: "Test",
+          reportAcct: false,
+        },
+        currentCount: 5,
+      };
+
+      vi.mocked(createAccountLabel).mockResolvedValue(undefined);
+
+      await triggerAccountLabel(action);
+
+      // Should only have one call for the label action
+      expect(accountActionsCounter.inc).toHaveBeenCalledTimes(1);
+      expect(accountActionsCounter.inc).toHaveBeenCalledWith({
+        action_type: "label",
+        label_type: "spam",
+        success: "true",
+      });
     });
   });
 });

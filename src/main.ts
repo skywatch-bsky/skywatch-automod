@@ -23,6 +23,10 @@ import {
 } from "./rules/profiles/checkProfiles.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
 import { checkAccountAge } from "./rules/account/age.js";
+import { connectRedis, redis } from "./redis.js";
+
+// Initialize Redis connection for post label tracking
+connectRedis();
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -324,12 +328,17 @@ const metricsServer = startMetricsServer(METRICS_PORT);
 
 jetstream.start();
 
-function shutdown() {
+async function shutdown() {
   try {
     logger.info({ process: "MAIN" }, "Shutting down gracefully");
     fs.writeFileSync("cursor.txt", jetstream.cursor!.toString(), "utf8");
     jetstream.close();
     metricsServer.close();
+
+    // Close Redis connection
+    logger.info({ process: "MAIN" }, "Closing Redis connection");
+    await redis.quit();
+    logger.info({ process: "MAIN" }, "Redis connection closed");
   } catch (error) {
     logger.error({ process: "MAIN", error }, "Error shutting down gracefully");
     process.exit(1);

@@ -1,6 +1,7 @@
 import { logger } from "./logger.js";
 import { TRACKED_LABELS } from "./config.js";
 import { addPostAndCheckThreshold } from "./redis.js";
+import { postsTrackedCounter, thresholdsMetCounter } from "./metrics.js";
 import type { TrackedLabelConfig } from "./types.js";
 
 /**
@@ -44,6 +45,9 @@ export async function trackPostLabel(
     // Record the post and get current count
     const currentCount = await addPostAndCheckThreshold(did, atURI, config);
 
+    // Increment tracking metric
+    postsTrackedCounter.inc({ label_type: label });
+
     logger.info(
       {
         process: "TRACK_LABEL",
@@ -57,6 +61,12 @@ export async function trackPostLabel(
 
     // Check if threshold is met
     if (currentCount >= config.threshold) {
+      // Increment threshold met metric
+      thresholdsMetCounter.inc({
+        label_type: label,
+        account_label: config.accountLabel,
+      });
+
       logger.warn(
         {
           process: "TRACK_LABEL",
@@ -64,6 +74,7 @@ export async function trackPostLabel(
           label,
           currentCount,
           threshold: config.threshold,
+          accountLabel: config.accountLabel,
         },
         `Threshold met for ${label} - triggering account action`,
       );
