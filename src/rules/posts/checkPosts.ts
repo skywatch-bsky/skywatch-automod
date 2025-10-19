@@ -21,21 +21,30 @@ export const checkPosts = async (post: Post[]) => {
     return;
   }
 
-  const urlRegex = /https?:\/\/[^\s]+/g;
+  const urlRegex = /https?:\/\/[^\s]+/gi;
 
   // Check for link shorteners
   if (LINK_SHORTENER.test(post[0].text)) {
     try {
       const url = post[0].text.match(urlRegex);
       if (url && LINK_SHORTENER.test(url[0])) {
-        // logger.info(`[CHECKPOSTS]: Checking shortened URL: ${url[0]}`);
+        logger.debug(
+          { process: "CHECKPOSTS", url: url[0], did: post[0].did },
+          "Resolving shortened URL",
+        );
+
         const finalUrl = await getFinalUrl(url[0]);
-        if (finalUrl) {
-          const originalUrl = post[0].text;
+        if (finalUrl && finalUrl !== url[0]) {
           post[0].text = post[0].text.replace(url[0], finalUrl);
-          /* logger.info(
-            `[CHECKPOSTS]: Shortened URL resolved: ${originalUrl} -> ${finalUrl}`,
-            ); */
+          logger.debug(
+            {
+              process: "CHECKPOSTS",
+              originalUrl: url[0],
+              resolvedUrl: finalUrl,
+              did: post[0].did,
+            },
+            "Shortened URL resolved",
+          );
         }
       }
     } catch (error) {
@@ -48,7 +57,13 @@ export const checkPosts = async (post: Post[]) => {
           : { error: String(error) };
 
       logger.error(
-        { process: "CHECKPOSTS", text: post[0].text, ...errorInfo },
+        {
+          process: "CHECKPOSTS",
+          text: post[0].text,
+          did: post[0].did,
+          atURI: post[0].atURI,
+          ...errorInfo,
+        },
         "Failed to resolve shortened URL",
       );
       // Keep the original URL if resolution fails
