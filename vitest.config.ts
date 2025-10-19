@@ -13,6 +13,9 @@ export default defineConfig({
         "**/*.config.*",
         "**/main.ts",
         "**/*.test.ts",
+        "**/*.example.ts",
+        "**/constants.ts",
+        "**/ageConstants.ts",
       ],
       thresholds: {
         lines: 60,
