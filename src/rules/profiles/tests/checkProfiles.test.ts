@@ -1,4 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { logger } from "../../../logger.js";
+import {
+  createAccountComment,
+  createAccountLabel,
+  createAccountReport,
+} from "../../../moderation.js";
+import { getLanguage } from "../../../utils/getLanguage.js";
 import { checkDescription, checkDisplayName } from "../checkProfiles.js";
 
 // Mock dependencies
@@ -102,14 +109,6 @@ vi.mock("../../../utils/getLanguage.js", () => ({
 vi.mock("../../../constants.js", () => ({
   GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
-
-import { logger } from "../../../logger.js";
-import {
-  createAccountLabel,
-  createAccountReport,
-  createAccountComment,
-} from "../../../moderation.js";
-import { getLanguage } from "../../../utils/getLanguage.js";
 
 describe("checkProfiles", () => {
   beforeEach(() => {

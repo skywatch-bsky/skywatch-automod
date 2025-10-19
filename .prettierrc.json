@@ -1,0 +1,13 @@
+{
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^node:",
+    "<THIRD_PARTY_MODULES>",
+    "^@atproto/(.*)$",
+    "^@skyware/(.*)$",
+    "^@clavata/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true
+}

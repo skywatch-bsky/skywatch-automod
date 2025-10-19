@@ -1,4 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { agent } from "../../../agent.js";
+import { GLOBAL_ALLOW } from "../../../constants.js";
+import { logger } from "../../../logger.js";
+import { checkAccountLabels, createAccountLabel } from "../../../moderation.js";
 import {
   calculateAccountAge,
   checkAccountAge,
@@ -34,11 +38,6 @@ vi.mock("../../../constants.js", () => ({
 
 // Mock fetch for DID document lookups
 global.fetch = vi.fn();
-
-import { agent } from "../../../agent.js";
-import { logger } from "../../../logger.js";
-import { createAccountLabel, checkAccountLabels } from "../../../moderation.js";
-import { GLOBAL_ALLOW } from "../../../constants.js";
 
 describe("Account Age Module", () => {
   beforeEach(() => {

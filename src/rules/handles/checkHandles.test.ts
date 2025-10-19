@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { checkHandle } from "./checkHandles.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  createAccountReport,
   createAccountComment,
   createAccountLabel,
+  createAccountReport,
 } from "../../moderation.js";
+import { checkHandle } from "./checkHandles.js";
 
 // Mock dependencies
 vi.mock("../../moderation.js", () => ({

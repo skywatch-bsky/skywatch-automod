@@ -1,16 +1,16 @@
-import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
-import { Post } from "../../types.js";
+import { GLOBAL_ALLOW } from "../../constants.js";
 import { logger } from "../../logger.js";
-import { countStarterPacks } from "../account/countStarterPacks.js";
 import {
-  createPostLabel,
-  createAccountReport,
   createAccountComment,
+  createAccountReport,
+  createPostLabel,
   createPostReport,
 } from "../../moderation.js";
-import { getLanguage } from "../../utils/getLanguage.js";
+import { Post } from "../../types.js";
 import { getFinalUrl } from "../../utils/getFinalUrl.js";
-import { GLOBAL_ALLOW } from "../../constants.js";
+import { getLanguage } from "../../utils/getLanguage.js";
+import { countStarterPacks } from "../account/countStarterPacks.js";
+import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
 
 export const checkPosts = async (post: Post[]) => {
   if (GLOBAL_ALLOW.includes(post[0].did)) {

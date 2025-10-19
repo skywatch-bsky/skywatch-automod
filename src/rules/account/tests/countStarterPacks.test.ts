@@ -1,4 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { agent } from "../../../agent.js";
+import { limit } from "../../../limits.js";
+import { logger } from "../../../logger.js";
+import { createAccountLabel } from "../../../moderation.js";
 import { countStarterPacks } from "../countStarterPacks.js";
 
 // Mock dependencies
@@ -31,11 +35,6 @@ vi.mock("../../../moderation.js", () => ({
 vi.mock("../../../limits.js", () => ({
   limit: vi.fn((fn) => fn()),
 }));
-
-import { agent } from "../../../agent.js";
-import { logger } from "../../../logger.js";
-import { createAccountLabel } from "../../../moderation.js";
-import { limit } from "../../../limits.js";
 
 describe("countStarterPacks", () => {
   beforeEach(() => {

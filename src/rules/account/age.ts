@@ -1,9 +1,9 @@
 import { agent, isLoggedIn } from "../../agent.js";
-import { logger } from "../../logger.js";
-import { createAccountLabel, checkAccountLabels } from "../../moderation.js";
-import { ACCOUNT_AGE_CHECKS } from "./ageConstants.js";
 import { PLC_URL } from "../../config.js";
 import { GLOBAL_ALLOW } from "../../constants.js";
+import { logger } from "../../logger.js";
+import { checkAccountLabels, createAccountLabel } from "../../moderation.js";
+import { ACCOUNT_AGE_CHECKS } from "./ageConstants.js";
 
 interface InteractionContext {
   // For replies

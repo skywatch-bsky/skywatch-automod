@@ -1,6 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { checkPosts } from "../checkPosts.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { logger } from "../../../logger.js";
+import {
+  createAccountComment,
+  createAccountReport,
+  createPostLabel,
+  createPostReport,
+} from "../../../moderation.js";
 import { Post } from "../../../types.js";
+import { getFinalUrl } from "../../../utils/getFinalUrl.js";
+import { getLanguage } from "../../../utils/getLanguage.js";
+import { countStarterPacks } from "../../account/countStarterPacks.js";
+import { checkPosts } from "../checkPosts.js";
 
 // Mock dependencies
 vi.mock("../constants.js", () => ({
@@ -88,17 +98,6 @@ vi.mock("../../../utils/getFinalUrl.js", () => ({
 vi.mock("../../../constants.js", () => ({
   GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
-
-import { logger } from "../../../logger.js";
-import { countStarterPacks } from "../../account/countStarterPacks.js";
-import {
-  createPostLabel,
-  createAccountReport,
-  createAccountComment,
-  createPostReport,
-} from "../../../moderation.js";
-import { getLanguage } from "../../../utils/getLanguage.js";
-import { getFinalUrl } from "../../../utils/getFinalUrl.js";
 
 describe("checkPosts", () => {
   beforeEach(() => {
