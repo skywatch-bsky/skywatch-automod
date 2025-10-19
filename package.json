@@ -3,8 +3,10 @@
   "version": "1.1.0",
   "type": "module",
   "scripts": {
-    "start": "npx tsx src/main.ts",
-    "dev": "npx tsx --watch src/main.ts",
+    "start": "bun src/main.ts",
+    "start:node": "npx tsx src/main.ts",
+    "dev": "bun --watch src/main.ts",
+    "dev:node": "npx tsx --watch src/main.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
