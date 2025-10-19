@@ -3,12 +3,13 @@ import { AccountAgeCheck } from "../../types.js";
 /**
  * Account age monitoring configurations
  *
- * Each configuration monitors replies to specified DIDs and labels accounts
- * that are newer than the threshold relative to the anchor date.
+ * Each configuration monitors replies and/or quote posts to specified DIDs or posts
+ * and labels accounts that were created within a specific time window.
  *
- * Example use case:
- * - Monitor replies to high-profile accounts during harassment campaigns
+ * Example use cases:
+ * - Monitor replies/quotes to high-profile accounts during harassment campaigns
  * - Flag sock puppet accounts created to participate in coordinated harassment
+ * - Detect brigading on specific controversial posts
  */
 export const ACCOUNT_AGE_CHECKS: AccountAgeCheck[] = [
   // Example: Monitor replies to specific accounts
