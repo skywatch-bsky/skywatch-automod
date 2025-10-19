@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { limit } from '../limits'
+import { limit } from '../limits.js'
 
 describe('Rate Limiter', () => {
   it('should limit the rate of calls', async () => {

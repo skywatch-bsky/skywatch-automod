@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { normalizeUnicode } from './normalizeUnicode'
+import { normalizeUnicode } from './normalizeUnicode.js'
 
 describe('normalizeUnicode with Homoglyphs', () => {
   it('should replace basic homoglyphs', () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
-import { startMetricsServer } from '../metrics'
+import { startMetricsServer } from '../metrics.js'
 import { Server } from 'http'
 
 describe('Metrics Server', () => {
