@@ -21,7 +21,7 @@ export const HANDLE_CHECKS: Checks[] = [
     toLabel: true,
     check: new RegExp("(?:(?:[a-zA-Z]+\\.)?altgov\\.info)", "i"),
   },
-  {
+  /*  {
     label: "suspect-inauthentic",
     comment: "Account is suspected to be inauthentic or spammy. Please review.",
     description: true,
@@ -37,7 +37,7 @@ export const HANDLE_CHECKS: Checks[] = [
       "did:plc:k6iz3efpj4prqkincrejjkew", // Keeps getting flagged for no discernable reason"
       "did:plc:445avk3am7zpwlrj7aop746e", // Flagged for unclear reasons
     ],
-  },
+  },*/
   {
     label: "maga-trump",
     comment: "MAGA/Trump support found in handle",

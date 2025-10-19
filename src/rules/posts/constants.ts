@@ -263,7 +263,7 @@ export const POST_CHECKS: Checks[] = [
     reportPost: false,
     toLabel: false,
     check: new RegExp(
-      "Trump is (still)? your president|#MA[GH]A\\b|\\bMake America Great Again\\b",
+      "Trump is (still)? your president|#MA[GH]A\\b|\\bMake America Great Again\\b|Trump 2028",
       "i",
     ),
   },
