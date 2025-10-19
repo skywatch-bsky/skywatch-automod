@@ -1,11 +1,10 @@
+import fs from "node:fs";
 import {
   CommitCreateEvent,
   CommitUpdateEvent,
   IdentityEvent,
   Jetstream,
 } from "@skyware/jetstream";
-import fs from "node:fs";
-
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
@@ -14,15 +13,15 @@ import {
 } from "./config.js";
 import { logger } from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
-import { Post, LinkFeature, Handle } from "./types.js";
-import { checkPosts } from "./rules/posts/checkPosts.js";
+import { checkAccountAge } from "./rules/account/age.js";
+import { checkFacetSpam } from "./rules/facets/facets.js";
 import { checkHandle } from "./rules/handles/checkHandles.js";
+import { checkPosts } from "./rules/posts/checkPosts.js";
 import {
   checkDescription,
   checkDisplayName,
 } from "./rules/profiles/checkProfiles.js";
-import { checkFacetSpam } from "./rules/facets/facets.js";
-import { checkAccountAge } from "./rules/account/age.js";
+import { Handle, LinkFeature, Post } from "./types.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;

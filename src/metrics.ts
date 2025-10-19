@@ -1,6 +1,5 @@
 import express from "express";
 import { Registry, collectDefaultMetrics } from "prom-client";
-
 import { logger } from "./logger.js";
 
 const register = new Registry();

@@ -1,12 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  checkFacetSpam,
-  FACET_SPAM_THRESHOLD,
-  FACET_SPAM_LABEL,
-  FACET_SPAM_COMMENT,
-  FACET_SPAM_ALLOWLIST,
-} from "../facets.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { logger } from "../../../logger.js";
+import { createAccountLabel } from "../../../moderation.js";
 import { Facet } from "../../../types.js";
+import {
+  FACET_SPAM_ALLOWLIST,
+  FACET_SPAM_COMMENT,
+  FACET_SPAM_LABEL,
+  FACET_SPAM_THRESHOLD,
+  checkFacetSpam,
+} from "../facets.js";
 
 // Mock dependencies
 vi.mock("../../../moderation.js", () => ({
@@ -20,9 +22,6 @@ vi.mock("../../../logger.js", () => ({
     error: vi.fn(),
   },
 }));
-
-import { createAccountLabel } from "../../../moderation.js";
-import { logger } from "../../../logger.js";
 
 describe("checkFacetSpam", () => {
   const TEST_DID = "did:plc:test123";

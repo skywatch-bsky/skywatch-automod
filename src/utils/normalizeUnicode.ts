@@ -1,5 +1,4 @@
 import { logger } from "../logger.js";
-
 import { homoglyphMap } from "./homoglyphs.js";
 
 /**
