@@ -1,11 +1,29 @@
 [
   {
-    "label": ["alt-tech", "disinformation-network", "fringe-media"],
+    "label": ["alt-tech"],
     "threshold": 5,
     "accountLabel": "amplifier",
-    "accountComment": "Account has posted alt-tech, disinformation, and / or fringe media content multiple times",
+    "accountComment": "Account has posted alt-tech content multiple times",
     "windowDays": 5,
-    "reportAcct": false,
+    "reportAcct": true,
+    "commentAcct": false
+  },
+  {
+    "label": "disinformation-network",
+    "threshold": 5,
+    "accountLabel": "amplifier",
+    "accountComment": "Account has posted disinformation content multiple times",
+    "windowDays": 5,
+    "reportAcct": true,
+    "commentAcct": false
+  },
+  {
+    "label": "fringe-media",
+    "threshold": 5,
+    "accountLabel": "amplifier",
+    "accountComment": "Account has posted fringe media content multiple times",
+    "windowDays": 5,
+    "reportAcct": true,
     "commentAcct": false
   },
   {
@@ -14,7 +32,7 @@
     "accountLabel": "follow-farming",
     "accountComment": "Account has posted follow-farming content multiple times",
     "windowDays": 5,
-    "reportAcct": false,
+    "reportAcct": true,
     "commentAcct": false
   }
 ]
