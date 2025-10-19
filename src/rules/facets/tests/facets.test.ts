@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { checkFacetSpam, FACET_SPAM_THRESHOLD, FACET_SPAM_LABEL, FACET_SPAM_COMMENT, FACET_SPAM_ALLOWLIST } from "../facets.js";
+import {
+  checkFacetSpam,
+  FACET_SPAM_THRESHOLD,
+  FACET_SPAM_LABEL,
+  FACET_SPAM_COMMENT,
+  FACET_SPAM_ALLOWLIST,
+} from "../facets.js";
 import { Facet } from "../../../types.js";
 
 // Mock dependencies
@@ -47,7 +53,9 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
       ];
 
@@ -61,15 +69,21 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 11, byteEnd: 20 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
         {
           index: { byteStart: 21, byteEnd: 30 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user3" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user3" },
+          ],
         },
       ];
 
@@ -84,7 +98,9 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
       ];
 
@@ -116,11 +132,21 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://example.com" }],
+          features: [
+            {
+              $type: "app.bsky.richtext.facet#link",
+              uri: "https://example.com",
+            },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://example.org" }],
+          features: [
+            {
+              $type: "app.bsky.richtext.facet#link",
+              uri: "https://example.org",
+            },
+          ],
         },
       ];
 
@@ -135,15 +161,21 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
       ];
 
@@ -161,11 +193,15 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
       ];
 
@@ -175,7 +211,7 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).not.toHaveBeenCalled();
       expect(logger.debug).toHaveBeenCalledWith(
         { process: "FACET_SPAM", did: TEST_DID, atURI: TEST_URI },
-        "Allowlisted DID"
+        "Allowlisted DID",
       );
 
       // Clean up
@@ -188,11 +224,15 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
       ];
 
@@ -206,13 +246,13 @@ describe("checkFacetSpam", () => {
           position: "0:1",
           count: 2,
         },
-        "Facet spam detected"
+        "Facet spam detected",
       );
 
       expect(createAccountLabel).toHaveBeenCalledWith(
         TEST_DID,
         FACET_SPAM_LABEL,
-        `${TEST_TIME}: ${FACET_SPAM_COMMENT} - 2 unique mentions at position 0:1 in ${TEST_URI}`
+        `${TEST_TIME}: ${FACET_SPAM_COMMENT} - 2 unique mentions at position 0:1 in ${TEST_URI}`,
       );
     });
 
@@ -220,7 +260,9 @@ describe("checkFacetSpam", () => {
       // Simulates the example from facets.json with 100+ mentions at position 0:1
       const facets: Facet[] = Array.from({ length: 100 }, (_, i) => ({
         index: { byteStart: 0, byteEnd: 1 },
-        features: [{ $type: "app.bsky.richtext.facet#mention", did: `did:plc:user${i}` }],
+        features: [
+          { $type: "app.bsky.richtext.facet#mention", did: `did:plc:user${i}` },
+        ],
       }));
 
       await checkFacetSpam(TEST_DID, TEST_TIME, TEST_URI, facets);
@@ -233,7 +275,7 @@ describe("checkFacetSpam", () => {
           position: "0:1",
           count: 100,
         }),
-        "Facet spam detected"
+        "Facet spam detected",
       );
 
       expect(createAccountLabel).toHaveBeenCalledOnce();
@@ -244,20 +286,28 @@ describe("checkFacetSpam", () => {
         // First spam position
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
         // Second spam position
         {
           index: { byteStart: 5, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user3" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user3" },
+          ],
         },
         {
           index: { byteStart: 5, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user4" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user4" },
+          ],
         },
       ];
 
@@ -271,15 +321,24 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 1 },
-          features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://example.com" }],
+          features: [
+            {
+              $type: "app.bsky.richtext.facet#link",
+              uri: "https://example.com",
+            },
+          ],
         },
       ];
 
@@ -298,7 +357,9 @@ describe("checkFacetSpam", () => {
 
     it("should use correct label and comment constants", () => {
       expect(FACET_SPAM_LABEL).toBe("suspect-inauthentic");
-      expect(FACET_SPAM_COMMENT).toBe("Abusive facet usage detected (hidden mentions)");
+      expect(FACET_SPAM_COMMENT).toBe(
+        "Abusive facet usage detected (hidden mentions)",
+      );
     });
   });
 
@@ -307,11 +368,15 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 0, byteEnd: 5 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 0, byteEnd: 10 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
       ];
 
@@ -325,11 +390,15 @@ describe("checkFacetSpam", () => {
       const facets: Facet[] = [
         {
           index: { byteStart: 1000000, byteEnd: 1000100 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user1" },
+          ],
         },
         {
           index: { byteStart: 1000000, byteEnd: 1000100 },
-          features: [{ $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" }],
+          features: [
+            { $type: "app.bsky.richtext.facet#mention", did: "did:plc:user2" },
+          ],
         },
       ];
 
@@ -338,7 +407,7 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         TEST_DID,
         FACET_SPAM_LABEL,
-        expect.stringContaining("1000000:1000100")
+        expect.stringContaining("1000000:1000100"),
       );
     });
   });

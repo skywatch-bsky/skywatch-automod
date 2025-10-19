@@ -16,13 +16,19 @@ app.get("/metrics", (req, res) => {
       res.send(metrics);
     })
     .catch((ex: unknown) => {
-      logger.error({ process: "METRICS", error: (ex as Error).message }, "Error serving metrics");
+      logger.error(
+        { process: "METRICS", error: (ex as Error).message },
+        "Error serving metrics",
+      );
       res.status(500).end((ex as Error).message);
     });
 });
 
 export const startMetricsServer = (port: number, host = "127.0.0.1") => {
   return app.listen(port, host, () => {
-    logger.info({ process: "METRICS", host, port }, "Metrics server is listening");
+    logger.info(
+      { process: "METRICS", host, port },
+      "Metrics server is listening",
+    );
   });
 };

@@ -51,10 +51,7 @@ describe("checkAccountLabels", () => {
       },
     });
 
-    const result = await checkAccountLabels(
-      "did:plc:test123",
-      "window-reply",
-    );
+    const result = await checkAccountLabels("did:plc:test123", "window-reply");
 
     expect(result).toBe(true);
     expect(agent.tools.ozone.moderation.getRepo).toHaveBeenCalledWith(
@@ -62,8 +59,7 @@ describe("checkAccountLabels", () => {
       {
         headers: {
           "atproto-proxy": "did:plc:moderator123#atproto_labeler",
-          "atproto-accept-labelers":
-            "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          "atproto-accept-labelers": "did:plc:ar7c4by46qjdydhdevvrndac;redact",
         },
       },
     );
@@ -76,10 +72,7 @@ describe("checkAccountLabels", () => {
       },
     });
 
-    const result = await checkAccountLabels(
-      "did:plc:test123",
-      "window-reply",
-    );
+    const result = await checkAccountLabels("did:plc:test123", "window-reply");
 
     expect(result).toBe(false);
   });
@@ -91,10 +84,7 @@ describe("checkAccountLabels", () => {
       },
     });
 
-    const result = await checkAccountLabels(
-      "did:plc:test123",
-      "window-reply",
-    );
+    const result = await checkAccountLabels("did:plc:test123", "window-reply");
 
     expect(result).toBe(false);
   });
@@ -104,10 +94,7 @@ describe("checkAccountLabels", () => {
       data: {},
     });
 
-    const result = await checkAccountLabels(
-      "did:plc:test123",
-      "window-reply",
-    );
+    const result = await checkAccountLabels("did:plc:test123", "window-reply");
 
     expect(result).toBe(false);
   });
@@ -117,10 +104,7 @@ describe("checkAccountLabels", () => {
       new Error("API Error"),
     );
 
-    const result = await checkAccountLabels(
-      "did:plc:test123",
-      "window-reply",
-    );
+    const result = await checkAccountLabels("did:plc:test123", "window-reply");
 
     expect(result).toBe(false);
     expect(logger.error).toHaveBeenCalledWith(

@@ -261,11 +261,7 @@ describe("checkHandle", () => {
     });
 
     it("should handle special characters in handles", async () => {
-      await checkHandle(
-        "did:plc:user1",
-        "spam-!@#$%^&*()",
-        Date.now(),
-      );
+      await checkHandle("did:plc:user1", "spam-!@#$%^&*()", Date.now());
 
       expect(createAccountReport).toHaveBeenCalled();
     });
