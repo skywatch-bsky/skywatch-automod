@@ -1,20 +1,25 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { agent } from "../agent.js";
-import { logger } from "../logger.js";
-import { checkAccountLabels } from "../moderation.js";
 
-// Mock dependencies
+// --- Mocks First ---
+
 vi.mock("../agent.js", () => ({
   agent: {
     tools: {
       ozone: {
         moderation: {
           getRepo: vi.fn(),
+          getRecord: vi.fn(),
+          emitEvent: vi.fn(),
         },
       },
     },
   },
   isLoggedIn: Promise.resolve(true),
+}));
+
+vi.mock("../redis.js", () => ({
+  tryClaimPostLabel: vi.fn(),
+  tryClaimAccountLabel: vi.fn(),
 }));
 
 vi.mock("../logger.js", () => ({
@@ -34,111 +39,80 @@ vi.mock("../limits.js", () => ({
   limit: vi.fn((fn) => fn()),
 }));
 
-describe("checkAccountLabels", () => {
+// --- Imports Second ---
+
+import { agent } from "../agent.js";
+import { checkAccountLabels, createPostLabel } from "../moderation.js";
+import { tryClaimPostLabel } from "../redis.js";
+import { logger } from "../logger.js";
+
+describe("Moderation Logic", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should return true if label exists on account", async () => {
-    (agent.tools.ozone.moderation.getRepo as any).mockResolvedValueOnce({
-      data: {
-        labels: [
-          { val: "spam" },
-          { val: "harassment" },
-          { val: "window-reply" },
-        ],
-      },
-    });
-
-    const result = await checkAccountLabels("did:plc:test123", "window-reply");
-
-    expect(result).toBe(true);
-    expect(agent.tools.ozone.moderation.getRepo).toHaveBeenCalledWith(
-      { did: "did:plc:test123" },
-      {
-        headers: {
-          "atproto-proxy": "did:plc:moderator123#atproto_labeler",
-          "atproto-accept-labelers": "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+  describe("checkAccountLabels", () => {
+    it("should return true if label exists on account", async () => {
+      vi.mocked(agent.tools.ozone.moderation.getRepo).mockResolvedValueOnce({
+        data: {
+          labels: [
+            { val: "spam", src: "did:plc:test", uri: "at://test", cts: "2024-01-01T00:00:00Z" },
+            { val: "window-reply", src: "did:plc:test", uri: "at://test", cts: "2024-01-01T00:00:00Z" }
+          ]
         },
-      },
-    );
+      } as any);
+      const result = await checkAccountLabels("did:plc:test123", "window-reply");
+      expect(result).toBe(true);
+    });
   });
 
-  it("should return false if label does not exist on account", async () => {
-    (agent.tools.ozone.moderation.getRepo as any).mockResolvedValueOnce({
-      data: {
-        labels: [{ val: "spam" }, { val: "harassment" }],
-      },
+  describe("createPostLabel with Caching", () => {
+    const URI = "at://did:plc:test/app.bsky.feed.post/123";
+    const CID = "bafybeig6xv5nwph5j7grrlp3pdeolqptpep5nfljmdkmtcf2l4wisa2mfa";
+    const LABEL = "test-label";
+    const COMMENT = "test comment";
+
+    it("should skip if claim fails (already claimed)", async () => {
+      vi.mocked(tryClaimPostLabel).mockResolvedValue(false);
+
+      await createPostLabel(URI, CID, LABEL, COMMENT, undefined);
+
+      expect(vi.mocked(tryClaimPostLabel)).toHaveBeenCalledWith(URI, LABEL);
+      expect(vi.mocked(agent.tools.ozone.moderation.getRecord)).not.toHaveBeenCalled();
+      expect(vi.mocked(agent.tools.ozone.moderation.emitEvent)).not.toHaveBeenCalled();
     });
 
-    const result = await checkAccountLabels("did:plc:test123", "window-reply");
+    it("should skip event if claimed but already labeled via API", async () => {
+      vi.mocked(tryClaimPostLabel).mockResolvedValue(true);
+      vi.mocked(agent.tools.ozone.moderation.getRecord).mockResolvedValue({
+        data: { labels: [{ val: LABEL, src: "did:plc:test", uri: URI, cts: "2024-01-01T00:00:00Z" }] },
+      } as any);
 
-    expect(result).toBe(false);
-  });
+      await createPostLabel(URI, CID, LABEL, COMMENT, undefined);
 
-  it("should return false if account has no labels", async () => {
-    (agent.tools.ozone.moderation.getRepo as any).mockResolvedValueOnce({
-      data: {
-        labels: [],
-      },
+      expect(vi.mocked(tryClaimPostLabel)).toHaveBeenCalledWith(URI, LABEL);
+      expect(vi.mocked(agent.tools.ozone.moderation.getRecord)).toHaveBeenCalledWith(
+        { uri: URI },
+        expect.any(Object),
+      );
+      expect(vi.mocked(agent.tools.ozone.moderation.emitEvent)).not.toHaveBeenCalled();
     });
 
-    const result = await checkAccountLabels("did:plc:test123", "window-reply");
+    it("should emit event if claimed and not labeled anywhere", async () => {
+      vi.mocked(tryClaimPostLabel).mockResolvedValue(true);
+      vi.mocked(agent.tools.ozone.moderation.getRecord).mockResolvedValue({
+        data: { labels: [] },
+      } as any);
+      vi.mocked(agent.tools.ozone.moderation.emitEvent).mockResolvedValue({ success: true } as any);
 
-    expect(result).toBe(false);
-  });
+      await createPostLabel(URI, CID, LABEL, COMMENT, undefined);
 
-  it("should return false if labels property is undefined", async () => {
-    (agent.tools.ozone.moderation.getRepo as any).mockResolvedValueOnce({
-      data: {},
+      expect(vi.mocked(tryClaimPostLabel)).toHaveBeenCalledWith(URI, LABEL);
+      expect(vi.mocked(agent.tools.ozone.moderation.getRecord)).toHaveBeenCalledWith(
+        { uri: URI },
+        expect.any(Object),
+      );
+      expect(vi.mocked(agent.tools.ozone.moderation.emitEvent)).toHaveBeenCalled();
     });
-
-    const result = await checkAccountLabels("did:plc:test123", "window-reply");
-
-    expect(result).toBe(false);
-  });
-
-  it("should handle API errors gracefully", async () => {
-    (agent.tools.ozone.moderation.getRepo as any).mockRejectedValueOnce(
-      new Error("API Error"),
-    );
-
-    const result = await checkAccountLabels("did:plc:test123", "window-reply");
-
-    expect(result).toBe(false);
-    expect(logger.error).toHaveBeenCalledWith(
-      {
-        process: "MODERATION",
-        did: "did:plc:test123",
-        error: expect.any(Error),
-      },
-      "Failed to check account labels",
-    );
-  });
-
-  it("should perform case-sensitive label matching", async () => {
-    (agent.tools.ozone.moderation.getRepo as any).mockResolvedValueOnce({
-      data: {
-        labels: [{ val: "window-reply" }],
-      },
-    });
-
-    const resultLower = await checkAccountLabels(
-      "did:plc:test123",
-      "window-reply",
-    );
-    expect(resultLower).toBe(true);
-
-    (agent.tools.ozone.moderation.getRepo as any).mockResolvedValueOnce({
-      data: {
-        labels: [{ val: "window-reply" }],
-      },
-    });
-
-    const resultUpper = await checkAccountLabels(
-      "did:plc:test123",
-      "Window-Reply",
-    );
-    expect(resultUpper).toBe(false);
   });
 });

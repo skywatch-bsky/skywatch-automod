@@ -23,3 +23,4 @@ export const CURSOR_UPDATE_INTERVAL = process.env.CURSOR_UPDATE_INTERVAL
   : 60000;
 export const LABEL_LIMIT = process.env.LABEL_LIMIT;
 export const LABEL_LIMIT_WAIT = process.env.LABEL_LIMIT_WAIT;
+export const REDIS_URL = process.env.REDIS_URL || "redis://redis:6379";
