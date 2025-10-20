@@ -54,6 +54,7 @@ services:
     # after a restart, preventing it from reprocessing old events or skipping new ones.
     volumes:
       - ./cursor.txt:/app/cursor.txt
+      - ./.session:/app/.session
 
     environment:
       - NODE_ENV=production
