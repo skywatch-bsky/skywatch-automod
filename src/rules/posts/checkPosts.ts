@@ -106,21 +106,13 @@ export const checkPosts = async (post: Post[]) => {
       countStarterPacks(post[0].did, post[0].time);
 
       if (checkPost.toLabel === true) {
-        logger.info(
-          {
-            process: "CHECKPOSTS",
-            label: checkPost.label,
-            did: post[0].did,
-            atURI: post[0].atURI,
-          },
-          "Labeling post",
-        );
         createPostLabel(
           post[0].atURI,
           post[0].cid,
           `${checkPost.label}`,
           `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           checkPost.duration,
+          post[0].did,
         );
       }
 
@@ -158,18 +150,10 @@ export const checkPosts = async (post: Post[]) => {
       }
 
       if (checkPost.commentAcct === true) {
-        logger.info(
-          {
-            process: "CHECKPOSTS",
-            label: checkPost.label,
-            did: post[0].did,
-            atURI: post[0].atURI,
-          },
-          "Commenting on account",
-        );
         createAccountComment(
           post[0].did,
           `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          post[0].atURI,
         );
       }
     }

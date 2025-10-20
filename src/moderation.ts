@@ -2,6 +2,11 @@ import { agent, isLoggedIn } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
 import { logger } from "./logger.js";
+import {
+  tryClaimAccountComment,
+  tryClaimAccountLabel,
+  tryClaimPostLabel,
+} from "./redis.js";
 
 const doesLabelExist = (
   labels: { val: string }[] | undefined,
@@ -19,8 +24,18 @@ export const createPostLabel = async (
   label: string,
   comment: string,
   duration: number | undefined,
+  did?: string,
 ) => {
   await isLoggedIn;
+
+  const claimed = await tryClaimPostLabel(uri, label);
+  if (!claimed) {
+    logger.debug(
+      { process: "MODERATION", uri, label },
+      "Post label already claimed in Redis, skipping",
+    );
+    return;
+  }
 
   const hasLabel = await checkRecordLabels(uri, label);
   if (hasLabel) {
@@ -30,6 +45,11 @@ export const createPostLabel = async (
     );
     return;
   }
+
+  logger.info(
+    { process: "MODERATION", label, did, atURI: uri },
+    "Labeling post",
+  );
 
   await limit(async () => {
     try {
@@ -50,7 +70,7 @@ export const createPostLabel = async (
         event.durationInHours = duration;
       }
 
-      return agent.tools.ozone.moderation.emitEvent(
+      await agent.tools.ozone.moderation.emitEvent(
         {
           event: event,
           // specify the labeled post by strongRef
@@ -91,6 +111,15 @@ export const createAccountLabel = async (
 ) => {
   await isLoggedIn;
 
+  const claimed = await tryClaimAccountLabel(did, label);
+  if (!claimed) {
+    logger.debug(
+      { process: "MODERATION", did, label },
+      "Account label already claimed in Redis, skipping",
+    );
+    return;
+  }
+
   const hasLabel = await checkAccountLabels(did, label);
   if (hasLabel) {
     logger.debug(
@@ -99,6 +128,8 @@ export const createAccountLabel = async (
     );
     return;
   }
+
+  logger.info({ process: "MODERATION", did, label }, "Labeling account");
 
   await limit(async () => {
     try {
@@ -186,8 +217,24 @@ export const createPostReport = async (
   });
 };
 
-export const createAccountComment = async (did: string, comment: string) => {
+export const createAccountComment = async (
+  did: string,
+  comment: string,
+  atURI: string,
+) => {
   await isLoggedIn;
+
+  const claimed = await tryClaimAccountComment(did, atURI);
+  if (!claimed) {
+    logger.debug(
+      { process: "MODERATION", did, atURI },
+      "Account comment already claimed in Redis, skipping",
+    );
+    return;
+  }
+
+  logger.info({ process: "MODERATION", did, atURI }, "Commenting on account");
+
   await limit(async () => {
     try {
       await agent.tools.ozone.moderation.emitEvent(
