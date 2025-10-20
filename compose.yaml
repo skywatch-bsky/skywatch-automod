@@ -9,6 +9,20 @@
 version: "3.8"
 
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: skywatch-automod-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - skywatch-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
   automod:
     # Build the Docker image from the Dockerfile in the current directory.
     build: .
@@ -26,9 +40,28 @@ services:
     env_file:
       - .env
 
+    # Wait for Redis to be healthy before starting
+    depends_on:
+      redis:
+        condition: service_healthy
+
+    networks:
+      - skywatch-network
+
     # Mount a volume to persist the firehose cursor.
     # This links the `cursor.txt` file from your host into the container at `/app/cursor.txt`.
     # Persisting this file allows the automod to resume from where it left off
     # after a restart, preventing it from reprocessing old events or skipping new ones.
     volumes:
       - ./cursor.txt:/app/cursor.txt
+
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+
+volumes:
+  redis-data:
+
+networks:
+  skywatch-network:
+    driver: bridge

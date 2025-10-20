@@ -167,17 +167,6 @@ describe("checkProfiles", () => {
           "This is spam content",
         );
 
-        expect(logger.info).toHaveBeenCalledWith(
-          {
-            process: "CHECKDESCRIPTION",
-            did: mockDid,
-            time: mockTime,
-            displayName: mockDisplayName,
-            description: "This is spam content",
-            label: "test-description",
-          },
-          "Labeling account",
-        );
         expect(createAccountLabel).toHaveBeenCalledWith(
           mockDid,
           "test-description",
@@ -365,30 +354,10 @@ describe("checkProfiles", () => {
         expect(createAccountComment).toHaveBeenCalledWith(
           mockDid,
           expect.any(String),
+          expect.any(String),
         );
       });
 
-      it("should log all moderation actions", async () => {
-        await checkDescription(
-          mockDid,
-          mockTime,
-          mockDisplayName,
-          "report this",
-        );
-
-        expect(logger.info).toHaveBeenCalledWith(
-          expect.objectContaining({ label: "all-actions" }),
-          "Labeling account",
-        );
-        expect(logger.info).toHaveBeenCalledWith(
-          expect.objectContaining({ label: "all-actions" }),
-          "Reporting account",
-        );
-        expect(logger.info).toHaveBeenCalledWith(
-          expect.objectContaining({ label: "all-actions" }),
-          "Commenting on account",
-        );
-      });
     });
   });
 
@@ -434,17 +403,6 @@ describe("checkProfiles", () => {
           mockDescription,
         );
 
-        expect(logger.info).toHaveBeenCalledWith(
-          {
-            process: "CHECKDISPLAYNAME",
-            did: mockDid,
-            time: mockTime,
-            displayName: "fake account",
-            description: mockDescription,
-            label: "test-displayname",
-          },
-          "Labeling account",
-        );
         expect(createAccountLabel).toHaveBeenCalledWith(
           mockDid,
           "test-displayname",

@@ -140,6 +140,7 @@ describe("checkHandle", () => {
       expect(createAccountComment).toHaveBeenCalledWith(
         "did:plc:user1",
         `${time}: Scam detected - scam-account`,
+        "handle:did:plc:user1:scam-account",
       );
     });
   });
@@ -181,6 +182,7 @@ describe("checkHandle", () => {
       expect(createAccountComment).toHaveBeenCalledWith(
         "did:plc:user1",
         `${time}: Scam detected - scam-user`,
+        "handle:did:plc:user1:scam-user",
       );
     });
 
@@ -206,6 +208,7 @@ describe("checkHandle", () => {
       expect(createAccountComment).toHaveBeenCalledWith(
         "did:plc:user1",
         `${time}: Multi-action triggered - dangerous-account`,
+        "handle:did:plc:user1:dangerous-account",
       );
       expect(createAccountLabel).toHaveBeenCalledWith(
         "did:plc:user1",
