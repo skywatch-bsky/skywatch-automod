@@ -70,17 +70,6 @@ export const checkDescription = async (
               `${checkProfiles.label}`,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              {
-                process: "CHECKDESCRIPTION",
-                did,
-                time,
-                displayName,
-                description,
-                label: checkProfiles.label,
-              },
-              "Labeling account",
-            );
           }
 
           if (checkProfiles.reportAcct === true) {
@@ -105,17 +94,7 @@ export const checkDescription = async (
             createAccountComment(
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
-            );
-            logger.info(
-              {
-                process: "CHECKDESCRIPTION",
-                did,
-                time,
-                displayName,
-                description,
-                label: checkProfiles.label,
-              },
-              "Commenting on account",
+              `profile:${did}:${time}`,
             );
           }
         }
@@ -186,17 +165,6 @@ export const checkDisplayName = async (
               `${checkProfiles.label}`,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
-            logger.info(
-              {
-                process: "CHECKDISPLAYNAME",
-                did,
-                time,
-                displayName,
-                description,
-                label: checkProfiles.label,
-              },
-              "Labeling account",
-            );
           }
 
           if (checkProfiles.reportAcct === true) {
@@ -221,17 +189,7 @@ export const checkDisplayName = async (
             createAccountComment(
               did,
               `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
-            );
-            logger.info(
-              {
-                process: "CHECKDISPLAYNAME",
-                did,
-                time,
-                displayName,
-                description,
-                label: checkProfiles.label,
-              },
-              "Commenting on account",
+              `profile:${did}:${time}`,
             );
           }
         }
