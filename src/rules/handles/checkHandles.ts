@@ -46,17 +46,11 @@ export const checkHandle = async (
       }
 
       if (checkList.toLabel === true) {
-        logger.info(
-          { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
-          "Labeling account",
+        createAccountLabel(
+          did,
+          `${checkList.label}`,
+          `${time}: ${checkList.comment} - ${handle}`,
         );
-        {
-          createAccountLabel(
-            did,
-            `${checkList.label}`,
-            `${time}: ${checkList.comment} - ${handle}`,
-          );
-        }
       }
 
       if (checkList.reportAcct === true) {
@@ -68,11 +62,11 @@ export const checkHandle = async (
       }
 
       if (checkList.commentAcct === true) {
-        logger.info(
-          { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
-          "Commenting on account",
+        createAccountComment(
+          did,
+          `${time}: ${checkList.comment} - ${handle}`,
+          `handle:${did}:${handle}`,
         );
-        createAccountComment(did, `${time}: ${checkList.comment} - ${handle}`);
       }
     }
   });

@@ -13,6 +13,7 @@ import {
 } from "./config.js";
 import { logger } from "./logger.js";
 import { startMetricsServer } from "./metrics.js";
+import { connectRedis, disconnectRedis } from "./redis.js";
 import { checkAccountAge } from "./rules/account/age.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
 import { checkHandle } from "./rules/handles/checkHandles.js";
@@ -321,14 +322,18 @@ const metricsServer = startMetricsServer(METRICS_PORT);
   }
 });*/
 
+logger.info({ process: "MAIN" }, "Connecting to Redis");
+await connectRedis();
+
 jetstream.start();
 
-function shutdown() {
+async function shutdown() {
   try {
     logger.info({ process: "MAIN" }, "Shutting down gracefully");
     fs.writeFileSync("cursor.txt", jetstream.cursor!.toString(), "utf8");
     jetstream.close();
     metricsServer.close();
+    await disconnectRedis();
   } catch (error) {
     logger.error({ process: "MAIN", error }, "Error shutting down gracefully");
     process.exit(1);
