@@ -244,21 +244,13 @@ describe("checkPosts", () => {
 
       await checkPosts(post);
 
-      expect(logger.info).toHaveBeenCalledWith(
-        {
-          process: "CHECKPOSTS",
-          label: "test-label",
-          did: post[0].did,
-          atURI: post[0].atURI,
-        },
-        "Labeling post",
-      );
       expect(createPostLabel).toHaveBeenCalledWith(
         post[0].atURI,
         post[0].cid,
         "test-label",
         expect.stringContaining("Test comment"),
         undefined,
+        post[0].did,
       );
     });
 
@@ -292,6 +284,7 @@ describe("checkPosts", () => {
         "language-specific",
         expect.any(String),
         undefined,
+        post[0].did,
       );
     });
 
@@ -345,6 +338,7 @@ describe("checkPosts", () => {
         "whitelisted-test",
         expect.any(String),
         undefined,
+        post[0].did,
       );
     });
   });
@@ -389,6 +383,7 @@ describe("checkPosts", () => {
         "ignored-did",
         expect.any(String),
         undefined,
+        "did:plc:notignored",
       );
     });
   });
@@ -405,6 +400,7 @@ describe("checkPosts", () => {
         "all-actions",
         expect.any(String),
         undefined,
+        post[0].did,
       );
       expect(createPostReport).toHaveBeenCalledWith(
         post[0].atURI,
@@ -418,29 +414,7 @@ describe("checkPosts", () => {
       expect(createAccountComment).toHaveBeenCalledWith(
         post[0].did,
         expect.any(String),
-      );
-    });
-
-    it("should log all moderation actions", async () => {
-      const post = createMockPost({ text: "report this" });
-
-      await checkPosts(post);
-
-      expect(logger.info).toHaveBeenCalledWith(
-        expect.objectContaining({ label: "all-actions" }),
-        "Labeling post",
-      );
-      expect(logger.info).toHaveBeenCalledWith(
-        expect.objectContaining({ label: "all-actions" }),
-        "Reporting post",
-      );
-      expect(logger.info).toHaveBeenCalledWith(
-        expect.objectContaining({ label: "all-actions" }),
-        "Reporting account",
-      );
-      expect(logger.info).toHaveBeenCalledWith(
-        expect.objectContaining({ label: "all-actions" }),
-        "Commenting on account",
+        expect.any(String),
       );
     });
   });
