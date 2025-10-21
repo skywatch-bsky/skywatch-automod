@@ -27,6 +27,12 @@ jobs:
           cp src/rules/handles/constants.example.ts src/rules/handles/constants.ts
           cp src/rules/posts/constants.example.ts src/rules/posts/constants.ts
           cp src/rules/profiles/constants.example.ts src/rules/profiles/constants.ts
+          cp rules/constants.example.ts rules/constants.ts
+          cp rules/handles.example.ts rules/handles.ts
+          cp rules/posts.example.ts rules/posts.ts
+          cp rules/profiles.example.ts rules/profiles.ts
+          cp rules/accountAge.example.ts rules/accountAge.ts
+          cp rules/accountThreshold.example.ts rules/accountThreshold.ts
 
       - name: Run linter
         run: bun run lint

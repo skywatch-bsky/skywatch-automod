@@ -7,4 +7,3 @@ labels.db*
 src/constants.ts
 constants.ts
 coverage/
-rules/*.ts
