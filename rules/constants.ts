@@ -6,3 +6,7 @@
 export const GLOBAL_ALLOW: string[] = [
   // Example: "did:plc:example123",
 ];
+
+export const LINK_SHORTENER: string[] = [
+  // Example: "did:plc:example123",
+];
