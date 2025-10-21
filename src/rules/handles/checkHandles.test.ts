@@ -1,3 +1,10 @@
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createAccountComment,
@@ -222,7 +229,7 @@ describe("checkHandle", () => {
     it("should process all matching rules", async () => {
       vi.resetModules();
       // Re-import with a mock that has overlapping patterns
-      vi.doMock("./constants.js", () => ({
+      vi.doMock("../../../rules/handles.js", () => ({
         HANDLE_CHECKS: [
           {
             label: "pattern1",
@@ -270,7 +277,7 @@ describe("checkHandle", () => {
     });
 
     it("should handle very long handles", async () => {
-      const longHandle = "spam-" + "a".repeat(1000);
+      const longHandle = `spam-${  "a".repeat(1000)}`;
       const time = Date.now();
       await checkHandle("did:plc:user1", longHandle, time);
 

@@ -1,8 +1,12 @@
+ 
+ 
+ 
+ 
+ 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 // --- Imports Second ---
 import { checkAccountLabels } from "../accountModeration.js";
 import { agent } from "../agent.js";
-import { logger } from "../logger.js";
 import { createPostLabel } from "../moderation.js";
 import { tryClaimPostLabel } from "../redis.js";
 

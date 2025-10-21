@@ -28,8 +28,8 @@ jobs:
           cp src/rules/posts/constants.example.ts src/rules/posts/constants.ts
           cp src/rules/profiles/constants.example.ts src/rules/profiles/constants.ts
 
-      #      - name: Run linter
-      #        run: npm run lint
+      - name: Run linter
+        run: bun run lint
 
       - name: Type check
         run: bun run type-check

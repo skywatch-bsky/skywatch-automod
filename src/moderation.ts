@@ -70,7 +70,7 @@ export const createPostLabel = async (
         durationInHours?: number;
       } = {
         $type: "tools.ozone.moderation.defs#modEventLabel",
-        comment: comment,
+        comment,
         createLabelVals: [label],
         negateLabelVals: [],
       };
@@ -81,15 +81,15 @@ export const createPostLabel = async (
 
       await agent.tools.ozone.moderation.emitEvent(
         {
-          event: event,
+          event,
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.repo.strongRef",
-            uri: uri,
-            cid: cid,
+            uri,
+            cid,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? "",
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
@@ -98,7 +98,7 @@ export const createPostLabel = async (
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
@@ -138,21 +138,21 @@ export const createPostReport = async (
   await isLoggedIn;
   await limit(async () => {
     try {
-      return agent.tools.ozone.moderation.emitEvent(
+      return await agent.tools.ozone.moderation.emitEvent(
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventReport",
-            comment: comment,
+            comment,
             reportType: "com.atproto.moderation.defs#reasonOther",
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.repo.strongRef",
-            uri: uri,
-            cid: cid,
+            uri,
+            cid,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? "",
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
@@ -161,7 +161,7 @@ export const createPostReport = async (
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
@@ -187,7 +187,7 @@ export const checkRecordLabels = async (
         { uri },
         {
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },

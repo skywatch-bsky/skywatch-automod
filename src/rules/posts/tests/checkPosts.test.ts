@@ -1,3 +1,9 @@
+ 
+ 
+ 
+ 
+ 
+ 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createAccountComment,
@@ -5,7 +11,7 @@ import {
 } from "../../../accountModeration.js";
 import { logger } from "../../../logger.js";
 import { createPostLabel, createPostReport } from "../../../moderation.js";
-import { Post } from "../../../types.js";
+import type { Post } from "../../../types.js";
 import { getFinalUrl } from "../../../utils/getFinalUrl.js";
 import { getLanguage } from "../../../utils/getLanguage.js";
 import { countStarterPacks } from "../../account/countStarterPacks.js";
