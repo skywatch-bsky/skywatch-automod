@@ -1,10 +1,3 @@
- 
- 
- 
- 
- 
- 
- 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createAccountComment,
@@ -277,7 +270,7 @@ describe("checkHandle", () => {
     });
 
     it("should handle very long handles", async () => {
-      const longHandle = `spam-${  "a".repeat(1000)}`;
+      const longHandle = `spam-${"a".repeat(1000)}`;
       const time = Date.now();
       await checkHandle("did:plc:user1", longHandle, time);
 

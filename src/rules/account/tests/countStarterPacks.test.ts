@@ -1,6 +1,3 @@
- 
- 
- 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createAccountLabel } from "../../../accountModeration.js";
 import { agent } from "../../../agent.js";

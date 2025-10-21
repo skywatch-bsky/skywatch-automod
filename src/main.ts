@@ -2,10 +2,9 @@ import fs from "node:fs";
 import type {
   CommitCreateEvent,
   CommitUpdateEvent,
-  IdentityEvent} from "@skyware/jetstream";
-import {
-  Jetstream,
+  IdentityEvent,
 } from "@skyware/jetstream";
+import { Jetstream } from "@skyware/jetstream";
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
@@ -112,9 +111,18 @@ jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<"app.bsky.feed.post">) => {
     const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-    const hasEmbed = Object.prototype.hasOwnProperty.call(event.commit.record, "embed");
-    const hasFacets = Object.prototype.hasOwnProperty.call(event.commit.record, "facets");
-    const hasText = Object.prototype.hasOwnProperty.call(event.commit.record, "text");
+    const hasEmbed = Object.prototype.hasOwnProperty.call(
+      event.commit.record,
+      "embed",
+    );
+    const hasFacets = Object.prototype.hasOwnProperty.call(
+      event.commit.record,
+      "facets",
+    );
+    const hasText = Object.prototype.hasOwnProperty.call(
+      event.commit.record,
+      "text",
+    );
 
     const tasks: Promise<void>[] = [];
 
@@ -136,7 +144,7 @@ jetstream.onCreate(
 
     // Check account age for quote posts
     if (hasEmbed) {
-      const {embed} = event.commit.record;
+      const { embed } = event.commit.record;
       if (
         embed &&
         typeof embed === "object" &&
@@ -170,14 +178,7 @@ jetstream.onCreate(
     if (hasFacets) {
       // Check for facet spam (hidden mentions with duplicate byte positions)
       const facets = event.commit.record.facets ?? null;
-      tasks.push(
-        checkFacetSpam(
-          event.did,
-          event.time_us,
-          atURI,
-          facets,
-        ),
-      );
+      tasks.push(checkFacetSpam(event.did, event.time_us, atURI, facets));
 
       const hasLinkType = facets?.some((facet) =>
         facet.features.some(
@@ -225,14 +226,14 @@ jetstream.onCreate(
     }
 
     if (hasEmbed) {
-      const {embed} = event.commit.record;
+      const { embed } = event.commit.record;
       if (
         embed &&
         typeof embed === "object" &&
         "$type" in embed &&
         embed.$type === "app.bsky.embed.external"
       ) {
-        const {external} = embed as { external: { uri: string } };
+        const { external } = embed as { external: { uri: string } };
         const posts: Post[] = [
           {
             did: event.did,
@@ -252,7 +253,9 @@ jetstream.onCreate(
         "$type" in embed &&
         embed.$type === "app.bsky.embed.recordWithMedia"
       ) {
-        const {media} = embed as { media: { $type: string; external?: { uri: string } } };
+        const { media } = embed as {
+          media: { $type: string; external?: { uri: string } };
+        };
         if (media.$type === "app.bsky.embed.external" && media.external) {
           const posts: Post[] = [
             {

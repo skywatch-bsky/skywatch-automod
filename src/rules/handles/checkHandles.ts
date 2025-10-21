@@ -58,7 +58,10 @@ export const checkHandle = (
           { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
           "Reporting account",
         );
-        void createAccountReport(did, `${time.toString()}: ${checkList.comment} - ${handle}`);
+        void createAccountReport(
+          did,
+          `${time.toString()}: ${checkList.comment} - ${handle}`,
+        );
       }
 
       if (checkList.commentAcct) {

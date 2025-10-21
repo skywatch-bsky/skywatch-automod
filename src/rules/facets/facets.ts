@@ -52,7 +52,11 @@ export const checkFacetSpam = async (
         positionMap.set(key, new Set());
       }
       const dids = positionMap.get(key);
-      if (dids && "did" in mentionFeature && typeof mentionFeature.did === "string") {
+      if (
+        dids &&
+        "did" in mentionFeature &&
+        typeof mentionFeature.did === "string"
+      ) {
         dids.add(mentionFeature.did);
       }
     }

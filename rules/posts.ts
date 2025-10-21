@@ -16,8 +16,3 @@ export const POST_CHECKS: Checks[] = [
   //   check: new RegExp("example-pattern", "i"),
   // },
 ];
-
-/**
- * Link shortener detection pattern
- */
-export const LINK_SHORTENER = new RegExp("", "i");
