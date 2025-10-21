@@ -1,6 +1,6 @@
 import { pRateLimit } from "p-ratelimit";
-import { logger } from "./logger.js";
 import { Counter, Gauge, Histogram } from "prom-client";
+import { logger } from "./logger.js";
 
 interface RateLimitState {
   limit: number;
@@ -76,7 +76,7 @@ export function updateRateLimitState(state: Partial<RateLimitState>): void {
       remaining: rateLimitState.remaining,
       resetIn: rateLimitState.reset - Math.floor(Date.now() / 1000),
     },
-    "Rate limit state updated"
+    "Rate limit state updated",
   );
 }
 
@@ -93,7 +93,7 @@ async function awaitRateLimit(): Promise<void> {
 
     if (delayMs > 0) {
       logger.warn(
-        `Rate limit critical (${state.remaining}/${state.limit} remaining). Waiting ${delaySeconds}s until reset...`
+        `Rate limit critical (${state.remaining.toString()}/${state.limit.toString()} remaining). Waiting ${delaySeconds.toString()}s until reset...`,
       );
 
       const waitStart = Date.now();

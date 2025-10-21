@@ -1,14 +1,14 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
+  chmodSync,
   existsSync,
   mkdirSync,
-  rmSync,
-  writeFileSync,
   readFileSync,
+  rmSync,
   unlinkSync,
-  chmodSync,
+  writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { SessionData } from "../session.js";
 
 const TEST_DIR = join(process.cwd(), ".test-session");
@@ -136,7 +136,7 @@ describe("session", () => {
       writeFileSync(
         TEST_SESSION_PATH,
         JSON.stringify({ accessJwt: "token" }),
-        "utf-8"
+        "utf-8",
       );
 
       const session = testLoadSession();
@@ -151,7 +151,7 @@ describe("session", () => {
           refreshJwt: "refresh",
           handle: "test.bsky.social",
         }),
-        "utf-8"
+        "utf-8",
       );
 
       const session = testLoadSession();

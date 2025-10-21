@@ -1,7 +1,7 @@
+import { createAccountLabel } from "../../accountModeration.js";
 import { agent, isLoggedIn } from "../../agent.js";
 import { limit } from "../../limits.js";
 import { logger } from "../../logger.js";
-import { createAccountLabel } from "../../moderation.js";
 
 const ALLOWED_DIDS = ["did:plc:gpunjjgvlyb4racypz3yfiq4"];
 
@@ -32,10 +32,10 @@ export const countStarterPacks = async (did: string, time: number) => {
           "Labeling account with excessive starter packs",
         );
 
-        createAccountLabel(
+        void createAccountLabel(
           did,
           "follow-farming",
-          `${time}: Account has ${starterPacks} starter packs`,
+          `${time.toString()}: Account has ${starterPacks.toString()} starter packs`,
         );
       }
     } catch (error) {

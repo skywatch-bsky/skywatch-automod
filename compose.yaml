@@ -13,6 +13,7 @@ services:
     image: redis:7-alpine
     container_name: skywatch-automod-redis
     restart: unless-stopped
+    command: redis-server --appendonly yes --appendfsync everysec
     volumes:
       - redis-data:/data
     networks:
@@ -33,7 +34,7 @@ services:
 
     # Expose the metrics server port to the host machine.
     ports:
-      - "4100:4101"
+      - "4101:4101"
 
     # Load environment variables from a .env file in the same directory.
     # This is where you should put your BSKY_HANDLE, BSKY_PASSWORD, etc.
@@ -55,14 +56,34 @@ services:
     volumes:
       - ./cursor.txt:/app/cursor.txt
       - ./.session:/app/.session
+      - ./rules:/app/rules
 
     environment:
       - NODE_ENV=production
       - REDIS_URL=redis://redis:6379
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: skywatch-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    networks:
+      - skywatch-network
+    depends_on:
+      - automod
+
 volumes:
   redis-data:
+  prometheus-data:
 
 networks:
   skywatch-network:
     driver: bridge
+    name: skywatch-network

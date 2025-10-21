@@ -1,6 +1,6 @@
+import { createAccountLabel } from "../../accountModeration.js";
 import { logger } from "../../logger.js";
-import { createAccountLabel } from "../../moderation.js";
-import { Facet } from "../../types.js";
+import type { Facet } from "../../types.js";
 
 // Threshold for duplicate facet positions before flagging as spam
 export const FACET_SPAM_THRESHOLD = 1;
@@ -23,7 +23,7 @@ export const checkFacetSpam = async (
   did: string,
   time: number,
   atURI: string,
-  facets: Facet[],
+  facets: Facet[] | null,
 ): Promise<void> => {
   // Check allowlist
   if (FACET_SPAM_ALLOWLIST.includes(did)) {
@@ -47,11 +47,18 @@ export const checkFacetSpam = async (
     );
 
     if (mentionFeature && "did" in mentionFeature) {
-      const key = `${facet.index.byteStart}:${facet.index.byteEnd}`;
+      const key = `${facet.index.byteStart.toString()}:${facet.index.byteEnd.toString()}`;
       if (!positionMap.has(key)) {
         positionMap.set(key, new Set());
       }
-      positionMap.get(key)!.add(mentionFeature.did as string);
+      const dids = positionMap.get(key);
+      if (
+        dids &&
+        "did" in mentionFeature &&
+        typeof mentionFeature.did === "string"
+      ) {
+        dids.add(mentionFeature.did);
+      }
     }
   }
 
@@ -73,7 +80,7 @@ export const checkFacetSpam = async (
       await createAccountLabel(
         did,
         FACET_SPAM_LABEL,
-        `${time}: ${FACET_SPAM_COMMENT} - ${uniqueCount} unique mentions at position ${position} in ${atURI}`,
+        `${time.toString()}: ${FACET_SPAM_COMMENT} - ${uniqueCount.toString()} unique mentions at position ${position} in ${atURI}`,
       );
 
       // Only label once per post even if multiple positions are suspicious

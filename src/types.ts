@@ -1,3 +1,5 @@
+import type * as AppBskyRichtextFacet from "@atproto/ozone/dist/lexicon/types/app/bsky/richtext/facet.js";
+
 export interface Checks {
   language?: string[];
   label: string;
@@ -38,26 +40,17 @@ export interface Profile {
   description?: string;
 }
 
-// Define the type for the link feature
-export interface LinkFeature {
-  $type: "app.bsky.richtext.facet#link";
-  uri: string;
-}
-
 export interface List {
   label: string;
   rkey: string;
 }
 
-export interface FacetIndex {
-  byteStart: number;
-  byteEnd: number;
-}
-
-export interface Facet {
-  index: FacetIndex;
-  features: Array<{ $type: string; [key: string]: any }>;
-}
+// Re-export facet types from @atproto/ozone for convenience
+export type Facet = AppBskyRichtextFacet.Main;
+export type FacetIndex = AppBskyRichtextFacet.ByteSlice;
+export type FacetMention = AppBskyRichtextFacet.Mention;
+export type LinkFeature = AppBskyRichtextFacet.Link;
+export type FacetTag = AppBskyRichtextFacet.Tag;
 
 export interface AccountAgeCheck {
   monitoredDIDs?: string[]; // DIDs to monitor for replies (optional if monitoredPostURIs is provided)
@@ -67,4 +60,15 @@ export interface AccountAgeCheck {
   label: string; // Label to apply if account is too new
   comment: string; // Comment for the label
   expires?: string; // Optional expiration date (ISO 8601) - check will be skipped after this date
+}
+
+export interface AccountThresholdConfig {
+  labels: string | string[]; // Single label or array for OR matching
+  threshold: number; // Number of labeled posts required to trigger account action
+  accountLabel: string; // Label to apply to the account
+  accountComment: string; // Comment for the account action
+  windowDays: number; // Rolling window in days
+  reportAcct: boolean; // Whether to report the account
+  commentAcct: boolean; // Whether to comment on the account
+  toLabel?: boolean; // Whether to apply label (defaults to true)
 }

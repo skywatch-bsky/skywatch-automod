@@ -1,10 +1,10 @@
-import { Server } from "http";
+import type { Server } from "http";
 import request from "supertest";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { startMetricsServer } from "../metrics.js";
 
 describe("Metrics Server", () => {
-  let server: Server;
+  let server: Server | undefined;
 
   afterEach(() => {
     if (server) {

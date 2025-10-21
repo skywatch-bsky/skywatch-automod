@@ -1,20 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { logger } from "../../../logger.js";
 import {
   createAccountComment,
   createAccountReport,
-  createPostLabel,
-  createPostReport,
-} from "../../../moderation.js";
-import { Post } from "../../../types.js";
+} from "../../../accountModeration.js";
+import { logger } from "../../../logger.js";
+import { createPostLabel, createPostReport } from "../../../moderation.js";
+import type { Post } from "../../../types.js";
 import { getFinalUrl } from "../../../utils/getFinalUrl.js";
 import { getLanguage } from "../../../utils/getLanguage.js";
 import { countStarterPacks } from "../../account/countStarterPacks.js";
 import { checkPosts } from "../checkPosts.js";
 
 // Mock dependencies
-vi.mock("../constants.js", () => ({
+vi.mock("../../../../rules/constants.js", () => ({
+  GLOBAL_ALLOW: ["did:plc:globalallow"],
   LINK_SHORTENER: /tinyurl\.com|bit\.ly/i,
+}));
+
+vi.mock("../../../../rules/posts.js", () => ({
   POST_CHECKS: [
     {
       label: "test-label",
@@ -80,10 +83,13 @@ vi.mock("../../account/countStarterPacks.js", () => ({
   countStarterPacks: vi.fn(),
 }));
 
-vi.mock("../../../moderation.js", () => ({
-  createPostLabel: vi.fn(),
+vi.mock("../../../accountModeration.js", () => ({
   createAccountReport: vi.fn(),
   createAccountComment: vi.fn(),
+}));
+
+vi.mock("../../../moderation.js", () => ({
+  createPostLabel: vi.fn(),
   createPostReport: vi.fn(),
 }));
 
@@ -93,10 +99,6 @@ vi.mock("../../../utils/getLanguage.js", () => ({
 
 vi.mock("../../../utils/getFinalUrl.js", () => ({
   getFinalUrl: vi.fn(),
-}));
-
-vi.mock("../../../constants.js", () => ({
-  GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
 
 describe("checkPosts", () => {
@@ -251,6 +253,7 @@ describe("checkPosts", () => {
         expect.stringContaining("Test comment"),
         undefined,
         post[0].did,
+        post[0].time,
       );
     });
 
@@ -285,6 +288,7 @@ describe("checkPosts", () => {
         expect.any(String),
         undefined,
         post[0].did,
+        post[0].time,
       );
     });
 
@@ -339,6 +343,7 @@ describe("checkPosts", () => {
         expect.any(String),
         undefined,
         post[0].did,
+        post[0].time,
       );
     });
   });
@@ -384,6 +389,7 @@ describe("checkPosts", () => {
         expect.any(String),
         undefined,
         "did:plc:notignored",
+        post[0].time,
       );
     });
   });
@@ -401,6 +407,7 @@ describe("checkPosts", () => {
         expect.any(String),
         undefined,
         post[0].did,
+        post[0].time,
       );
       expect(createPostReport).toHaveBeenCalledWith(
         post[0].atURI,

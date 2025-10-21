@@ -1,0 +1,12 @@
+# Development override for docker-compose
+# Usage: docker compose -f compose.yaml -f compose.dev.yaml up
+#
+# This configuration:
+# - Runs the app in watch mode (auto-reloads on file changes)
+# - Mounts source code so changes are picked up without rebuild
+
+services:
+  automod:
+    command: ["bun", "run", "dev"]
+    volumes:
+      - ./src:/app/src

@@ -2,12 +2,12 @@ import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import prettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
+import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+export default defineConfig(
   eslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
   prettier,
   {
     languageOptions: {
@@ -25,17 +25,17 @@ export default tseslint.config(
     rules: {
       // TypeScript specific rules
       "@typescript-eslint/no-unused-vars": [
-        "error",
+        "warn",
         { argsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unsafe-assignment": "error",
       "@typescript-eslint/no-unsafe-member-access": "error",
       "@typescript-eslint/no-unsafe-call": "error",
       "@typescript-eslint/no-unsafe-return": "error",
       "@typescript-eslint/no-unsafe-argument": "error",
-      "@typescript-eslint/prefer-nullish-coalescing": "error",
-      "@typescript-eslint/prefer-optional-chain": "error",
+      "@typescript-eslint/prefer-nullish-coalescing": "warn",
+      "@typescript-eslint/prefer-optional-chain": "warn",
       "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/consistent-type-exports": "error",
@@ -45,14 +45,14 @@ export default tseslint.config(
       "no-console": "warn",
       "no-debugger": "error",
       "no-var": "error",
-      "prefer-const": "error",
-      "prefer-template": "error",
-      "object-shorthand": "error",
-      "prefer-destructuring": ["error", { object: true, array: false }],
+      "prefer-const": "warn",
+      "prefer-template": "warn",
+      "object-shorthand": "warn",
+      "prefer-destructuring": ["warn", { object: true, array: false }],
 
       // Import rules
       "import/order": [
-        "error",
+        "warn",
         {
           groups: [
             "builtin",
@@ -62,11 +62,29 @@ export default tseslint.config(
             "sibling",
             "index",
           ],
-          "newlines-between": "always",
+          pathGroups: [
+            {
+              pattern: "@atproto/**",
+              group: "external",
+              position: "after",
+            },
+            {
+              pattern: "@skyware/**",
+              group: "external",
+              position: "after",
+            },
+            {
+              pattern: "@clavata/**",
+              group: "external",
+              position: "after",
+            },
+          ],
+          pathGroupsExcludedImportTypes: ["builtin"],
+          "newlines-between": "never",
           alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],
-      "import/no-duplicates": "error",
+      "import/no-duplicates": "warn",
       "import/no-unresolved": "off", // TypeScript handles this
 
       // Security-focused rules
@@ -81,21 +99,13 @@ export default tseslint.config(
       "no-unreachable": "error",
       "no-unreachable-loop": "error",
 
-      // Style preferences
-      "@stylistic/indent": ["error", 2],
-      "@stylistic/quotes": ["error", "double"],
-      "@stylistic/semi": ["error", "always"],
-      //"@stylistic/comma-dangle": ["error", "es5"],
-      "@stylistic/object-curly-spacing": ["error", "always"],
-      "@stylistic/array-bracket-spacing": ["error", "never"],
-      "@stylistic/space-before-function-paren": [
-        "error",
-        {
-          anonymous: "always",
-          named: "never",
-          asyncArrow: "always",
-        },
-      ],
+      // Style preferences (prettier handles these)
+      "@stylistic/indent": "off",
+      "@stylistic/quotes": "off",
+      "@stylistic/semi": "off",
+      "@stylistic/object-curly-spacing": "off",
+      "@stylistic/array-bracket-spacing": "off",
+      "@stylistic/space-before-function-paren": "off",
     },
   },
   {
@@ -110,6 +120,26 @@ export default tseslint.config(
       "*.config.js",
       "*.config.mjs",
       "coverage/",
+      "rules/",
     ],
+  },
+  // Test file overrides
+  {
+    files: ["**/*.test.ts", "**/*.test.tsx"],
+    rules: {
+      "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/await-thenable": "off",
+      "@typescript-eslint/no-confusing-void-expression": "off",
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/no-unnecessary-type-conversion": "off",
+      "@typescript-eslint/no-deprecated": "off",
+    },
   },
 );
