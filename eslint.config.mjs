@@ -120,6 +120,7 @@ export default defineConfig(
       "*.config.js",
       "*.config.mjs",
       "coverage/",
+      "rules/",
     ],
   },
   // Test file overrides
