@@ -1,11 +1,11 @@
-import { GLOBAL_ALLOW } from "../../constants.js";
-import { logger } from "../../logger.js";
+import { GLOBAL_ALLOW } from "../../../rules/constants.js";
+import { PROFILE_CHECKS } from "../../../rules/profiles.js";
 import {
   createAccountComment,
   createAccountLabel,
   createAccountReport,
-} from "../../moderation.js";
-import { PROFILE_CHECKS } from "../../rules/profiles/constants.js";
+} from "../../accountModeration.js";
+import { logger } from "../../logger.js";
 import { getLanguage } from "../../utils/getLanguage.js";
 
 export const checkDescription = async (
@@ -64,18 +64,18 @@ export const checkDescription = async (
             }
           }
 
-          if (checkProfiles.toLabel === true) {
-            createAccountLabel(
+          if (checkProfiles.toLabel) {
+            void createAccountLabel(
               did,
-              `${checkProfiles.label}`,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              checkProfiles.label,
+              `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
           }
 
-          if (checkProfiles.reportAcct === true) {
-            createAccountReport(
+          if (checkProfiles.reportAcct) {
+            void createAccountReport(
               did,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
               {
@@ -90,11 +90,11 @@ export const checkDescription = async (
             );
           }
 
-          if (checkProfiles.commentAcct === true) {
-            createAccountComment(
+          if (checkProfiles.commentAcct) {
+            void createAccountComment(
               did,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
-              `profile:${did}:${time}`,
+              `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              `profile:${did}:${time.toString()}`,
             );
           }
         }
@@ -159,18 +159,18 @@ export const checkDisplayName = async (
             }
           }
 
-          if (checkProfiles.toLabel === true) {
-            createAccountLabel(
+          if (checkProfiles.toLabel) {
+            void createAccountLabel(
               did,
-              `${checkProfiles.label}`,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              checkProfiles.label,
+              `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
           }
 
-          if (checkProfiles.reportAcct === true) {
-            createAccountReport(
+          if (checkProfiles.reportAcct) {
+            void createAccountReport(
               did,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
             );
             logger.info(
               {
@@ -185,11 +185,11 @@ export const checkDisplayName = async (
             );
           }
 
-          if (checkProfiles.commentAcct === true) {
-            createAccountComment(
+          if (checkProfiles.commentAcct) {
+            void createAccountComment(
               did,
-              `${time}: ${checkProfiles.comment} - ${displayName} - ${description}`,
-              `profile:${did}:${time}`,
+              `${time.toString()}: ${checkProfiles.comment} - ${displayName} - ${description}`,
+              `profile:${did}:${time.toString()}`,
             );
           }
         }

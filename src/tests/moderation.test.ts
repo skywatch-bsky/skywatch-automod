@@ -1,4 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+// --- Imports Second ---
+import { checkAccountLabels } from "../accountModeration.js";
+import { agent } from "../agent.js";
+import { createPostLabel } from "../moderation.js";
+import { tryClaimPostLabel } from "../redis.js";
 
 // --- Mocks First ---
 
@@ -39,13 +44,6 @@ vi.mock("../limits.js", () => ({
   limit: vi.fn((fn) => fn()),
 }));
 
-// --- Imports Second ---
-
-import { agent } from "../agent.js";
-import { checkAccountLabels, createPostLabel } from "../moderation.js";
-import { tryClaimPostLabel } from "../redis.js";
-import { logger } from "../logger.js";
-
 describe("Moderation Logic", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -56,12 +54,25 @@ describe("Moderation Logic", () => {
       vi.mocked(agent.tools.ozone.moderation.getRepo).mockResolvedValueOnce({
         data: {
           labels: [
-            { val: "spam", src: "did:plc:test", uri: "at://test", cts: "2024-01-01T00:00:00Z" },
-            { val: "window-reply", src: "did:plc:test", uri: "at://test", cts: "2024-01-01T00:00:00Z" }
-          ]
+            {
+              val: "spam",
+              src: "did:plc:test",
+              uri: "at://test",
+              cts: "2024-01-01T00:00:00Z",
+            },
+            {
+              val: "window-reply",
+              src: "did:plc:test",
+              uri: "at://test",
+              cts: "2024-01-01T00:00:00Z",
+            },
+          ],
         },
       } as any);
-      const result = await checkAccountLabels("did:plc:test123", "window-reply");
+      const result = await checkAccountLabels(
+        "did:plc:test123",
+        "window-reply",
+      );
       expect(result).toBe(true);
     });
   });
@@ -78,24 +89,38 @@ describe("Moderation Logic", () => {
       await createPostLabel(URI, CID, LABEL, COMMENT, undefined);
 
       expect(vi.mocked(tryClaimPostLabel)).toHaveBeenCalledWith(URI, LABEL);
-      expect(vi.mocked(agent.tools.ozone.moderation.getRecord)).not.toHaveBeenCalled();
-      expect(vi.mocked(agent.tools.ozone.moderation.emitEvent)).not.toHaveBeenCalled();
+      expect(
+        vi.mocked(agent.tools.ozone.moderation.getRecord),
+      ).not.toHaveBeenCalled();
+      expect(
+        vi.mocked(agent.tools.ozone.moderation.emitEvent),
+      ).not.toHaveBeenCalled();
     });
 
     it("should skip event if claimed but already labeled via API", async () => {
       vi.mocked(tryClaimPostLabel).mockResolvedValue(true);
       vi.mocked(agent.tools.ozone.moderation.getRecord).mockResolvedValue({
-        data: { labels: [{ val: LABEL, src: "did:plc:test", uri: URI, cts: "2024-01-01T00:00:00Z" }] },
+        data: {
+          labels: [
+            {
+              val: LABEL,
+              src: "did:plc:test",
+              uri: URI,
+              cts: "2024-01-01T00:00:00Z",
+            },
+          ],
+        },
       } as any);
 
       await createPostLabel(URI, CID, LABEL, COMMENT, undefined);
 
       expect(vi.mocked(tryClaimPostLabel)).toHaveBeenCalledWith(URI, LABEL);
-      expect(vi.mocked(agent.tools.ozone.moderation.getRecord)).toHaveBeenCalledWith(
-        { uri: URI },
-        expect.any(Object),
-      );
-      expect(vi.mocked(agent.tools.ozone.moderation.emitEvent)).not.toHaveBeenCalled();
+      expect(
+        vi.mocked(agent.tools.ozone.moderation.getRecord),
+      ).toHaveBeenCalledWith({ uri: URI }, expect.any(Object));
+      expect(
+        vi.mocked(agent.tools.ozone.moderation.emitEvent),
+      ).not.toHaveBeenCalled();
     });
 
     it("should emit event if claimed and not labeled anywhere", async () => {
@@ -103,16 +128,19 @@ describe("Moderation Logic", () => {
       vi.mocked(agent.tools.ozone.moderation.getRecord).mockResolvedValue({
         data: { labels: [] },
       } as any);
-      vi.mocked(agent.tools.ozone.moderation.emitEvent).mockResolvedValue({ success: true } as any);
+      vi.mocked(agent.tools.ozone.moderation.emitEvent).mockResolvedValue({
+        success: true,
+      } as any);
 
       await createPostLabel(URI, CID, LABEL, COMMENT, undefined);
 
       expect(vi.mocked(tryClaimPostLabel)).toHaveBeenCalledWith(URI, LABEL);
-      expect(vi.mocked(agent.tools.ozone.moderation.getRecord)).toHaveBeenCalledWith(
-        { uri: URI },
-        expect.any(Object),
-      );
-      expect(vi.mocked(agent.tools.ozone.moderation.emitEvent)).toHaveBeenCalled();
+      expect(
+        vi.mocked(agent.tools.ozone.moderation.getRecord),
+      ).toHaveBeenCalledWith({ uri: URI }, expect.any(Object));
+      expect(
+        vi.mocked(agent.tools.ozone.moderation.emitEvent),
+      ).toHaveBeenCalled();
     });
   });
 });

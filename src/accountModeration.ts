@@ -3,7 +3,7 @@ import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
 import { logger } from "./logger.js";
 import { labelsAppliedCounter, labelsCachedCounter } from "./metrics.js";
-import { tryClaimPostLabel } from "./redis.js";
+import { tryClaimAccountComment, tryClaimAccountLabel } from "./redis.js";
 
 const doesLabelExist = (
   labels: { val: string }[] | undefined,
@@ -15,78 +15,58 @@ const doesLabelExist = (
   return labels.some((label) => label.val === labelVal);
 };
 
-export const createPostLabel = async (
-  uri: string,
-  cid: string,
+export const createAccountLabel = async (
+  did: string,
   label: string,
   comment: string,
-  duration: number | undefined,
-  did?: string,
-  time?: number,
 ) => {
   await isLoggedIn;
 
-  const claimed = await tryClaimPostLabel(uri, label);
+  const claimed = await tryClaimAccountLabel(did, label);
   if (!claimed) {
     logger.debug(
-      { process: "MODERATION", uri, label },
-      "Post label already claimed in Redis, skipping",
+      { process: "MODERATION", did, label },
+      "Account label already claimed in Redis, skipping",
     );
     labelsCachedCounter.inc({
       label_type: label,
-      target_type: "post",
+      target_type: "account",
       reason: "redis_cache",
     });
     return;
   }
 
-  const hasLabel = await checkRecordLabels(uri, label);
+  const hasLabel = await checkAccountLabels(did, label);
   if (hasLabel) {
     logger.debug(
-      { process: "MODERATION", uri, label },
-      "Post already has label, skipping",
+      { process: "MODERATION", did, label },
+      "Account already has label, skipping",
     );
     labelsCachedCounter.inc({
       label_type: label,
-      target_type: "post",
+      target_type: "account",
       reason: "existing_label",
     });
     return;
   }
 
-  logger.info(
-    { process: "MODERATION", label, did, atURI: uri },
-    "Labeling post",
-  );
-  labelsAppliedCounter.inc({ label_type: label, target_type: "post" });
+  logger.info({ process: "MODERATION", did, label }, "Labeling account");
+  labelsAppliedCounter.inc({ label_type: label, target_type: "account" });
 
   await limit(async () => {
     try {
-      const event: {
-        $type: string;
-        comment: string;
-        createLabelVals: string[];
-        negateLabelVals: string[];
-        durationInHours?: number;
-      } = {
-        $type: "tools.ozone.moderation.defs#modEventLabel",
-        comment,
-        createLabelVals: [label],
-        negateLabelVals: [],
-      };
-
-      if (duration) {
-        event.durationInHours = duration;
-      }
-
       await agent.tools.ozone.moderation.emitEvent(
         {
-          event,
+          event: {
+            $type: "tools.ozone.moderation.defs#modEventLabel",
+            comment,
+            createLabelVals: [label],
+            negateLabelVals: [],
+          },
           // specify the labeled post by strongRef
           subject: {
-            $type: "com.atproto.repo.strongRef",
-            uri,
-            cid,
+            $type: "com.atproto.admin.defs#repoRef",
+            did,
           },
           // put in the rest of the metadata
           createdBy: agent.did ?? "",
@@ -104,41 +84,76 @@ export const createPostLabel = async (
           },
         },
       );
-
-      if (did && time) {
-        try {
-          // Dynamic import to avoid circular dependency:
-          // accountThreshold imports from moderation (createAccountLabel, etc.)
-          // moderation imports from accountThreshold (checkAccountThreshold)
-          const { checkAccountThreshold } = await import(
-            "./accountThreshold.js"
-          );
-          await checkAccountThreshold(did, label, time);
-        } catch (error) {
-          logger.error(
-            { process: "ACCOUNT_THRESHOLD", did, label, error },
-            "Failed to check account threshold",
-          );
-        }
-      }
     } catch (e) {
       logger.error(
         { process: "MODERATION", error: e },
-        "Failed to create post label",
+        "Failed to create account label",
       );
     }
   });
 };
 
-export const createPostReport = async (
-  uri: string,
-  cid: string,
+export const createAccountComment = async (
+  did: string,
   comment: string,
+  atURI: string,
 ) => {
+  await isLoggedIn;
+
+  const claimed = await tryClaimAccountComment(did, atURI);
+  if (!claimed) {
+    logger.debug(
+      { process: "MODERATION", did, atURI },
+      "Account comment already claimed in Redis, skipping",
+    );
+    return;
+  }
+
+  logger.info({ process: "MODERATION", did, atURI }, "Commenting on account");
+
+  await limit(async () => {
+    try {
+      await agent.tools.ozone.moderation.emitEvent(
+        {
+          event: {
+            $type: "tools.ozone.moderation.defs#modEventComment",
+            comment,
+          },
+          // specify the labeled post by strongRef
+          subject: {
+            $type: "com.atproto.admin.defs#repoRef",
+            did,
+          },
+          // put in the rest of the metadata
+          createdBy: agent.did ?? "",
+          createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+          },
+        },
+        {
+          encoding: "application/json",
+          headers: {
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      );
+    } catch (e) {
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to create account comment",
+      );
+    }
+  });
+};
+
+export const createAccountReport = async (did: string, comment: string) => {
   await isLoggedIn;
   await limit(async () => {
     try {
-      return await agent.tools.ozone.moderation.emitEvent(
+      await agent.tools.ozone.moderation.emitEvent(
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventReport",
@@ -147,9 +162,8 @@ export const createPostReport = async (
           },
           // specify the labeled post by strongRef
           subject: {
-            $type: "com.atproto.repo.strongRef",
-            uri,
-            cid,
+            $type: "com.atproto.admin.defs#repoRef",
+            did,
           },
           // put in the rest of the metadata
           createdBy: agent.did ?? "",
@@ -170,21 +184,21 @@ export const createPostReport = async (
     } catch (e) {
       logger.error(
         { process: "MODERATION", error: e },
-        "Failed to create post label",
+        "Failed to create account report",
       );
     }
   });
 };
 
-export const checkRecordLabels = async (
-  uri: string,
+export const checkAccountLabels = async (
+  did: string,
   label: string,
 ): Promise<boolean> => {
   await isLoggedIn;
   return await limit(async () => {
     try {
-      const response = await agent.tools.ozone.moderation.getRecord(
-        { uri },
+      const response = await agent.tools.ozone.moderation.getRepo(
+        { did },
         {
           headers: {
             "atproto-proxy": `${MOD_DID}#atproto_labeler`,
@@ -197,8 +211,8 @@ export const checkRecordLabels = async (
       return doesLabelExist(response.data.labels, label);
     } catch (e) {
       logger.error(
-        { process: "MODERATION", uri, error: e },
-        "Failed to check record labels",
+        { process: "MODERATION", did, error: e },
+        "Failed to check account labels",
       );
       return false;
     }

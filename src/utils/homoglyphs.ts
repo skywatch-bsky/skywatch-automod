@@ -1,5 +1,3 @@
-/* eslint-disable no-misleading-character-class */
-
 export const homoglyphMap: Record<string, string> = {
   // Confusables for 'a'
   á: "a",

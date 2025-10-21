@@ -1,14 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ACCOUNT_AGE_CHECKS } from "../../../../rules/accountAge.js";
+import { GLOBAL_ALLOW } from "../../../../rules/constants.js";
+import {
+  checkAccountLabels,
+  createAccountLabel,
+} from "../../../accountModeration.js";
 import { agent } from "../../../agent.js";
-import { GLOBAL_ALLOW } from "../../../constants.js";
+import { PLC_URL } from "../../../config.js";
 import { logger } from "../../../logger.js";
-import { checkAccountLabels, createAccountLabel } from "../../../moderation.js";
 import {
   calculateAccountAge,
   checkAccountAge,
   getAccountCreationDate,
 } from "../age.js";
-import { ACCOUNT_AGE_CHECKS } from "../ageConstants.js";
 
 // Mock dependencies
 vi.mock("../../../agent.js", () => ({
@@ -27,12 +31,12 @@ vi.mock("../../../logger.js", () => ({
   },
 }));
 
-vi.mock("../../../moderation.js", () => ({
+vi.mock("../../../accountModeration.js", () => ({
   createAccountLabel: vi.fn(),
   checkAccountLabels: vi.fn(),
 }));
 
-vi.mock("../../../constants.js", () => ({
+vi.mock("../../../../rules/constants.js", () => ({
   GLOBAL_ALLOW: [],
 }));
 
@@ -97,7 +101,7 @@ describe("Account Age Module", () => {
       const result = await getAccountCreationDate("did:plc:test123");
 
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://plc.directory/did:plc:test123/log/audit",
+        `https://${PLC_URL}/did:plc:test123/log/audit`,
       );
       expect(result).toEqual(new Date("2025-01-10T12:00:00.000Z"));
     });

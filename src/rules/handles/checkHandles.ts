@@ -1,17 +1,17 @@
-import { GLOBAL_ALLOW } from "../../constants.js";
-import { logger } from "../../logger.js";
+import { GLOBAL_ALLOW } from "../../../rules/constants.js";
+import { HANDLE_CHECKS } from "../../../rules/handles.js";
 import {
   createAccountComment,
   createAccountLabel,
   createAccountReport,
-} from "../../moderation.js";
-import { HANDLE_CHECKS } from "./constants.js";
+} from "../../accountModeration.js";
+import { logger } from "../../logger.js";
 
-export const checkHandle = async (
+export const checkHandle = (
   did: string,
   handle: string,
   time: number,
-) => {
+): void => {
   // Check if DID is whitelisted
   if (GLOBAL_ALLOW.includes(did)) {
     logger.warn(
@@ -45,26 +45,29 @@ export const checkHandle = async (
         }
       }
 
-      if (checkList.toLabel === true) {
-        createAccountLabel(
+      if (checkList.toLabel) {
+        void createAccountLabel(
           did,
-          `${checkList.label}`,
-          `${time}: ${checkList.comment} - ${handle}`,
+          checkList.label,
+          `${time.toString()}: ${checkList.comment} - ${handle}`,
         );
       }
 
-      if (checkList.reportAcct === true) {
+      if (checkList.reportAcct) {
         logger.info(
           { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
           "Reporting account",
         );
-        createAccountReport(did, `${time}: ${checkList.comment} - ${handle}`);
+        void createAccountReport(
+          did,
+          `${time.toString()}: ${checkList.comment} - ${handle}`,
+        );
       }
 
-      if (checkList.commentAcct === true) {
-        createAccountComment(
+      if (checkList.commentAcct) {
+        void createAccountComment(
           did,
-          `${time}: ${checkList.comment} - ${handle}`,
+          `${time.toString()}: ${checkList.comment} - ${handle}`,
           `handle:${did}:${handle}`,
         );
       }

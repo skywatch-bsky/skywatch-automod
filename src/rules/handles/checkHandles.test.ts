@@ -3,11 +3,11 @@ import {
   createAccountComment,
   createAccountLabel,
   createAccountReport,
-} from "../../moderation.js";
+} from "../../accountModeration.js";
 import { checkHandle } from "./checkHandles.js";
 
 // Mock dependencies
-vi.mock("../../moderation.js", () => ({
+vi.mock("../../accountModeration.js", () => ({
   createAccountReport: vi.fn(),
   createAccountComment: vi.fn(),
   createAccountLabel: vi.fn(),
@@ -21,12 +21,12 @@ vi.mock("../../logger.js", () => ({
   },
 }));
 
-vi.mock("../../constants.js", () => ({
+vi.mock("../../../rules/constants.js", () => ({
   GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
 
 // Mock HANDLE_CHECKS with various test scenarios
-vi.mock("./constants.js", () => ({
+vi.mock("../../../rules/handles.js", () => ({
   HANDLE_CHECKS: [
     {
       label: "spam",
@@ -222,7 +222,7 @@ describe("checkHandle", () => {
     it("should process all matching rules", async () => {
       vi.resetModules();
       // Re-import with a mock that has overlapping patterns
-      vi.doMock("./constants.js", () => ({
+      vi.doMock("../../../rules/handles.js", () => ({
         HANDLE_CHECKS: [
           {
             label: "pattern1",
@@ -270,7 +270,7 @@ describe("checkHandle", () => {
     });
 
     it("should handle very long handles", async () => {
-      const longHandle = "spam-" + "a".repeat(1000);
+      const longHandle = `spam-${"a".repeat(1000)}`;
       const time = Date.now();
       await checkHandle("did:plc:user1", longHandle, time);
 

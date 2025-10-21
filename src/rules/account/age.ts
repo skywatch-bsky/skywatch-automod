@@ -1,9 +1,12 @@
+import { ACCOUNT_AGE_CHECKS } from "../../../rules/accountAge.js";
+import { GLOBAL_ALLOW } from "../../../rules/constants.js";
+import {
+  checkAccountLabels,
+  createAccountLabel,
+} from "../../accountModeration.js";
 import { agent, isLoggedIn } from "../../agent.js";
 import { PLC_URL } from "../../config.js";
-import { GLOBAL_ALLOW } from "../../constants.js";
 import { logger } from "../../logger.js";
-import { checkAccountLabels, createAccountLabel } from "../../moderation.js";
-import { ACCOUNT_AGE_CHECKS } from "./ageConstants.js";
 
 interface InteractionContext {
   // For replies
@@ -36,13 +39,13 @@ export const getAccountCreationDate = async (
       try {
         const response = await fetch(`https://${PLC_URL}/${did}/log/audit`);
         if (response.ok) {
-          const didDoc = await response.json();
+          const didDoc = (await response.json()) as unknown;
 
           // The plc directory returns an array of operations, first one is creation
           if (Array.isArray(didDoc) && didDoc.length > 0) {
-            const createdAt = didDoc[0].createdAt;
-            if (createdAt) {
-              return new Date(createdAt);
+            const firstOp = didDoc[0] as { createdAt?: string };
+            if (firstOp.createdAt) {
+              return new Date(firstOp.createdAt);
             }
           }
         } else {
@@ -51,7 +54,7 @@ export const getAccountCreationDate = async (
             "Failed to fetch DID document, trying profile fallback",
           );
         }
-      } catch (plcError) {
+      } catch {
         logger.debug(
           { process: "ACCOUNT_AGE", did },
           "Error fetching from plc directory, trying profile fallback",
@@ -65,7 +68,7 @@ export const getAccountCreationDate = async (
       if (profile.data.createdAt) {
         return new Date(profile.data.createdAt);
       }
-    } catch (profileError) {
+    } catch {
       logger.debug({ process: "ACCOUNT_AGE", did }, "Failed to get profile");
     }
 
@@ -237,7 +240,7 @@ export const checkAccountAge = async (
       await createAccountLabel(
         context.actorDid,
         check.label,
-        `${context.time}: ${check.comment} - Account created within monitored range - Interaction: ${context.atURI}`,
+        `${context.time.toString()}: ${check.comment} - Account created within monitored range - Interaction: ${context.atURI}`,
       );
 
       // Only apply one label per interaction

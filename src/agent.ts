@@ -1,11 +1,17 @@
 import { Agent, setGlobalDispatcher } from "undici";
 import { AtpAgent } from "@atproto/api";
 import { BSKY_HANDLE, BSKY_PASSWORD, OZONE_PDS } from "./config.js";
-import { loadSession, saveSession, type SessionData } from "./session.js";
 import { updateRateLimitState } from "./limits.js";
 import { logger } from "./logger.js";
+import { type SessionData, loadSession, saveSession } from "./session.js";
 
-setGlobalDispatcher(new Agent({ connect: { timeout: 20_000 } }));
+setGlobalDispatcher(
+  new Agent({
+    connect: { timeout: 20_000 },
+    keepAliveTimeout: 10_000,
+    keepAliveMaxTimeout: 20_000,
+  }),
+);
 
 const customFetch: typeof fetch = async (input, init) => {
   const response = await fetch(input, init);
@@ -21,7 +27,7 @@ const customFetch: typeof fetch = async (input, init) => {
       limit: parseInt(limitHeader, 10),
       remaining: parseInt(remainingHeader, 10),
       reset: parseInt(resetHeader, 10),
-      policy: policyHeader || undefined,
+      policy: policyHeader ?? undefined,
     });
   }
 
@@ -40,13 +46,14 @@ let refreshTimer: NodeJS.Timeout | null = null;
 async function refreshSession(): Promise<void> {
   try {
     logger.info("Refreshing session tokens");
-    await agent.resumeSession(agent.session!);
-
-    if (agent.session) {
-      saveSession(agent.session as SessionData);
-      scheduleSessionRefresh();
+    if (!agent.session) {
+      throw new Error("No active session to refresh");
     }
-  } catch (error) {
+    await agent.resumeSession(agent.session);
+
+    saveSession(agent.session as SessionData);
+    scheduleSessionRefresh();
+  } catch (error: unknown) {
     logger.error({ error }, "Failed to refresh session, will re-authenticate");
     await performLogin();
   }
@@ -58,10 +65,12 @@ function scheduleSessionRefresh(): void {
   }
 
   const refreshIn = JWT_LIFETIME_MS * REFRESH_AT_PERCENT;
-  logger.debug(`Scheduling session refresh in ${(refreshIn / 1000 / 60).toFixed(1)} minutes`);
+  logger.debug(
+    `Scheduling session refresh in ${(refreshIn / 1000 / 60).toFixed(1)} minutes`,
+  );
 
   refreshTimer = setTimeout(() => {
-    refreshSession().catch((error) => {
+    refreshSession().catch((error: unknown) => {
       logger.error({ error }, "Scheduled session refresh failed");
     });
   }, refreshIn);

@@ -1,16 +1,15 @@
-import { GLOBAL_ALLOW } from "../../constants.js";
-import { logger } from "../../logger.js";
+import { GLOBAL_ALLOW, LINK_SHORTENER } from "../../../rules/constants.js";
+import { POST_CHECKS } from "../../../rules/posts.js";
 import {
   createAccountComment,
   createAccountReport,
-  createPostLabel,
-  createPostReport,
-} from "../../moderation.js";
-import { Post } from "../../types.js";
+} from "../../accountModeration.js";
+import { logger } from "../../logger.js";
+import { createPostLabel, createPostReport } from "../../moderation.js";
+import type { Post } from "../../types.js";
 import { getFinalUrl } from "../../utils/getFinalUrl.js";
 import { getLanguage } from "../../utils/getLanguage.js";
 import { countStarterPacks } from "../account/countStarterPacks.js";
-import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
 
 export const checkPosts = async (post: Post[]) => {
   if (GLOBAL_ALLOW.includes(post[0].did)) {
@@ -103,16 +102,17 @@ export const checkPosts = async (post: Post[]) => {
         }
       }
 
-      countStarterPacks(post[0].did, post[0].time);
+      void countStarterPacks(post[0].did, post[0].time);
 
-      if (checkPost.toLabel === true) {
-        createPostLabel(
+      if (checkPost.toLabel) {
+        void createPostLabel(
           post[0].atURI,
           post[0].cid,
-          `${checkPost.label}`,
-          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          checkPost.label,
+          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           checkPost.duration,
           post[0].did,
+          post[0].time,
         );
       }
 
@@ -126,14 +126,14 @@ export const checkPosts = async (post: Post[]) => {
           },
           "Reporting post",
         );
-        createPostReport(
+        void createPostReport(
           post[0].atURI,
           post[0].cid,
-          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
 
-      if (checkPost.reportAcct === true) {
+      if (checkPost.reportAcct) {
         logger.info(
           {
             process: "CHECKPOSTS",
@@ -143,16 +143,16 @@ export const checkPosts = async (post: Post[]) => {
           },
           "Reporting account",
         );
-        createAccountReport(
+        void createAccountReport(
           post[0].did,
-          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
         );
       }
 
-      if (checkPost.commentAcct === true) {
-        createAccountComment(
+      if (checkPost.commentAcct) {
+        void createAccountComment(
           post[0].did,
-          `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           post[0].atURI,
         );
       }

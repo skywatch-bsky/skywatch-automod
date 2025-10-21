@@ -4,6 +4,4 @@ cursor.txt
 *.log
 labels.db*
 .DS_Store
-src/constants.ts
-constants.ts
 coverage/
