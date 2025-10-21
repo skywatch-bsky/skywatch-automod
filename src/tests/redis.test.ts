@@ -1,4 +1,3 @@
- 
 // Import the mocked redis first to get a reference to the mock client
 import { createClient } from "redis";
 import { afterEach, describe, expect, it, vi } from "vitest";
