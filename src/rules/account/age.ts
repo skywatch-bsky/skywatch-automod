@@ -1,9 +1,12 @@
+import { ACCOUNT_AGE_CHECKS } from "../../../rules/accountAge.js";
+import { GLOBAL_ALLOW } from "../../../rules/constants.js";
+import {
+  checkAccountLabels,
+  createAccountLabel,
+} from "../../accountModeration.js";
 import { agent, isLoggedIn } from "../../agent.js";
 import { PLC_URL } from "../../config.js";
-import { GLOBAL_ALLOW } from "../../../rules/constants.js";
 import { logger } from "../../logger.js";
-import { checkAccountLabels, createAccountLabel } from "../../accountModeration.js";
-import { ACCOUNT_AGE_CHECKS } from "../../../rules/accountAge.js";
 
 interface InteractionContext {
   // For replies

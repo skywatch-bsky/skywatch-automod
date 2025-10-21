@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createAccountLabel } from "../../../accountModeration.js";
 import { agent } from "../../../agent.js";
 import { limit } from "../../../limits.js";
 import { logger } from "../../../logger.js";
-import { createAccountLabel } from "../../../accountModeration.js";
 import { countStarterPacks } from "../countStarterPacks.js";
 
 // Mock dependencies

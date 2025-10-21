@@ -1,14 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { agent } from "../../../agent.js";
+import { ACCOUNT_AGE_CHECKS } from "../../../../rules/accountAge.js";
 import { GLOBAL_ALLOW } from "../../../../rules/constants.js";
+import {
+  checkAccountLabels,
+  createAccountLabel,
+} from "../../../accountModeration.js";
+import { agent } from "../../../agent.js";
 import { logger } from "../../../logger.js";
-import { checkAccountLabels, createAccountLabel } from "../../../accountModeration.js";
 import {
   calculateAccountAge,
   checkAccountAge,
   getAccountCreationDate,
 } from "../age.js";
-import { ACCOUNT_AGE_CHECKS } from "../../../../rules/accountAge.js";
 
 // Mock dependencies
 vi.mock("../../../agent.js", () => ({

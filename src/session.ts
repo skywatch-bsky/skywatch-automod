@@ -1,4 +1,10 @@
-import { readFileSync, writeFileSync, unlinkSync, chmodSync, existsSync } from "node:fs";
+import {
+  chmodSync,
+  existsSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import { logger } from "./logger.js";
 
@@ -34,7 +40,10 @@ export function loadSession(): SessionData | null {
     logger.info("Loaded existing session from file");
     return session;
   } catch (error) {
-    logger.error({ error }, "Failed to load session file, will authenticate fresh");
+    logger.error(
+      { error },
+      "Failed to load session file, will authenticate fresh",
+    );
     return null;
   }
 }

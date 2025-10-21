@@ -130,7 +130,6 @@ export const createPostLabel = async (
   });
 };
 
-
 export const createPostReport = async (
   uri: string,
   cid: string,
@@ -176,7 +175,6 @@ export const createPostReport = async (
     }
   });
 };
-
 
 export const checkRecordLabels = async (
   uri: string,

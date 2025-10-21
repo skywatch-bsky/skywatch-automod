@@ -133,7 +133,11 @@ export async function checkAccountThreshold(
         const shouldLabel = config.toLabel !== false;
 
         if (shouldLabel) {
-          await createAccountLabel(did, config.accountLabel, config.accountComment);
+          await createAccountLabel(
+            did,
+            config.accountLabel,
+            config.accountComment,
+          );
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
             action: "label",

@@ -1,4 +1,23 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  createAccountComment,
+  createAccountLabel,
+  createAccountReport,
+} from "../accountModeration.js";
+import {
+  checkAccountThreshold,
+  loadThresholdConfigs,
+} from "../accountThreshold.js";
+import { logger } from "../logger.js";
+import {
+  accountLabelsThresholdAppliedCounter,
+  accountThresholdChecksCounter,
+  accountThresholdMetCounter,
+} from "../metrics.js";
+import {
+  getPostLabelCountInWindow,
+  trackPostLabelForAccount,
+} from "../redis.js";
 
 vi.mock("../logger.js", () => ({
   logger: {
@@ -76,26 +95,6 @@ vi.mock("../metrics.js", () => ({
     inc: vi.fn(),
   },
 }));
-
-import {
-  checkAccountThreshold,
-  loadThresholdConfigs,
-} from "../accountThreshold.js";
-import { logger } from "../logger.js";
-import {
-  accountLabelsThresholdAppliedCounter,
-  accountThresholdChecksCounter,
-  accountThresholdMetCounter,
-} from "../metrics.js";
-import {
-  createAccountComment,
-  createAccountLabel,
-  createAccountReport,
-} from "../accountModeration.js";
-import {
-  getPostLabelCountInWindow,
-  trackPostLabelForAccount,
-} from "../redis.js";
 
 describe("Account Threshold Logic", () => {
   afterEach(() => {

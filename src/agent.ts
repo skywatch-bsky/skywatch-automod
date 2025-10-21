@@ -1,9 +1,9 @@
 import { Agent, setGlobalDispatcher } from "undici";
 import { AtpAgent } from "@atproto/api";
 import { BSKY_HANDLE, BSKY_PASSWORD, OZONE_PDS } from "./config.js";
-import { loadSession, saveSession, type SessionData } from "./session.js";
 import { updateRateLimitState } from "./limits.js";
 import { logger } from "./logger.js";
+import { type SessionData, loadSession, saveSession } from "./session.js";
 
 setGlobalDispatcher(
   new Agent({
@@ -64,7 +64,9 @@ function scheduleSessionRefresh(): void {
   }
 
   const refreshIn = JWT_LIFETIME_MS * REFRESH_AT_PERCENT;
-  logger.debug(`Scheduling session refresh in ${(refreshIn / 1000 / 60).toFixed(1)} minutes`);
+  logger.debug(
+    `Scheduling session refresh in ${(refreshIn / 1000 / 60).toFixed(1)} minutes`,
+  );
 
   refreshTimer = setTimeout(() => {
     refreshSession().catch((error) => {

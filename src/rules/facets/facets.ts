@@ -1,5 +1,5 @@
-import { logger } from "../../logger.js";
 import { createAccountLabel } from "../../accountModeration.js";
+import { logger } from "../../logger.js";
 import { Facet } from "../../types.js";
 
 // Threshold for duplicate facet positions before flagging as spam

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { logger } from "../../../logger.js";
 import { createAccountLabel } from "../../../accountModeration.js";
+import { logger } from "../../../logger.js";
 import { Facet } from "../../../types.js";
 import {
   FACET_SPAM_ALLOWLIST,

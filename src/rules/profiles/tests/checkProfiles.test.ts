@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { logger } from "../../../logger.js";
 import {
   createAccountComment,
   createAccountLabel,
   createAccountReport,
 } from "../../../accountModeration.js";
+import { logger } from "../../../logger.js";
 import { getLanguage } from "../../../utils/getLanguage.js";
 import { checkDescription, checkDisplayName } from "../checkProfiles.js";
 
@@ -357,7 +357,6 @@ describe("checkProfiles", () => {
           expect.any(String),
         );
       });
-
     });
   });
 
