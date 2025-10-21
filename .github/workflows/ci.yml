@@ -21,15 +21,6 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Setup example config files for CI
-        run: |
-          cp rules/constants.example.ts rules/constants.ts
-          cp rules/handles.example.ts rules/handles.ts
-          cp rules/posts.example.ts rules/posts.ts
-          cp rules/profiles.example.ts rules/profiles.ts
-          cp rules/accountAge.example.ts rules/accountAge.ts
-          cp rules/accountThreshold.example.ts rules/accountThreshold.ts
-
       - name: Run linter
         run: bun run lint
 
