@@ -68,3 +68,14 @@ export interface AccountAgeCheck {
   comment: string; // Comment for the label
   expires?: string; // Optional expiration date (ISO 8601) - check will be skipped after this date
 }
+
+export interface AccountThresholdConfig {
+  labels: string | string[]; // Single label or array for OR matching
+  threshold: number; // Number of labeled posts required to trigger account action
+  accountLabel: string; // Label to apply to the account
+  accountComment: string; // Comment for the account action
+  windowDays: number; // Rolling window in days
+  reportAcct: boolean; // Whether to report the account
+  commentAcct: boolean; // Whether to comment on the account
+  toLabel?: boolean; // Whether to apply label (defaults to true)
+}

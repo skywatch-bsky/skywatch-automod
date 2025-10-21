@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { logger } from "../../../logger.js";
-import { createAccountLabel } from "../../../moderation.js";
+import { createAccountLabel } from "../../../accountModeration.js";
 import { Facet } from "../../../types.js";
 import {
   FACET_SPAM_ALLOWLIST,
@@ -11,7 +11,7 @@ import {
 } from "../facets.js";
 
 // Mock dependencies
-vi.mock("../../../moderation.js", () => ({
+vi.mock("../../../accountModeration.js", () => ({
   createAccountLabel: vi.fn(),
 }));
 

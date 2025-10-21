@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { agent } from "../../../agent.js";
-import { GLOBAL_ALLOW } from "../../../constants.js";
+import { GLOBAL_ALLOW } from "../../../../rules/constants.js";
 import { logger } from "../../../logger.js";
-import { checkAccountLabels, createAccountLabel } from "../../../moderation.js";
+import { checkAccountLabels, createAccountLabel } from "../../../accountModeration.js";
 import {
   calculateAccountAge,
   checkAccountAge,
   getAccountCreationDate,
 } from "../age.js";
-import { ACCOUNT_AGE_CHECKS } from "../ageConstants.js";
+import { ACCOUNT_AGE_CHECKS } from "../../../../rules/accountAge.js";
 
 // Mock dependencies
 vi.mock("../../../agent.js", () => ({
@@ -27,12 +27,12 @@ vi.mock("../../../logger.js", () => ({
   },
 }));
 
-vi.mock("../../../moderation.js", () => ({
+vi.mock("../../../accountModeration.js", () => ({
   createAccountLabel: vi.fn(),
   checkAccountLabels: vi.fn(),
 }));
 
-vi.mock("../../../constants.js", () => ({
+vi.mock("../../../../rules/constants.js", () => ({
   GLOBAL_ALLOW: [],
 }));
 

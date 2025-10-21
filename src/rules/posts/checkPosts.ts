@@ -1,16 +1,15 @@
-import { GLOBAL_ALLOW } from "../../constants.js";
-import { logger } from "../../logger.js";
+import { GLOBAL_ALLOW, LINK_SHORTENER } from "../../../rules/constants.js";
+import { POST_CHECKS } from "../../../rules/posts.js";
 import {
   createAccountComment,
   createAccountReport,
-  createPostLabel,
-  createPostReport,
-} from "../../moderation.js";
+} from "../../accountModeration.js";
+import { logger } from "../../logger.js";
+import { createPostLabel, createPostReport } from "../../moderation.js";
 import { Post } from "../../types.js";
 import { getFinalUrl } from "../../utils/getFinalUrl.js";
 import { getLanguage } from "../../utils/getLanguage.js";
 import { countStarterPacks } from "../account/countStarterPacks.js";
-import { LINK_SHORTENER, POST_CHECKS } from "./constants.js";
 
 export const checkPosts = async (post: Post[]) => {
   if (GLOBAL_ALLOW.includes(post[0].did)) {
@@ -113,6 +112,7 @@ export const checkPosts = async (post: Post[]) => {
           `${post[0].time}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
           checkPost.duration,
           post[0].did,
+          post[0].time,
         );
       }
 

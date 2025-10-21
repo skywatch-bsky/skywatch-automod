@@ -5,7 +5,13 @@ import { loadSession, saveSession, type SessionData } from "./session.js";
 import { updateRateLimitState } from "./limits.js";
 import { logger } from "./logger.js";
 
-setGlobalDispatcher(new Agent({ connect: { timeout: 20_000 } }));
+setGlobalDispatcher(
+  new Agent({
+    connect: { timeout: 20_000 },
+    keepAliveTimeout: 10_000,
+    keepAliveMaxTimeout: 20_000,
+  }),
+);
 
 const customFetch: typeof fetch = async (input, init) => {
   const response = await fetch(input, init);

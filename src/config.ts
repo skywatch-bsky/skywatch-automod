@@ -5,8 +5,7 @@ export const OZONE_URL = process.env.OZONE_URL ?? "";
 export const OZONE_PDS = process.env.OZONE_PDS ?? "";
 export const BSKY_HANDLE = process.env.BSKY_HANDLE ?? "";
 export const BSKY_PASSWORD = process.env.BSKY_PASSWORD ?? "";
-export const HOST = process.env.HOST ?? "127.0.0.1";
-export const PORT = process.env.PORT ? Number(process.env.PORT) : 4100;
+export const HOST = process.env.HOST ?? "0.0.0.0";
 export const METRICS_PORT = process.env.METRICS_PORT
   ? Number(process.env.METRICS_PORT)
   : 4101; // Left this intact from the code I adapted this from

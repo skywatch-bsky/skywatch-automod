@@ -107,3 +107,75 @@ export async function tryClaimAccountComment(
     return true;
   }
 }
+
+function getPostLabelTrackingKey(
+  did: string,
+  label: string,
+  windowDays: number,
+): string {
+  return `account-post-labels:${did}:${label}:${windowDays}`;
+}
+
+export async function trackPostLabelForAccount(
+  did: string,
+  label: string,
+  timestamp: number,
+  windowDays: number,
+): Promise<void> {
+  try {
+    const key = getPostLabelTrackingKey(did, label, windowDays);
+    const windowStartTime = timestamp - windowDays * 24 * 60 * 60 * 1000000;
+
+    await redisClient.zRemRangeByScore(key, "-inf", windowStartTime);
+
+    await redisClient.zAdd(key, {
+      score: timestamp,
+      value: timestamp.toString(),
+    });
+
+    const ttlSeconds = (windowDays + 1) * 24 * 60 * 60;
+    await redisClient.expire(key, ttlSeconds);
+
+    logger.debug(
+      { did, label, timestamp, windowDays },
+      "Tracked post label for account",
+    );
+  } catch (err) {
+    logger.error(
+      { err, did, label, timestamp, windowDays },
+      "Error tracking post label in Redis",
+    );
+    throw err;
+  }
+}
+
+export async function getPostLabelCountInWindow(
+  did: string,
+  labels: string[],
+  windowDays: number,
+  currentTime: number,
+): Promise<number> {
+  try {
+    const windowStartTime = currentTime - windowDays * 24 * 60 * 60 * 1000000;
+    let totalCount = 0;
+
+    for (const label of labels) {
+      const key = getPostLabelTrackingKey(did, label, windowDays);
+      const count = await redisClient.zCount(key, windowStartTime, "+inf");
+      totalCount += count;
+    }
+
+    logger.debug(
+      { did, labels, windowDays, totalCount },
+      "Retrieved post label count in window",
+    );
+
+    return totalCount;
+  } catch (err) {
+    logger.error(
+      { err, did, labels, windowDays },
+      "Error getting post label count from Redis",
+    );
+    throw err;
+  }
+}

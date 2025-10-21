@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'skywatch-automod'
+    static_configs:
+      - targets: ['automod:4101']
+        labels:
+          service: 'automod'

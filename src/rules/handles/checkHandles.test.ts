@@ -3,11 +3,11 @@ import {
   createAccountComment,
   createAccountLabel,
   createAccountReport,
-} from "../../moderation.js";
+} from "../../accountModeration.js";
 import { checkHandle } from "./checkHandles.js";
 
 // Mock dependencies
-vi.mock("../../moderation.js", () => ({
+vi.mock("../../accountModeration.js", () => ({
   createAccountReport: vi.fn(),
   createAccountComment: vi.fn(),
   createAccountLabel: vi.fn(),
@@ -21,12 +21,12 @@ vi.mock("../../logger.js", () => ({
   },
 }));
 
-vi.mock("../../constants.js", () => ({
+vi.mock("../../../rules/constants.js", () => ({
   GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
 
 // Mock HANDLE_CHECKS with various test scenarios
-vi.mock("./constants.js", () => ({
+vi.mock("../../../rules/handles.js", () => ({
   HANDLE_CHECKS: [
     {
       label: "spam",

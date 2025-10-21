@@ -41,10 +41,11 @@ vi.mock("../limits.js", () => ({
 
 // --- Imports Second ---
 
+import { checkAccountLabels } from "../accountModeration.js";
 import { agent } from "../agent.js";
-import { checkAccountLabels, createPostLabel } from "../moderation.js";
-import { tryClaimPostLabel } from "../redis.js";
 import { logger } from "../logger.js";
+import { createPostLabel } from "../moderation.js";
+import { tryClaimPostLabel } from "../redis.js";
 
 describe("Moderation Logic", () => {
   beforeEach(() => {

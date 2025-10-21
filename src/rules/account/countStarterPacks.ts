@@ -1,7 +1,7 @@
 import { agent, isLoggedIn } from "../../agent.js";
 import { limit } from "../../limits.js";
 import { logger } from "../../logger.js";
-import { createAccountLabel } from "../../moderation.js";
+import { createAccountLabel } from "../../accountModeration.js";
 
 const ALLOWED_DIDS = ["did:plc:gpunjjgvlyb4racypz3yfiq4"];
 

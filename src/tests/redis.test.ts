@@ -9,6 +9,10 @@ vi.mock('redis', () => {
     quit: vi.fn(),
     exists: vi.fn(),
     set: vi.fn(),
+    zAdd: vi.fn(),
+    zRemRangeByScore: vi.fn(),
+    zCount: vi.fn(),
+    expire: vi.fn(),
   };
   return {
     createClient: vi.fn(() => mockClient),
@@ -25,6 +29,8 @@ import {
   tryClaimAccountLabel,
   connectRedis,
   disconnectRedis,
+  trackPostLabelForAccount,
+  getPostLabelCountInWindow,
 } from '../redis.js';
 import { logger } from '../logger.js';
 
@@ -101,6 +107,113 @@ describe('Redis Cache Logic', () => {
       vi.mocked(mockRedisClient.set).mockResolvedValue(null);
       const result = await tryClaimAccountLabel('did:plc:123', 'test-label');
       expect(result).toBe(false);
+    });
+  });
+
+  describe('trackPostLabelForAccount', () => {
+    it('should track post label with correct timestamp and TTL', async () => {
+      vi.mocked(mockRedisClient.zRemRangeByScore).mockResolvedValue(0);
+      vi.mocked(mockRedisClient.zAdd).mockResolvedValue(1);
+      vi.mocked(mockRedisClient.expire).mockResolvedValue(true);
+
+      const timestamp = 1640000000000000; // microseconds
+      const windowDays = 5;
+
+      await trackPostLabelForAccount('did:plc:123', 'test-label', timestamp, windowDays);
+
+      const expectedKey = 'account-post-labels:did:plc:123:test-label:5';
+      const windowStartTime = timestamp - windowDays * 24 * 60 * 60 * 1000000;
+
+      expect(mockRedisClient.zRemRangeByScore).toHaveBeenCalledWith(
+        expectedKey,
+        '-inf',
+        windowStartTime
+      );
+      expect(mockRedisClient.zAdd).toHaveBeenCalledWith(expectedKey, {
+        score: timestamp,
+        value: timestamp.toString(),
+      });
+      expect(mockRedisClient.expire).toHaveBeenCalledWith(
+        expectedKey,
+        (windowDays + 1) * 24 * 60 * 60
+      );
+    });
+
+    it('should throw error on Redis failure', async () => {
+      const redisError = new Error('Redis down');
+      vi.mocked(mockRedisClient.zRemRangeByScore).mockRejectedValue(redisError);
+
+      await expect(
+        trackPostLabelForAccount('did:plc:123', 'test-label', 1640000000000000, 5)
+      ).rejects.toThrow('Redis down');
+
+      expect(logger.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('getPostLabelCountInWindow', () => {
+    it('should count posts for single label', async () => {
+      vi.mocked(mockRedisClient.zCount).mockResolvedValue(3);
+
+      const currentTime = 1640000000000000;
+      const windowDays = 5;
+      const count = await getPostLabelCountInWindow(
+        'did:plc:123',
+        ['test-label'],
+        windowDays,
+        currentTime
+      );
+
+      expect(count).toBe(3);
+      const windowStartTime = currentTime - windowDays * 24 * 60 * 60 * 1000000;
+      expect(mockRedisClient.zCount).toHaveBeenCalledWith(
+        'account-post-labels:did:plc:123:test-label:5',
+        windowStartTime,
+        '+inf'
+      );
+    });
+
+    it('should sum counts for multiple labels (OR logic)', async () => {
+      vi.mocked(mockRedisClient.zCount)
+        .mockResolvedValueOnce(3)
+        .mockResolvedValueOnce(2)
+        .mockResolvedValueOnce(1);
+
+      const currentTime = 1640000000000000;
+      const windowDays = 5;
+      const count = await getPostLabelCountInWindow(
+        'did:plc:123',
+        ['label-1', 'label-2', 'label-3'],
+        windowDays,
+        currentTime
+      );
+
+      expect(count).toBe(6);
+      expect(mockRedisClient.zCount).toHaveBeenCalledTimes(3);
+    });
+
+    it('should return 0 when no posts in window', async () => {
+      vi.mocked(mockRedisClient.zCount).mockResolvedValue(0);
+
+      const count = await getPostLabelCountInWindow(
+        'did:plc:123',
+        ['test-label'],
+        5,
+        1640000000000000
+      );
+
+      expect(count).toBe(0);
+    });
+
+    it('should throw error on Redis failure', async () => {
+      const redisError = new Error('Redis down');
+      vi.mocked(mockRedisClient.zCount).mockRejectedValue(redisError);
+
+      await expect(
+        getPostLabelCountInWindow('did:plc:123', ['test-label'], 5, 1640000000000000)
+      ).rejects.toThrow('Redis down');
+
+      expect(logger.error).toHaveBeenCalled();
     });
   });
 });

@@ -4,12 +4,12 @@ import {
   createAccountComment,
   createAccountLabel,
   createAccountReport,
-} from "../../../moderation.js";
+} from "../../../accountModeration.js";
 import { getLanguage } from "../../../utils/getLanguage.js";
 import { checkDescription, checkDisplayName } from "../checkProfiles.js";
 
 // Mock dependencies
-vi.mock("../constants.js", () => ({
+vi.mock("../../../../rules/profiles.js", () => ({
   PROFILE_CHECKS: [
     {
       label: "test-description",
@@ -96,7 +96,7 @@ vi.mock("../../../logger.js", () => ({
   },
 }));
 
-vi.mock("../../../moderation.js", () => ({
+vi.mock("../../../accountModeration.js", () => ({
   createAccountLabel: vi.fn(),
   createAccountReport: vi.fn(),
   createAccountComment: vi.fn(),
@@ -106,7 +106,7 @@ vi.mock("../../../utils/getLanguage.js", () => ({
   getLanguage: vi.fn().mockResolvedValue("eng"),
 }));
 
-vi.mock("../../../constants.js", () => ({
+vi.mock("../../../../rules/constants.js", () => ({
   GLOBAL_ALLOW: ["did:plc:globalallow"],
 }));
 
