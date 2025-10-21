@@ -93,7 +93,7 @@ async function awaitRateLimit(): Promise<void> {
 
     if (delayMs > 0) {
       logger.warn(
-        `Rate limit critical (${state.remaining}/${state.limit} remaining). Waiting ${delaySeconds}s until reset...`,
+        `Rate limit critical (${state.remaining.toString()}/${state.limit.toString()} remaining). Waiting ${delaySeconds.toString()}s until reset...`,
       );
 
       const waitStart = Date.now();

@@ -2,7 +2,9 @@ import { logger } from "../logger.js";
 
 export async function getFinalUrl(url: string): Promise<string> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 15000); // 15-second timeout
 
   const headers = {
     "User-Agent":
@@ -19,12 +21,14 @@ export async function getFinalUrl(url: string): Promise<string> {
     });
     clearTimeout(timeoutId);
     return response.url;
-  } catch (headError) {
+  } catch {
     clearTimeout(timeoutId);
 
     // Some services block HEAD requests, try GET as fallback
     const getController = new AbortController();
-    const getTimeoutId = setTimeout(() => getController.abort(), 15000);
+    const getTimeoutId = setTimeout(() => {
+      getController.abort();
+    }, 15000);
 
     try {
       logger.debug(

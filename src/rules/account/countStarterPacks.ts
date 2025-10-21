@@ -32,10 +32,10 @@ export const countStarterPacks = async (did: string, time: number) => {
           "Labeling account with excessive starter packs",
         );
 
-        createAccountLabel(
+        void createAccountLabel(
           did,
           "follow-farming",
-          `${time}: Account has ${starterPacks} starter packs`,
+          `${time.toString()}: Account has ${starterPacks.toString()} starter packs`,
         );
       }
     } catch (error) {

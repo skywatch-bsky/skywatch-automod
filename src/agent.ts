@@ -27,7 +27,7 @@ const customFetch: typeof fetch = async (input, init) => {
       limit: parseInt(limitHeader, 10),
       remaining: parseInt(remainingHeader, 10),
       reset: parseInt(resetHeader, 10),
-      policy: policyHeader || undefined,
+      policy: policyHeader ?? undefined,
     });
   }
 
@@ -46,13 +46,14 @@ let refreshTimer: NodeJS.Timeout | null = null;
 async function refreshSession(): Promise<void> {
   try {
     logger.info("Refreshing session tokens");
-    await agent.resumeSession(agent.session!);
-
-    if (agent.session) {
-      saveSession(agent.session as SessionData);
-      scheduleSessionRefresh();
+    if (!agent.session) {
+      throw new Error("No active session to refresh");
     }
-  } catch (error) {
+    await agent.resumeSession(agent.session);
+
+    saveSession(agent.session as SessionData);
+    scheduleSessionRefresh();
+  } catch (error: unknown) {
     logger.error({ error }, "Failed to refresh session, will re-authenticate");
     await performLogin();
   }
@@ -69,7 +70,7 @@ function scheduleSessionRefresh(): void {
   );
 
   refreshTimer = setTimeout(() => {
-    refreshSession().catch((error) => {
+    refreshSession().catch((error: unknown) => {
       logger.error({ error }, "Scheduled session refresh failed");
     });
   }, refreshIn);

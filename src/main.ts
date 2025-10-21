@@ -1,8 +1,9 @@
 import fs from "node:fs";
-import {
+import type {
   CommitCreateEvent,
   CommitUpdateEvent,
-  IdentityEvent,
+  IdentityEvent} from "@skyware/jetstream";
+import {
   Jetstream,
 } from "@skyware/jetstream";
 import {
@@ -22,7 +23,7 @@ import {
   checkDescription,
   checkDisplayName,
 } from "./rules/profiles/checkProfiles.js";
-import { Handle, LinkFeature, Post } from "./types.js";
+import type { Post } from "./types.js";
 
 let cursor = 0;
 let cursorUpdateInterval: NodeJS.Timeout;
@@ -55,7 +56,7 @@ try {
 const jetstream = new Jetstream({
   wantedCollections: WANTED_COLLECTION,
   endpoint: FIREHOSE_URL,
-  cursor: cursor,
+  cursor,
 });
 
 jetstream.on("open", () => {
@@ -111,9 +112,9 @@ jetstream.onCreate(
   "app.bsky.feed.post",
   (event: CommitCreateEvent<"app.bsky.feed.post">) => {
     const atURI = `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`;
-    const hasEmbed = event.commit.record.hasOwnProperty("embed");
-    const hasFacets = event.commit.record.hasOwnProperty("facets");
-    const hasText = event.commit.record.hasOwnProperty("text");
+    const hasEmbed = Object.prototype.hasOwnProperty.call(event.commit.record, "embed");
+    const hasFacets = Object.prototype.hasOwnProperty.call(event.commit.record, "facets");
+    const hasText = Object.prototype.hasOwnProperty.call(event.commit.record, "text");
 
     const tasks: Promise<void>[] = [];
 
@@ -135,29 +136,32 @@ jetstream.onCreate(
 
     // Check account age for quote posts
     if (hasEmbed) {
-      const embed = event.commit.record.embed;
+      const {embed} = event.commit.record;
       if (
         embed &&
+        typeof embed === "object" &&
+        "$type" in embed &&
         (embed.$type === "app.bsky.embed.record" ||
           embed.$type === "app.bsky.embed.recordWithMedia")
       ) {
         const record =
           embed.$type === "app.bsky.embed.record"
-            ? embed.record
-            : embed.record.record;
-        if (record && record.uri) {
+            ? (embed as { record: { uri?: string } }).record
+            : (embed as { record: { record: { uri?: string } } }).record.record;
+        if (record.uri && typeof record.uri === "string") {
           const quotedPostURI = record.uri;
           const quotedDid = quotedPostURI.split("/")[2]; // Extract DID from at://did/...
-
-          tasks.push(
-            checkAccountAge({
-              actorDid: event.did,
-              quotedDid,
-              quotedPostURI,
-              atURI,
-              time: event.time_us,
-            }),
-          );
+          if (quotedDid) {
+            tasks.push(
+              checkAccountAge({
+                actorDid: event.did,
+                quotedDid,
+                quotedPostURI,
+                atURI,
+                time: event.time_us,
+              }),
+            );
+          }
         }
       }
     }
@@ -165,43 +169,44 @@ jetstream.onCreate(
     // Check if the record has facets
     if (hasFacets) {
       // Check for facet spam (hidden mentions with duplicate byte positions)
+      const facets = event.commit.record.facets ?? null;
       tasks.push(
         checkFacetSpam(
           event.did,
           event.time_us,
           atURI,
-          event.commit.record.facets!,
+          facets,
         ),
       );
 
-      const hasLinkType = event.commit.record.facets!.some((facet) =>
+      const hasLinkType = facets?.some((facet) =>
         facet.features.some(
           (feature) => feature.$type === "app.bsky.richtext.facet#link",
         ),
       );
 
-      if (hasLinkType) {
-        const urls = event.commit.record
-          .facets!.flatMap((facet) =>
-            facet.features.filter(
-              (feature) => feature.$type === "app.bsky.richtext.facet#link",
-            ),
-          )
-          .map((feature: LinkFeature) => feature.uri);
+      if (hasLinkType && facets) {
+        for (const facet of facets) {
+          const linkFeatures = facet.features.filter(
+            (feature) => feature.$type === "app.bsky.richtext.facet#link",
+          );
 
-        urls.forEach((url) => {
-          const posts: Post[] = [
-            {
-              did: event.did,
-              time: event.time_us,
-              rkey: event.commit.rkey,
-              atURI: atURI,
-              text: url,
-              cid: event.commit.cid,
-            },
-          ];
-          tasks.push(checkPosts(posts));
-        });
+          for (const feature of linkFeatures) {
+            if ("uri" in feature && typeof feature.uri === "string") {
+              const posts: Post[] = [
+                {
+                  did: event.did,
+                  time: event.time_us,
+                  rkey: event.commit.rkey,
+                  atURI,
+                  text: feature.uri,
+                  cid: event.commit.cid,
+                },
+              ];
+              tasks.push(checkPosts(posts));
+            }
+          }
+        }
       }
     }
 
@@ -211,7 +216,7 @@ jetstream.onCreate(
           did: event.did,
           time: event.time_us,
           rkey: event.commit.rkey,
-          atURI: atURI,
+          atURI,
           text: event.commit.record.text,
           cid: event.commit.cid,
         },
@@ -220,30 +225,42 @@ jetstream.onCreate(
     }
 
     if (hasEmbed) {
-      const embed = event.commit.record.embed;
-      if (embed && embed.$type === "app.bsky.embed.external") {
+      const {embed} = event.commit.record;
+      if (
+        embed &&
+        typeof embed === "object" &&
+        "$type" in embed &&
+        embed.$type === "app.bsky.embed.external"
+      ) {
+        const {external} = embed as { external: { uri: string } };
         const posts: Post[] = [
           {
             did: event.did,
             time: event.time_us,
             rkey: event.commit.rkey,
-            atURI: atURI,
-            text: embed.external.uri,
+            atURI,
+            text: external.uri,
             cid: event.commit.cid,
           },
         ];
         tasks.push(checkPosts(posts));
       }
 
-      if (embed && embed.$type === "app.bsky.embed.recordWithMedia") {
-        if (embed.media.$type === "app.bsky.embed.external") {
+      if (
+        embed &&
+        typeof embed === "object" &&
+        "$type" in embed &&
+        embed.$type === "app.bsky.embed.recordWithMedia"
+      ) {
+        const {media} = embed as { media: { $type: string; external?: { uri: string } } };
+        if (media.$type === "app.bsky.embed.external" && media.external) {
           const posts: Post[] = [
             {
               did: event.did,
               time: event.time_us,
               rkey: event.commit.rkey,
-              atURI: atURI,
-              text: embed.media.external.uri,
+              atURI,
+              text: media.external.uri,
               cid: event.commit.cid,
             },
           ];
@@ -257,16 +274,17 @@ jetstream.onCreate(
 // Check for profile updates
 jetstream.onUpdate(
   "app.bsky.actor.profile",
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/require-await
   async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        checkDescription(
+        void checkDescription(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
           event.commit.record.description as string,
         );
-        checkDisplayName(
+        void checkDisplayName(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
@@ -283,16 +301,17 @@ jetstream.onUpdate(
 
 jetstream.onCreate(
   "app.bsky.actor.profile",
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/require-await
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        checkDescription(
+        void checkDescription(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
           event.commit.record.description as string,
         );
-        checkDisplayName(
+        void checkDisplayName(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
@@ -306,11 +325,16 @@ jetstream.onCreate(
 );
 
 // Check for handle updates
-jetstream.on("identity", async (event: IdentityEvent) => {
-  if (event.identity.handle) {
-    checkHandle(event.identity.did, event.identity.handle, event.time_us);
-  }
-});
+jetstream.on(
+  "identity",
+  // eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/no-misused-promises
+  async (event: IdentityEvent) => {
+    if (event.identity.handle) {
+      // checkHandle is sync but calls async functions with void
+      checkHandle(event.identity.did, event.identity.handle, event.time_us);
+    }
+  },
+);
 
 const metricsServer = startMetricsServer(METRICS_PORT);
 
@@ -322,7 +346,9 @@ jetstream.start();
 async function shutdown() {
   try {
     logger.info({ process: "MAIN" }, "Shutting down gracefully");
-    fs.writeFileSync("cursor.txt", jetstream.cursor!.toString(), "utf8");
+    if (jetstream.cursor !== undefined) {
+      fs.writeFileSync("cursor.txt", jetstream.cursor.toString(), "utf8");
+    }
     jetstream.close();
     metricsServer.close();
     await disconnectRedis();
@@ -332,5 +358,5 @@ async function shutdown() {
   }
 }
 
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
+process.on("SIGINT", () => void shutdown());
+process.on("SIGTERM", () => void shutdown());

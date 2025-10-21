@@ -6,6 +6,7 @@ import {
   createAccountLabel,
 } from "../../../accountModeration.js";
 import { agent } from "../../../agent.js";
+import { PLC_URL } from "../../../config.js";
 import { logger } from "../../../logger.js";
 import {
   calculateAccountAge,
@@ -100,7 +101,7 @@ describe("Account Age Module", () => {
       const result = await getAccountCreationDate("did:plc:test123");
 
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://plc.directory/did:plc:test123/log/audit",
+        `https://${PLC_URL}/did:plc:test123/log/audit`,
       );
       expect(result).toEqual(new Date("2025-01-10T12:00:00.000Z"));
     });

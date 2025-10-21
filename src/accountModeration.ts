@@ -59,17 +59,17 @@ export const createAccountLabel = async (
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventLabel",
-            comment: comment,
+            comment,
             createLabelVals: [label],
             negateLabelVals: [],
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.admin.defs#repoRef",
-            did: did,
+            did,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? "",
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
@@ -78,7 +78,7 @@ export const createAccountLabel = async (
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
@@ -117,15 +117,15 @@ export const createAccountComment = async (
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventComment",
-            comment: comment,
+            comment,
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.admin.defs#repoRef",
-            did: did,
+            did,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? "",
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
@@ -134,7 +134,7 @@ export const createAccountComment = async (
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
@@ -157,16 +157,16 @@ export const createAccountReport = async (did: string, comment: string) => {
         {
           event: {
             $type: "tools.ozone.moderation.defs#modEventReport",
-            comment: comment,
+            comment,
             reportType: "com.atproto.moderation.defs#reasonOther",
           },
           // specify the labeled post by strongRef
           subject: {
             $type: "com.atproto.admin.defs#repoRef",
-            did: did,
+            did,
           },
           // put in the rest of the metadata
-          createdBy: `${agent.did}`,
+          createdBy: agent.did ?? "",
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
@@ -175,7 +175,7 @@ export const createAccountReport = async (did: string, comment: string) => {
         {
           encoding: "application/json",
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },
@@ -201,7 +201,7 @@ export const checkAccountLabels = async (
         { did },
         {
           headers: {
-            "atproto-proxy": `${MOD_DID!}#atproto_labeler`,
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
             "atproto-accept-labelers":
               "did:plc:ar7c4by46qjdydhdevvrndac;redact",
           },

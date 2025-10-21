@@ -1,3 +1,5 @@
+import type * as AppBskyRichtextFacet from "@atproto/ozone/dist/lexicon/types/app/bsky/richtext/facet.js";
+
 export interface Checks {
   language?: string[];
   label: string;
@@ -38,26 +40,17 @@ export interface Profile {
   description?: string;
 }
 
-// Define the type for the link feature
-export interface LinkFeature {
-  $type: "app.bsky.richtext.facet#link";
-  uri: string;
-}
-
 export interface List {
   label: string;
   rkey: string;
 }
 
-export interface FacetIndex {
-  byteStart: number;
-  byteEnd: number;
-}
-
-export interface Facet {
-  index: FacetIndex;
-  features: Array<{ $type: string; [key: string]: any }>;
-}
+// Re-export facet types from @atproto/ozone for convenience
+export type Facet = AppBskyRichtextFacet.Main;
+export type FacetIndex = AppBskyRichtextFacet.ByteSlice;
+export type FacetMention = AppBskyRichtextFacet.Mention;
+export type LinkFeature = AppBskyRichtextFacet.Link;
+export type FacetTag = AppBskyRichtextFacet.Tag;
 
 export interface AccountAgeCheck {
   monitoredDIDs?: string[]; // DIDs to monitor for replies (optional if monitoredPostURIs is provided)

@@ -113,7 +113,7 @@ function getPostLabelTrackingKey(
   label: string,
   windowDays: number,
 ): string {
-  return `account-post-labels:${did}:${label}:${windowDays}`;
+  return `account-post-labels:${did}:${label}:${windowDays.toString()}`;
 }
 
 export async function trackPostLabelForAccount(

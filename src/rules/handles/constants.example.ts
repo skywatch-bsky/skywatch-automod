@@ -1,4 +1,4 @@
-import { Checks } from "../../types.js";
+import type { Checks } from "../../types.js";
 
 /**
  * Example handle check configurations

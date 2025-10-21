@@ -14,14 +14,14 @@ import {
   getPostLabelCountInWindow,
   trackPostLabelForAccount,
 } from "./redis.js";
-import { AccountThresholdConfig } from "./types.js";
+import type { AccountThresholdConfig } from "./types.js";
 
 function normalizeLabels(labels: string | string[]): string[] {
   return Array.isArray(labels) ? labels : [labels];
 }
 
 function validateAndLoadConfigs(): AccountThresholdConfig[] {
-  if (!ACCOUNT_THRESHOLD_CONFIGS || ACCOUNT_THRESHOLD_CONFIGS.length === 0) {
+  if (ACCOUNT_THRESHOLD_CONFIGS.length === 0) {
     logger.warn(
       { process: "ACCOUNT_THRESHOLD" },
       "No account threshold configs found",
@@ -153,7 +153,7 @@ export async function checkAccountThreshold(
         }
 
         if (config.commentAcct) {
-          const atURI = `threshold-comment:${config.accountLabel}:${timestamp}`;
+          const atURI = `threshold-comment:${config.accountLabel}:${timestamp.toString()}`;
           await createAccountComment(did, config.accountComment, atURI);
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,

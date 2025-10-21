@@ -1,3 +1,4 @@
+ 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Agent", () => {
@@ -30,9 +31,11 @@ describe("Agent", () => {
     const { agent, login } = await import("../agent.js");
 
     // Check that the agent was created with the correct service URL
-    expect(mockConstructor).toHaveBeenCalledWith({
-      service: "https://pds.test.com",
-    });
+    expect(mockConstructor).toHaveBeenCalledWith(
+      expect.objectContaining({
+        service: "https://pds.test.com",
+      }),
+    );
     expect(agent.service.toString()).toBe("https://pds.test.com/");
 
     // Check that the login function calls the mockLogin function
