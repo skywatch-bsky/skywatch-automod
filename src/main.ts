@@ -5,6 +5,7 @@ import type {
   IdentityEvent,
 } from "@skyware/jetstream";
 import { Jetstream } from "@skyware/jetstream";
+import { login } from "./agent.js";
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
@@ -343,6 +344,10 @@ const metricsServer = startMetricsServer(METRICS_PORT);
 
 logger.info({ process: "MAIN" }, "Connecting to Redis");
 await connectRedis();
+
+logger.info({ process: "MAIN" }, "Authenticating with Bluesky");
+await login();
+logger.info({ process: "MAIN" }, "Authentication complete, starting Jetstream");
 
 jetstream.start();
 
