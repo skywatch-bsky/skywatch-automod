@@ -5,3 +5,4 @@ cursor.txt
 labels.db*
 .DS_Store
 coverage/
+.session
