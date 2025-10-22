@@ -99,6 +99,15 @@ async function performLogin(): Promise<boolean> {
   }
 }
 
+const MAX_LOGIN_RETRIES = 3;
+const RETRY_DELAY_MS = 2000;
+
+let loginPromise: Promise<void> | null = null;
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function authenticate(): Promise<boolean> {
   const savedSession = loadSession();
 
@@ -121,7 +130,44 @@ async function authenticate(): Promise<boolean> {
   return performLogin();
 }
 
-export const login = authenticate;
-export const isLoggedIn = authenticate()
-  .then((success) => success)
-  .catch(() => false);
+async function authenticateWithRetry(): Promise<void> {
+  // Reuse existing login attempt if one is in progress
+  if (loginPromise) {
+    return loginPromise;
+  }
+
+  loginPromise = (async () => {
+    for (let attempt = 1; attempt <= MAX_LOGIN_RETRIES; attempt++) {
+      logger.info(
+        { attempt, maxRetries: MAX_LOGIN_RETRIES },
+        "Attempting login",
+      );
+
+      const success = await authenticate();
+
+      if (success) {
+        logger.info("Authentication successful");
+        return;
+      }
+
+      if (attempt < MAX_LOGIN_RETRIES) {
+        logger.warn(
+          { attempt, maxRetries: MAX_LOGIN_RETRIES, retryInMs: RETRY_DELAY_MS },
+          "Login failed, retrying",
+        );
+        await sleep(RETRY_DELAY_MS);
+      }
+    }
+
+    logger.error(
+      { maxRetries: MAX_LOGIN_RETRIES },
+      "All login attempts failed, aborting",
+    );
+    process.exit(1);
+  })();
+
+  return loginPromise;
+}
+
+export const login = authenticateWithRetry;
+export const isLoggedIn = authenticateWithRetry().then(() => true);
