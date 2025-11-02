@@ -88,6 +88,25 @@ export async function tryClaimAccountLabel(
   }
 }
 
+export async function deleteAccountLabelClaim(
+  did: string,
+  label: string,
+): Promise<void> {
+  try {
+    const key = getAccountLabelCacheKey(did, label);
+    await redisClient.del(key);
+    logger.debug(
+      { did, label },
+      "Deleted account label claim from Redis cache",
+    );
+  } catch (err) {
+    logger.warn(
+      { err, did, label },
+      "Error deleting account label claim from Redis",
+    );
+  }
+}
+
 export async function tryClaimAccountComment(
   did: string,
   atURI: string,

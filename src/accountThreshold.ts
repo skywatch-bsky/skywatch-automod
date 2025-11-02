@@ -132,11 +132,13 @@ export async function checkAccountThreshold(
 
         const shouldLabel = config.toLabel !== false;
 
+        const formattedComment = `${config.accountComment}\n\nThreshold: ${count.toString()}/${config.threshold.toString()} in ${config.windowDays.toString()} days\n\nPost Label: ${postLabel}`;
+
         if (shouldLabel) {
           await createAccountLabel(
             did,
             config.accountLabel,
-            config.accountComment,
+            formattedComment,
           );
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
@@ -145,7 +147,7 @@ export async function checkAccountThreshold(
         }
 
         if (config.reportAcct) {
-          await createAccountReport(did, config.accountComment);
+          await createAccountReport(did, formattedComment);
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
             action: "report",
@@ -154,7 +156,7 @@ export async function checkAccountThreshold(
 
         if (config.commentAcct) {
           const atURI = `threshold-comment:${config.accountLabel}:${timestamp.toString()}`;
-          await createAccountComment(did, config.accountComment, atURI);
+          await createAccountComment(did, formattedComment, atURI);
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
             action: "comment",

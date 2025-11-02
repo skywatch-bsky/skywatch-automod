@@ -166,7 +166,7 @@ describe("Account Threshold Logic", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         testDid,
         "test-account-label",
-        "Test comment",
+        "Test comment\n\nThreshold: 3/3 in 5 days\n\nPost Label: test-label",
       );
       expect(accountLabelsThresholdAppliedCounter.inc).toHaveBeenCalledWith({
         account_label: "test-account-label",
@@ -202,11 +202,11 @@ describe("Account Threshold Logic", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         testDid,
         "multi-label-account",
-        "Multi label comment",
+        "Multi label comment\n\nThreshold: 5/5 in 7 days\n\nPost Label: label-2",
       );
       expect(createAccountReport).toHaveBeenCalledWith(
         testDid,
-        "Multi label comment",
+        "Multi label comment\n\nThreshold: 5/5 in 7 days\n\nPost Label: label-2",
       );
       expect(createAccountComment).toHaveBeenCalled();
     });

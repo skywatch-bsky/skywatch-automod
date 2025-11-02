@@ -240,7 +240,7 @@ export const checkAccountAge = async (
       await createAccountLabel(
         context.actorDid,
         check.label,
-        `${context.time.toString()}: ${check.comment} - Account created within monitored range - Interaction: ${context.atURI}`,
+        `${context.time.toString()}: ${check.comment} \n\nAccount created within monitored range. \n\nInteraction: ${context.atURI}`,
       );
 
       // Only apply one label per interaction

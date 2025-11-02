@@ -93,6 +93,9 @@ export const createPostLabel = async (
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              externalUrl: `https://pdsls.dev/${uri}`,
+            },
           },
         },
         {
@@ -156,6 +159,9 @@ export const createPostReport = async (
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              externalUrl: `https://pdsls.dev/${uri}`,
+            },
           },
         },
         {

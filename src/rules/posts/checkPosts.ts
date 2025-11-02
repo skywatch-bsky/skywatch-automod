@@ -104,12 +104,15 @@ export const checkPosts = async (post: Post[]) => {
 
       void countStarterPacks(post[0].did, post[0].time);
 
+      const postURL = `https://pdsls.dev/${post[0].atURI}`;
+      const formattedComment = `${post[0].time.toString()}: ${checkPost.comment}\n\nPost: ${postURL}\n\nText: "${post[0].text}"`;
+
       if (checkPost.toLabel) {
         void createPostLabel(
           post[0].atURI,
           post[0].cid,
           checkPost.label,
-          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
+          formattedComment,
           checkPost.duration,
           post[0].did,
           post[0].time,
@@ -126,11 +129,7 @@ export const checkPosts = async (post: Post[]) => {
           },
           "Reporting post",
         );
-        void createPostReport(
-          post[0].atURI,
-          post[0].cid,
-          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-        );
+        void createPostReport(post[0].atURI, post[0].cid, formattedComment);
       }
 
       if (checkPost.reportAcct) {
@@ -143,18 +142,11 @@ export const checkPosts = async (post: Post[]) => {
           },
           "Reporting account",
         );
-        void createAccountReport(
-          post[0].did,
-          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-        );
+        void createAccountReport(post[0].did, formattedComment);
       }
 
       if (checkPost.commentAcct) {
-        void createAccountComment(
-          post[0].did,
-          `${post[0].time.toString()}: ${checkPost.comment} at ${post[0].atURI} with text "${post[0].text}"`,
-          post[0].atURI,
-        );
+        void createAccountComment(post[0].did, formattedComment, post[0].atURI);
       }
     }
   });

@@ -5,6 +5,7 @@ import type {
   IdentityEvent,
 } from "@skyware/jetstream";
 import { Jetstream } from "@skyware/jetstream";
+import { login } from "./agent.js";
 import {
   CURSOR_UPDATE_INTERVAL,
   FIREHOSE_URL,
@@ -18,10 +19,7 @@ import { checkAccountAge } from "./rules/account/age.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
 import { checkHandle } from "./rules/handles/checkHandles.js";
 import { checkPosts } from "./rules/posts/checkPosts.js";
-import {
-  checkDescription,
-  checkDisplayName,
-} from "./rules/profiles/checkProfiles.js";
+import { checkProfile } from "./rules/profiles/checkProfiles.js";
 import type { Post } from "./types.js";
 
 let cursor = 0;
@@ -281,13 +279,7 @@ jetstream.onUpdate(
   async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        void checkDescription(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
-        void checkDisplayName(
+        void checkProfile(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
@@ -308,13 +300,7 @@ jetstream.onCreate(
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        void checkDescription(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
-        void checkDisplayName(
+        void checkProfile(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
@@ -343,6 +329,10 @@ const metricsServer = startMetricsServer(METRICS_PORT);
 
 logger.info({ process: "MAIN" }, "Connecting to Redis");
 await connectRedis();
+
+logger.info({ process: "MAIN" }, "Authenticating with Bluesky");
+await login();
+logger.info({ process: "MAIN" }, "Authentication complete, starting Jetstream");
 
 jetstream.start();
 

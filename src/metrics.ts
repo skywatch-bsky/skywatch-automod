@@ -20,6 +20,13 @@ export const labelsCachedCounter = new Counter({
   registers: [register],
 });
 
+export const unlabelsRemovedCounter: Counter = new Counter({
+  name: "skywatch_labels_removed_total",
+  help: "Total number of labels removed due to criteria no longer matching",
+  labelNames: ["label_type", "target_type"],
+  registers: [register],
+});
+
 export const accountLabelsThresholdAppliedCounter = new Counter({
   name: "skywatch_account_labels_threshold_applied_total",
   help: "Total number of account actions applied due to threshold",

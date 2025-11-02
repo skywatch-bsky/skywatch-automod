@@ -2,8 +2,8 @@ import { agent, isLoggedIn } from "./agent.js";
 import { MOD_DID } from "./config.js";
 import { limit } from "./limits.js";
 import { logger } from "./logger.js";
-import { labelsAppliedCounter, labelsCachedCounter } from "./metrics.js";
-import { tryClaimAccountComment, tryClaimAccountLabel } from "./redis.js";
+import { labelsAppliedCounter, labelsCachedCounter, unlabelsRemovedCounter } from "./metrics.js";
+import { tryClaimAccountComment, tryClaimAccountLabel, deleteAccountLabelClaim } from "./redis.js";
 
 const doesLabelExist = (
   labels: { val: string }[] | undefined,
@@ -73,6 +73,9 @@ export const createAccountLabel = async (
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              externalUrl: `https://pdsls.dev/at://${did}`,
+            },
           },
         },
         {
@@ -129,6 +132,9 @@ export const createAccountComment = async (
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              externalUrl: `https://pdsls.dev/at://${did}`,
+            },
           },
         },
         {
@@ -170,6 +176,9 @@ export const createAccountReport = async (did: string, comment: string) => {
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              externalUrl: `https://pdsls.dev/at://${did}`,
+            },
           },
         },
         {
@@ -185,6 +194,69 @@ export const createAccountReport = async (did: string, comment: string) => {
       logger.error(
         { process: "MODERATION", error: e },
         "Failed to create account report",
+      );
+    }
+  });
+};
+
+export const negateAccountLabel = async (
+  did: string,
+  label: string,
+  comment: string,
+) => {
+  await isLoggedIn;
+
+  const hasLabel = await checkAccountLabels(did, label);
+  if (!hasLabel) {
+    logger.debug(
+      { process: "MODERATION", did, label },
+      "Account does not have label, skipping",
+    );
+    return;
+  }
+
+  logger.info({ process: "MODERATION", did, label }, "Unlabeling account");
+  unlabelsRemovedCounter.inc({ label_type: label, target_type: "account" });
+
+  await limit(async () => {
+    try {
+      await agent.tools.ozone.moderation.emitEvent(
+        {
+          event: {
+            $type: "tools.ozone.moderation.defs#modEventLabel",
+            comment,
+            createLabelVals: [],
+            negateLabelVals: [label],
+          },
+          // specify the labeled post by strongRef
+          subject: {
+            $type: "com.atproto.admin.defs#repoRef",
+            did,
+          },
+          // put in the rest of the metadata
+          createdBy: agent.did ?? "",
+          createdAt: new Date().toISOString(),
+          modTool: {
+            name: "skywatch/skywatch-automod",
+            meta: {
+              externalUrl: `https://pdsls.dev/at://${did}`,
+            },
+          },
+        },
+        {
+          encoding: "application/json",
+          headers: {
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      );
+      await deleteAccountLabelClaim(did, label);
+    } catch (e) {
+      logger.error(
+        { process: "MODERATION", error: e },
+        "Failed to negate account label",
       );
     }
   });
@@ -215,6 +287,32 @@ export const checkAccountLabels = async (
         "Failed to check account labels",
       );
       return false;
+    }
+  });
+};
+
+export const getAllAccountLabels = async (did: string): Promise<string[]> => {
+  await isLoggedIn;
+  return await limit(async () => {
+    try {
+      const response = await agent.tools.ozone.moderation.getRepo(
+        { did },
+        {
+          headers: {
+            "atproto-proxy": `${MOD_DID}#atproto_labeler`,
+            "atproto-accept-labelers":
+              "did:plc:ar7c4by46qjdydhdevvrndac;redact",
+          },
+        },
+      );
+
+      return (response.data.labels ?? []).map((label) => label.val);
+    } catch (e) {
+      logger.error(
+        { process: "MODERATION", did, error: e },
+        "Failed to get account labels",
+      );
+      return [];
     }
   });
 };

@@ -13,13 +13,24 @@ describe("Agent", () => {
       OZONE_PDS: "pds.test.com",
     }));
 
+    // Mock session
+    const mockSession = {
+      did: "did:plc:test123",
+      handle: "test.bsky.social",
+      accessJwt: "test-access-jwt",
+      refreshJwt: "test-refresh-jwt",
+    };
+
     // Mock the AtpAgent
-    const mockLogin = vi.fn(() => Promise.resolve());
+    const mockLogin = vi.fn(() =>
+      Promise.resolve({ success: true, data: mockSession }),
+    );
     const mockConstructor = vi.fn();
     vi.doMock("@atproto/api", () => ({
       AtpAgent: class {
         login = mockLogin;
         service: URL;
+        session = mockSession;
         constructor(options: { service: string }) {
           mockConstructor(options);
           this.service = new URL(options.service);

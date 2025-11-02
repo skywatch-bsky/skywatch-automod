@@ -3,6 +3,7 @@ import type * as AppBskyRichtextFacet from "@atproto/ozone/dist/lexicon/types/ap
 export interface Checks {
   language?: string[];
   label: string;
+  unlabel?: boolean;
   comment: string;
   description?: boolean;
   displayName?: boolean;
