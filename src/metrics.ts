@@ -68,6 +68,13 @@ export const starterPackLabelsThresholdAppliedCounter = new Counter({
   registers: [register],
 });
 
+export const moderationActionsFailedCounter = new Counter({
+  name: "skywatch_moderation_actions_failed_total",
+  help: "Total number of moderation actions that failed",
+  labelNames: ["action", "target_type"],
+  registers: [register],
+});
+
 const app = express();
 
 app.get("/metrics", (req, res) => {

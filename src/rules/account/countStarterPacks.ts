@@ -2,10 +2,9 @@ import { createAccountLabel } from "../../accountModeration.js";
 import { agent, isLoggedIn } from "../../agent.js";
 import { limit } from "../../limits.js";
 import { logger } from "../../logger.js";
+import { moderationActionsFailedCounter } from "../../metrics.js";
 
-const ALLOWED_DIDS = [
-  "did:plc:example"
-];
+const ALLOWED_DIDS = ["did:plc:example"];
 
 export const countStarterPacks = async (did: string, time: number) => {
   await isLoggedIn;
@@ -34,11 +33,22 @@ export const countStarterPacks = async (did: string, time: number) => {
           "Labeling account with excessive starter packs",
         );
 
-        void createAccountLabel(
-          did,
-          "follow-farming",
-          `${time.toString()}: Account has ${starterPacks.toString()} starter packs`,
-        );
+        try {
+          await createAccountLabel(
+            did,
+            "follow-farming",
+            `${time.toString()}: Account has ${starterPacks.toString()} starter packs`,
+          );
+        } catch (labelError) {
+          logger.error(
+            { process: "COUNTSTARTERPACKS", did, time, error: labelError },
+            "Failed to apply follow-farming label",
+          );
+          moderationActionsFailedCounter.inc({
+            action: "label",
+            target_type: "account",
+          });
+        }
       }
     } catch (error) {
       const errorInfo =
