@@ -3,16 +3,30 @@ import type { Checks } from "../src/types.js";
 /**
  * Handle-based moderation checks
  *
- * This file contains example values. Copy to handles.ts and configure with your checks.
+ * Monitors user handles (usernames) for pattern matches.
+ * Configure your checks below.
  */
 export const HANDLE_CHECKS: Checks[] = [
-  // Example check:
+  // Basic example - flag potential impersonation:
   // {
-  //   label: "example-label",
-  //   comment: "Example check found in handle",
-  //   reportAcct: false,
+  //   label: "impersonation",
+  //   comment: "Potential impersonation detected in handle",
+  //   reportAcct: true,
+  //   commentAcct: false,
+  //   toLabel: false,
+  //   check: new RegExp("official.*support", "i"),
+  // },
+
+  // Advanced example with optional fields:
+  // {
+  //   label: "suspicious-handle",
+  //   comment: "Handle matches known spam pattern",
+  //   reportAcct: true,
   //   commentAcct: false,
   //   toLabel: true,
-  //   check: new RegExp("example-pattern", "i"),
+  //   unlabel: true,                      // Remove label if handle changes
+  //   check: new RegExp("crypto.*airdrop", "i"),
+  //   whitelist: new RegExp("cryptography", "i"),  // Don't match legitimate use
+  //   ignoredDIDs: ["did:plc:verified123"],
   // },
 ];

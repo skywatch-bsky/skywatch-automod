@@ -45,12 +45,10 @@ export const checkHandle = (
         }
       }
 
+      const formattedComment = `${time.toString()}: ${checkList.comment}\n\nHandle: ${handle}`;
+
       if (checkList.toLabel) {
-        void createAccountLabel(
-          did,
-          checkList.label,
-          `${time.toString()}: ${checkList.comment} - ${handle}`,
-        );
+        void createAccountLabel(did, checkList.label, formattedComment);
       }
 
       if (checkList.reportAcct) {
@@ -58,16 +56,13 @@ export const checkHandle = (
           { process: "CHECKHANDLE", did, handle, time, label: checkList.label },
           "Reporting account",
         );
-        void createAccountReport(
-          did,
-          `${time.toString()}: ${checkList.comment} - ${handle}`,
-        );
+        void createAccountReport(did, formattedComment);
       }
 
       if (checkList.commentAcct) {
         void createAccountComment(
           did,
-          `${time.toString()}: ${checkList.comment} - ${handle}`,
+          formattedComment,
           `handle:${did}:${handle}`,
         );
       }

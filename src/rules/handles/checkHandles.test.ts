@@ -103,7 +103,7 @@ describe("checkHandle", () => {
 
       expect(createAccountReport).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Spam detected - spam-account`,
+        `${time}: Spam detected\n\nHandle: spam-account`,
       );
     });
 
@@ -121,7 +121,7 @@ describe("checkHandle", () => {
 
       expect(createAccountReport).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Spam detected - SPAM-ACCOUNT`,
+        `${time}: Spam detected\n\nHandle: SPAM-ACCOUNT`,
       );
     });
   });
@@ -139,7 +139,7 @@ describe("checkHandle", () => {
 
       expect(createAccountComment).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Scam detected - scam-account`,
+        `${time}: Scam detected\n\nHandle: scam-account`,
         "handle:did:plc:user1:scam-account",
       );
     });
@@ -159,7 +159,7 @@ describe("checkHandle", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         "did:plc:normaluser",
         "bot",
-        `${time}: Bot detected - bot-456`,
+        `${time}: Bot detected\n\nHandle: bot-456`,
       );
     });
   });
@@ -171,7 +171,7 @@ describe("checkHandle", () => {
 
       expect(createAccountReport).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Spam detected - spam-user`,
+        `${time}: Spam detected\n\nHandle: spam-user`,
       );
     });
 
@@ -181,7 +181,7 @@ describe("checkHandle", () => {
 
       expect(createAccountComment).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Scam detected - scam-user`,
+        `${time}: Scam detected\n\nHandle: scam-user`,
         "handle:did:plc:user1:scam-user",
       );
     });
@@ -193,7 +193,7 @@ describe("checkHandle", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         "did:plc:user1",
         "bot",
-        `${time}: Bot detected - bot-789`,
+        `${time}: Bot detected\n\nHandle: bot-789`,
       );
     });
 
@@ -203,17 +203,17 @@ describe("checkHandle", () => {
 
       expect(createAccountReport).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Multi-action triggered - dangerous-account`,
+        `${time}: Multi-action triggered\n\nHandle: dangerous-account`,
       );
       expect(createAccountComment).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Multi-action triggered - dangerous-account`,
+        `${time}: Multi-action triggered\n\nHandle: dangerous-account`,
         "handle:did:plc:user1:dangerous-account",
       );
       expect(createAccountLabel).toHaveBeenCalledWith(
         "did:plc:user1",
         "multi-action",
-        `${time}: Multi-action triggered - dangerous-account`,
+        `${time}: Multi-action triggered\n\nHandle: dangerous-account`,
       );
     });
   });
@@ -276,7 +276,7 @@ describe("checkHandle", () => {
 
       expect(createAccountReport).toHaveBeenCalledWith(
         "did:plc:user1",
-        `${time}: Spam detected - ${longHandle}`,
+        `${time}: Spam detected\n\nHandle: ${longHandle}`,
       );
     });
 
@@ -294,7 +294,7 @@ describe("checkHandle", () => {
 
       expect(createAccountReport).toHaveBeenCalledWith(
         "did:plc:user1",
-        "1234567890: Spam detected - spam-account",
+        "1234567890: Spam detected\n\nHandle: spam-account",
       );
     });
 

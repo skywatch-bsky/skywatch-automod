@@ -105,10 +105,35 @@ export const ACCOUNT_THRESHOLD_CONFIGS: AccountThresholdConfig[] = [
     threshold: 3,
     accountLabel: "repeat-offender",
     accountComment: "Account exceeded spam threshold",
-    windowDays: 7,
+    window: 7,
+    windowUnit: "days",  // Options: "minutes", "hours", "days"
     reportAcct: true,
     commentAcct: false,
     toLabel: true,
+  },
+];
+```
+
+### Starter Pack Threshold Checks
+
+File: `rules/starterPackThreshold.ts`
+
+Applies account-level labels when an account creates too many starter packs within a time window. Useful for detecting follow-farming and coordinated campaign behaviour.
+
+```typescript
+import type { StarterPackThresholdConfig } from "../src/types.js";
+
+export const STARTER_PACK_THRESHOLD_CONFIGS: StarterPackThresholdConfig[] = [
+  {
+    threshold: 10,           // Account action triggered after 10 starter packs
+    window: 7,               // Within this duration
+    windowUnit: "days",      // Options: "minutes", "hours", "days"
+    accountLabel: "follow-farming",
+    accountComment: "Account created multiple starter packs in short period",
+    toLabel: true,           // Whether to apply the label (default: true)
+    reportAcct: true,        // Whether to report the account
+    commentAcct: false,      // Whether to comment on the account
+    allowlist: [],           // DIDs to exempt from this check
   },
 ];
 ```
@@ -135,6 +160,34 @@ export const ACCOUNT_THRESHOLD_CONFIGS: AccountThresholdConfig[] = [
 - `ignoredDIDs` - DIDs to skip checking (string[])
 - `starterPacks` - Filter by starter pack membership (string[])
 - `knownVectors` - Known attack vectors for tracking (string[])
+- `trackOnly` - Track without applying label (boolean)
+- `unlabel` - Remove existing label if content no longer matches (boolean)
+
+### Threshold Configuration Fields
+
+#### Account Threshold
+
+- `labels` - Single label or array of labels to aggregate (string | string[])
+- `threshold` - Number of labeled posts required to trigger account action (number)
+- `window` - Rolling window duration (number)
+- `windowUnit` - Unit for the rolling window: "minutes", "hours", or "days" (WindowUnit)
+- `accountLabel` - Label to apply to the account (string)
+- `accountComment` - Comment for the account action (string)
+- `toLabel` - Whether to apply the label, defaults to true (boolean)
+- `reportAcct` - Whether to report the account (boolean)
+- `commentAcct` - Whether to comment on the account (boolean)
+
+#### Starter Pack Threshold
+
+- `threshold` - Number of starter packs required to trigger account action (number)
+- `window` - Rolling window duration (number)
+- `windowUnit` - Unit for the rolling window: "minutes", "hours", or "days" (WindowUnit)
+- `accountLabel` - Label to apply to the account (string)
+- `accountComment` - Comment for the account action (string)
+- `toLabel` - Whether to apply the label, defaults to true (boolean)
+- `reportAcct` - Whether to report the account (boolean)
+- `commentAcct` - Whether to comment on the account (boolean)
+- `allowlist` - DIDs to exempt from this check (string[])
 
 ## Examples
 

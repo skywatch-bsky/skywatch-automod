@@ -20,6 +20,13 @@ export const labelsCachedCounter = new Counter({
   registers: [register],
 });
 
+export const unlabelsRemovedCounter: Counter = new Counter({
+  name: "skywatch_labels_removed_total",
+  help: "Total number of labels removed due to criteria no longer matching",
+  labelNames: ["label_type", "target_type"],
+  registers: [register],
+});
+
 export const accountLabelsThresholdAppliedCounter = new Counter({
   name: "skywatch_account_labels_threshold_applied_total",
   help: "Total number of account actions applied due to threshold",
@@ -38,6 +45,26 @@ export const accountThresholdMetCounter = new Counter({
   name: "skywatch_account_threshold_met_total",
   help: "Total number of times account thresholds were met",
   labelNames: ["account_label"],
+  registers: [register],
+});
+
+export const starterPackThresholdChecksCounter = new Counter({
+  name: "skywatch_starter_pack_threshold_checks_total",
+  help: "Total number of starter pack threshold checks performed",
+  registers: [register],
+});
+
+export const starterPackThresholdMetCounter = new Counter({
+  name: "skywatch_starter_pack_threshold_met_total",
+  help: "Total number of times starter pack thresholds were met",
+  labelNames: ["account_label"],
+  registers: [register],
+});
+
+export const starterPackLabelsThresholdAppliedCounter = new Counter({
+  name: "skywatch_starter_pack_labels_threshold_applied_total",
+  help: "Total number of account actions applied due to starter pack threshold",
+  labelNames: ["account_label", "action"],
   registers: [register],
 });
 

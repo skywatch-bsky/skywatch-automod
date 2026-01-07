@@ -251,7 +251,7 @@ describe("checkFacetSpam", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         TEST_DID,
         FACET_SPAM_LABEL,
-        `${TEST_TIME}: ${FACET_SPAM_COMMENT} - 2 unique mentions at position 0:1 in ${TEST_URI}`,
+        `${TEST_TIME}: ${FACET_SPAM_COMMENT} \n\n2 unique mentions at position 0:1. \n\nPost: ${TEST_URI}`,
       );
     });
 
@@ -355,7 +355,7 @@ describe("checkFacetSpam", () => {
     });
 
     it("should use correct label and comment constants", () => {
-      expect(FACET_SPAM_LABEL).toBe("suspect-inauthentic");
+      expect(FACET_SPAM_LABEL).toBe("platform-manipulation");
       expect(FACET_SPAM_COMMENT).toBe(
         "Abusive facet usage detected (hidden mentions)",
       );

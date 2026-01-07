@@ -263,8 +263,7 @@ describe("checkProfiles", () => {
             process: "CHECKDESCRIPTION",
             did: mockDid,
             time: mockTime,
-            displayName: mockDisplayName,
-            description: "this is good bad content",
+            content: "this is good bad content",
           },
           "Whitelisted phrase found",
         );

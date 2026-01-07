@@ -3,7 +3,9 @@ import { agent, isLoggedIn } from "../../agent.js";
 import { limit } from "../../limits.js";
 import { logger } from "../../logger.js";
 
-const ALLOWED_DIDS = ["did:plc:gpunjjgvlyb4racypz3yfiq4"];
+const ALLOWED_DIDS = [
+  "did:plc:example"
+];
 
 export const countStarterPacks = async (did: string, time: number) => {
   await isLoggedIn;

@@ -41,9 +41,9 @@ function validateAndLoadConfigs(): AccountThresholdConfig[] {
         `Invalid account threshold config: threshold must be positive`,
       );
     }
-    if (config.windowDays <= 0) {
+    if (config.window <= 0) {
       throw new Error(
-        `Invalid account threshold config: windowDays must be positive`,
+        `Invalid account threshold config: window must be positive`,
       );
     }
   }
@@ -65,6 +65,7 @@ export function loadThresholdConfigs(): AccountThresholdConfig[] {
 
 export async function checkAccountThreshold(
   did: string,
+  uri: string,
   postLabel: string,
   timestamp: number,
 ): Promise<void> {
@@ -93,13 +94,15 @@ export async function checkAccountThreshold(
         did,
         postLabel,
         timestamp,
-        config.windowDays,
+        config.window,
+        config.windowUnit,
       );
 
       const count = await getPostLabelCountInWindow(
         did,
         labels,
-        config.windowDays,
+        config.window,
+        config.windowUnit,
         timestamp,
       );
 
@@ -110,7 +113,8 @@ export async function checkAccountThreshold(
           labels,
           count,
           threshold: config.threshold,
-          windowDays: config.windowDays,
+          window: config.window,
+          windowUnit: config.windowUnit,
         },
         "Checked account threshold",
       );
@@ -132,12 +136,10 @@ export async function checkAccountThreshold(
 
         const shouldLabel = config.toLabel !== false;
 
+        const formattedComment = `${config.accountComment}\n\nThreshold: ${count.toString()}/${config.threshold.toString()} in ${config.window.toString()} ${config.windowUnit}\n\nPost: ${uri}\n\nPost Label: ${postLabel}`;
+
         if (shouldLabel) {
-          await createAccountLabel(
-            did,
-            config.accountLabel,
-            config.accountComment,
-          );
+          await createAccountLabel(did, config.accountLabel, formattedComment);
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
             action: "label",
@@ -145,7 +147,7 @@ export async function checkAccountThreshold(
         }
 
         if (config.reportAcct) {
-          await createAccountReport(did, config.accountComment);
+          await createAccountReport(did, formattedComment);
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
             action: "report",
@@ -154,7 +156,7 @@ export async function checkAccountThreshold(
 
         if (config.commentAcct) {
           const atURI = `threshold-comment:${config.accountLabel}:${timestamp.toString()}`;
-          await createAccountComment(did, config.accountComment, atURI);
+          await createAccountComment(did, formattedComment, atURI);
           accountLabelsThresholdAppliedCounter.inc({
             account_label: config.accountLabel,
             action: "comment",

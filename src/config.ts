@@ -16,6 +16,7 @@ export const WANTED_COLLECTION = [
   "app.bsky.feed.post",
   "app.bsky.actor.defs",
   "app.bsky.actor.profile",
+  "app.bsky.graph.starterpack",
 ];
 export const CURSOR_UPDATE_INTERVAL = process.env.CURSOR_UPDATE_INTERVAL
   ? Number(process.env.CURSOR_UPDATE_INTERVAL)

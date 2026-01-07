@@ -93,6 +93,10 @@ export const createPostLabel = async (
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              time: new Date().toISOString(),
+              externalUrl: `https://pdsls.dev/${uri}`,
+            },
           },
         },
         {
@@ -113,7 +117,7 @@ export const createPostLabel = async (
           const { checkAccountThreshold } = await import(
             "./accountThreshold.js"
           );
-          await checkAccountThreshold(did, label, time);
+          await checkAccountThreshold(did, uri, label, time);
         } catch (error) {
           logger.error(
             { process: "ACCOUNT_THRESHOLD", did, label, error },
@@ -156,6 +160,10 @@ export const createPostReport = async (
           createdAt: new Date().toISOString(),
           modTool: {
             name: "skywatch/skywatch-automod",
+            meta: {
+              time: new Date().toISOString(),
+              externalUrl: `https://pdsls.dev/${uri}`,
+            },
           },
         },
         {

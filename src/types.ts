@@ -3,6 +3,7 @@ import type * as AppBskyRichtextFacet from "@atproto/ozone/dist/lexicon/types/ap
 export interface Checks {
   language?: string[];
   label: string;
+  unlabel?: boolean;
   comment: string;
   description?: boolean;
   displayName?: boolean;
@@ -10,6 +11,7 @@ export interface Checks {
   commentAcct: boolean;
   reportPost?: boolean;
   toLabel: boolean;
+  trackOnly?: boolean;
   duration?: number;
   check: RegExp;
   whitelist?: RegExp;
@@ -62,13 +64,28 @@ export interface AccountAgeCheck {
   expires?: string; // Optional expiration date (ISO 8601) - check will be skipped after this date
 }
 
+export type WindowUnit = "minutes" | "hours" | "days";
+
 export interface AccountThresholdConfig {
   labels: string | string[]; // Single label or array for OR matching
   threshold: number; // Number of labeled posts required to trigger account action
   accountLabel: string; // Label to apply to the account
   accountComment: string; // Comment for the account action
-  windowDays: number; // Rolling window in days
+  window: number; // Rolling window duration
+  windowUnit: WindowUnit; // Unit for the rolling window
   reportAcct: boolean; // Whether to report the account
   commentAcct: boolean; // Whether to comment on the account
   toLabel?: boolean; // Whether to apply label (defaults to true)
+}
+
+export interface StarterPackThresholdConfig {
+  threshold: number;
+  window: number;
+  windowUnit: WindowUnit;
+  accountLabel: string;
+  accountComment: string;
+  toLabel?: boolean;
+  reportAcct?: boolean;
+  commentAcct?: boolean;
+  allowlist?: string[];
 }

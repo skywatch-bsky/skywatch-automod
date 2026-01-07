@@ -14,9 +14,19 @@ cp .env.example .env
 Required environment variables:
 - `BSKY_HANDLE` - Bluesky account handle
 - `BSKY_PASSWORD` - Account password
-- `MOD_DID` - Moderator DID
-- `OZONE_PDS` - Ozone PDS URL
-- `FIREHOSE_URL` - Jetstream firehose URL
+- `DID` - Moderator DID
+- `OZONE_URL` - Ozone service URL
+- `OZONE_PDS` - Ozone PDS hostname
+
+Optional environment variables:
+- `FIREHOSE_URL` - Jetstream firehose URL (default: `wss://jetstream.atproto.tools/subscribe`)
+- `REDIS_URL` - Redis connection URL (default: `redis://redis:6379`)
+- `HOST` - Metrics server bind address (default: `0.0.0.0`)
+- `METRICS_PORT` - Metrics server port (default: `4101`)
+- `PLC_URL` - PLC directory hostname (default: `plc.directory`)
+- `CURSOR_UPDATE_INTERVAL` - Cursor save interval in ms (default: `60000`)
+- `LABEL_LIMIT` - Rate limit for label operations
+- `LABEL_LIMIT_WAIT` - Wait time for rate limiter
 
 Create cursor file (optional but recommended):
 
@@ -54,6 +64,21 @@ bun test:coverage # With coverage
 
 ## How It Works
 
-Monitors the Bluesky firehose via Jetstream and analyzes posts, profiles, and handles against configured moderation rules. When criteria are met, applies appropriate labels or creates moderation reports.
+Monitors the Bluesky firehose via Jetstream and analyzes:
+- **Posts** - Text content and embedded URLs
+- **Profiles** - Display names and descriptions
+- **Handles** - Username patterns
+- **Starter packs** - Creation activity
+
+When criteria are met, applies appropriate labels or creates moderation reports.
+
+### Threshold Systems
+
+Beyond pattern matching, the automod supports account-level threshold enforcement:
+
+- **Account threshold** - Labels accounts that accumulate multiple post-level violations within a rolling time window
+- **Starter pack threshold** - Labels accounts that create too many starter packs within a time window (useful for detecting follow-farming)
+
+Both systems use Redis for time-windowed tracking and support configurable actions (label, report, comment).
 
 For developing custom checks, see [developing_checks.md](./rules/developing_checks.md).

@@ -35,7 +35,8 @@ vi.mock("../../rules/accountThreshold.js", () => ({
       threshold: 3,
       accountLabel: "test-account-label",
       accountComment: "Test comment",
-      windowDays: 5,
+      window: 5,
+      windowUnit: "days",
       reportAcct: false,
       commentAcct: false,
       toLabel: true,
@@ -45,7 +46,8 @@ vi.mock("../../rules/accountThreshold.js", () => ({
       threshold: 5,
       accountLabel: "multi-label-account",
       accountComment: "Multi label comment",
-      windowDays: 7,
+      window: 7,
+      windowUnit: "days",
       reportAcct: true,
       commentAcct: true,
       toLabel: true,
@@ -55,7 +57,8 @@ vi.mock("../../rules/accountThreshold.js", () => ({
       threshold: 2,
       accountLabel: "monitored",
       accountComment: "Monitoring comment",
-      windowDays: 3,
+      window: 3,
+      windowUnit: "days",
       reportAcct: true,
       commentAcct: false,
       toLabel: false,
@@ -65,7 +68,8 @@ vi.mock("../../rules/accountThreshold.js", () => ({
       threshold: 2,
       accountLabel: "shared-config",
       accountComment: "Shared config comment",
-      windowDays: 4,
+      window: 4,
+      windowUnit: "days",
       reportAcct: false,
       commentAcct: false,
       toLabel: true,
@@ -118,13 +122,19 @@ describe("Account Threshold Logic", () => {
 
   describe("checkAccountThreshold", () => {
     const testDid = "did:plc:test123";
+    const testUri = "at://did:plc:test123/app.bsky.feed.post/abc123";
     const testTimestamp = 1640000000000000;
 
     it("should not check threshold for non-matching labels", async () => {
       vi.mocked(trackPostLabelForAccount).mockResolvedValue();
       vi.mocked(getPostLabelCountInWindow).mockResolvedValue(0);
 
-      await checkAccountThreshold(testDid, "non-matching-label", testTimestamp);
+      await checkAccountThreshold(
+        testDid,
+        testUri,
+        "non-matching-label",
+        testTimestamp,
+      );
 
       expect(trackPostLabelForAccount).not.toHaveBeenCalled();
       expect(getPostLabelCountInWindow).not.toHaveBeenCalled();
@@ -134,7 +144,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(trackPostLabelForAccount).mockResolvedValue();
       vi.mocked(getPostLabelCountInWindow).mockResolvedValue(2);
 
-      await checkAccountThreshold(testDid, "test-label", testTimestamp);
+      await checkAccountThreshold(testDid, testUri, "test-label", testTimestamp);
 
       expect(accountThresholdChecksCounter.inc).toHaveBeenCalledWith({
         post_label: "test-label",
@@ -144,11 +154,13 @@ describe("Account Threshold Logic", () => {
         "test-label",
         testTimestamp,
         5,
+        "days",
       );
       expect(getPostLabelCountInWindow).toHaveBeenCalledWith(
         testDid,
         ["test-label"],
         5,
+        "days",
         testTimestamp,
       );
     });
@@ -158,7 +170,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(getPostLabelCountInWindow).mockResolvedValue(3);
       vi.mocked(createAccountLabel).mockResolvedValue();
 
-      await checkAccountThreshold(testDid, "test-label", testTimestamp);
+      await checkAccountThreshold(testDid, testUri, "test-label", testTimestamp);
 
       expect(accountThresholdMetCounter.inc).toHaveBeenCalledWith({
         account_label: "test-account-label",
@@ -166,7 +178,7 @@ describe("Account Threshold Logic", () => {
       expect(createAccountLabel).toHaveBeenCalledWith(
         testDid,
         "test-account-label",
-        "Test comment",
+        `Test comment\n\nThreshold: 3/3 in 5 days\n\nPost: ${testUri}\n\nPost Label: test-label`,
       );
       expect(accountLabelsThresholdAppliedCounter.inc).toHaveBeenCalledWith({
         account_label: "test-account-label",
@@ -178,7 +190,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(trackPostLabelForAccount).mockResolvedValue();
       vi.mocked(getPostLabelCountInWindow).mockResolvedValue(2);
 
-      await checkAccountThreshold(testDid, "test-label", testTimestamp);
+      await checkAccountThreshold(testDid, testUri, "test-label", testTimestamp);
 
       expect(accountThresholdMetCounter.inc).not.toHaveBeenCalled();
       expect(createAccountLabel).not.toHaveBeenCalled();
@@ -191,22 +203,23 @@ describe("Account Threshold Logic", () => {
       vi.mocked(createAccountReport).mockResolvedValue();
       vi.mocked(createAccountComment).mockResolvedValue();
 
-      await checkAccountThreshold(testDid, "label-2", testTimestamp);
+      await checkAccountThreshold(testDid, testUri, "label-2", testTimestamp);
 
       expect(getPostLabelCountInWindow).toHaveBeenCalledWith(
         testDid,
         ["label-1", "label-2", "label-3"],
         7,
+        "days",
         testTimestamp,
       );
       expect(createAccountLabel).toHaveBeenCalledWith(
         testDid,
         "multi-label-account",
-        "Multi label comment",
+        `Multi label comment\n\nThreshold: 5/5 in 7 days\n\nPost: ${testUri}\n\nPost Label: label-2`,
       );
       expect(createAccountReport).toHaveBeenCalledWith(
         testDid,
-        "Multi label comment",
+        `Multi label comment\n\nThreshold: 5/5 in 7 days\n\nPost: ${testUri}\n\nPost Label: label-2`,
       );
       expect(createAccountComment).toHaveBeenCalled();
     });
@@ -216,7 +229,12 @@ describe("Account Threshold Logic", () => {
       vi.mocked(getPostLabelCountInWindow).mockResolvedValue(2);
       vi.mocked(createAccountReport).mockResolvedValue();
 
-      await checkAccountThreshold(testDid, "monitor-only-label", testTimestamp);
+      await checkAccountThreshold(
+        testDid,
+        testUri,
+        "monitor-only-label",
+        testTimestamp,
+      );
 
       expect(trackPostLabelForAccount).toHaveBeenCalled();
       expect(getPostLabelCountInWindow).toHaveBeenCalled();
@@ -237,7 +255,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(createAccountReport).mockResolvedValue();
       vi.mocked(createAccountComment).mockResolvedValue();
 
-      await checkAccountThreshold(testDid, "label-1", testTimestamp);
+      await checkAccountThreshold(testDid, testUri, "label-1", testTimestamp);
 
       expect(accountLabelsThresholdAppliedCounter.inc).toHaveBeenCalledTimes(3);
       expect(accountLabelsThresholdAppliedCounter.inc).toHaveBeenCalledWith({
@@ -259,7 +277,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(trackPostLabelForAccount).mockRejectedValue(redisError);
 
       await expect(
-        checkAccountThreshold(testDid, "test-label", testTimestamp),
+        checkAccountThreshold(testDid, testUri, "test-label", testTimestamp),
       ).rejects.toThrow("Redis connection failed");
 
       expect(logger.error).toHaveBeenCalled();
@@ -271,7 +289,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(getPostLabelCountInWindow).mockRejectedValue(redisError);
 
       await expect(
-        checkAccountThreshold(testDid, "test-label", testTimestamp),
+        checkAccountThreshold(testDid, testUri, "test-label", testTimestamp),
       ).rejects.toThrow("Redis query failed");
 
       expect(logger.error).toHaveBeenCalled();
@@ -286,7 +304,7 @@ describe("Account Threshold Logic", () => {
       vi.mocked(createAccountReport).mockResolvedValue();
       vi.mocked(createAccountComment).mockResolvedValue();
 
-      await checkAccountThreshold(testDid, "label-1", testTimestamp);
+      await checkAccountThreshold(testDid, testUri, "label-1", testTimestamp);
 
       expect(trackPostLabelForAccount).toHaveBeenCalledTimes(2);
       expect(getPostLabelCountInWindow).toHaveBeenCalledTimes(2);
