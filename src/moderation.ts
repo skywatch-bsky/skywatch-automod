@@ -130,6 +130,7 @@ export const createPostLabel = async (
         { process: "MODERATION", error: e },
         "Failed to create post label",
       );
+      throw e;
     }
   });
 };
@@ -178,8 +179,9 @@ export const createPostReport = async (
     } catch (e) {
       logger.error(
         { process: "MODERATION", error: e },
-        "Failed to create post label",
+        "Failed to create post report",
       );
+      throw e;
     }
   });
 };

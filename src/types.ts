@@ -89,3 +89,13 @@ export interface StarterPackThresholdConfig {
   commentAcct?: boolean;
   allowlist?: string[];
 }
+
+export interface ModerationError {
+  action: "label" | "report" | "comment" | "unlabel";
+  error: unknown;
+}
+
+export interface ModerationResult {
+  success: boolean;
+  errors: ModerationError[];
+}

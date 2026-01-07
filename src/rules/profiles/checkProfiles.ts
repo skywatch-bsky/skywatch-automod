@@ -7,7 +7,8 @@ import {
   negateAccountLabel,
 } from "../../accountModeration.js";
 import { logger } from "../../logger.js";
-import type { Checks } from "../../types.js";
+import { moderationActionsFailedCounter } from "../../metrics.js";
+import type { Checks, ModerationResult } from "../../types.js";
 import { getLanguage } from "../../utils/getLanguage.js";
 
 export class ProfileChecker {
@@ -21,26 +22,26 @@ export class ProfileChecker {
     this.time = time;
   }
 
-  checkDescription(description: string): void {
+  async checkDescription(description: string): Promise<void> {
     if (!description) return;
-    this.performActions(description, "CHECKDESCRIPTION");
+    await this.performActions(description, "CHECKDESCRIPTION");
   }
 
-  checkDisplayName(displayName: string): void {
+  async checkDisplayName(displayName: string): Promise<void> {
     if (!displayName) return;
-    this.performActions(displayName, "CHECKDISPLAYNAME");
+    await this.performActions(displayName, "CHECKDISPLAYNAME");
   }
 
-  checkBoth(displayName: string, description: string): void {
+  async checkBoth(displayName: string, description: string): Promise<void> {
     const profile = `${displayName} ${description}`;
     if (!profile) return;
-    this.performActions(profile, "CHECKPROFILE");
+    await this.performActions(profile, "CHECKPROFILE");
   }
 
-  private performActions(
+  private async performActions(
     content: string,
     processType: "CHECKPROFILE" | "CHECKDESCRIPTION" | "CHECKDISPLAYNAME",
-  ): void {
+  ): Promise<void> {
     const matched = this.check.check.test(content);
 
     if (matched) {
@@ -52,46 +53,111 @@ export class ProfileChecker {
         return;
       }
 
-      this.applyActions(content, processType);
+      const result = await this.applyActions(content, processType);
+      if (!result.success) {
+        for (const error of result.errors) {
+          logger.error(
+            {
+              process: processType,
+              did: this.did,
+              action: error.action,
+              error: error.error,
+            },
+            "Moderation action failed",
+          );
+          moderationActionsFailedCounter.inc({
+            action: error.action,
+            target_type: "account",
+          });
+        }
+      }
     } else {
       if (this.check.unlabel) {
-        this.removeLabel(content, processType);
+        const result = await this.removeLabel(content, processType);
+        if (!result.success) {
+          for (const error of result.errors) {
+            logger.error(
+              {
+                process: processType,
+                did: this.did,
+                action: error.action,
+                error: error.error,
+              },
+              "Moderation action failed",
+            );
+            moderationActionsFailedCounter.inc({
+              action: error.action,
+              target_type: "account",
+            });
+          }
+        }
       }
     }
   }
 
-  private applyActions(content: string, processType: string): void {
+  private async applyActions(
+    content: string,
+    processType: string,
+  ): Promise<ModerationResult> {
+    const results: ModerationResult = { success: true, errors: [] };
     const formattedComment = `${this.time.toString()}: ${this.check.comment}\n\nContent: ${content}`;
 
     if (this.check.toLabel) {
-      void createAccountLabel(this.did, this.check.label, formattedComment);
+      try {
+        await createAccountLabel(this.did, this.check.label, formattedComment);
+      } catch (error) {
+        results.success = false;
+        results.errors.push({ action: "label", error });
+      }
     }
 
     if (this.check.reportAcct) {
-      void createAccountReport(this.did, formattedComment);
-      logger.info(
-        {
-          process: processType,
-          did: this.did,
-          time: this.time,
-          label: this.check.label,
-        },
-        "Reporting account",
-      );
+      try {
+        await createAccountReport(this.did, formattedComment);
+        logger.info(
+          {
+            process: processType,
+            did: this.did,
+            time: this.time,
+            label: this.check.label,
+          },
+          "Reporting account",
+        );
+      } catch (error) {
+        results.success = false;
+        results.errors.push({ action: "report", error });
+      }
     }
 
     if (this.check.commentAcct) {
-      void createAccountComment(
-        this.did,
-        formattedComment,
-        `profile:${this.did}`,
-      );
+      try {
+        await createAccountComment(
+          this.did,
+          formattedComment,
+          `profile:${this.did}`,
+        );
+      } catch (error) {
+        results.success = false;
+        results.errors.push({ action: "comment", error });
+      }
     }
+
+    return results;
   }
 
-  private removeLabel(content: string, _processType: string): void {
+  private async removeLabel(
+    content: string,
+    _processType: string,
+  ): Promise<ModerationResult> {
+    const results: ModerationResult = { success: true, errors: [] };
     const formattedComment = `${this.check.comment}\n\nContent: ${content}`;
-    void negateAccountLabel(this.did, this.check.label, formattedComment);
+    try {
+      await negateAccountLabel(this.did, this.check.label, formattedComment);
+    } catch (error) {
+      results.success = false;
+      results.errors.push({ action: "unlabel", error });
+    }
+    return results;
   }
 }
 
@@ -129,7 +195,7 @@ export const checkDescription = async (
 
     if (checkRule.description === true) {
       const checker = new ProfileChecker(checkRule, did, time);
-      checker.checkDescription(description);
+      await checker.checkDescription(description);
     }
   }
 };
@@ -168,7 +234,7 @@ export const checkDisplayName = async (
 
     if (checkRule.displayName === true) {
       const checker = new ProfileChecker(checkRule, did, time);
-      checker.checkDisplayName(displayName);
+      await checker.checkDisplayName(displayName);
     }
   }
 };
@@ -213,11 +279,11 @@ export const checkProfile = async (
     const checker = new ProfileChecker(checkRule, did, time);
 
     if (checkRule.description === true && checkRule.displayName === true) {
-      checker.checkBoth(displayName, description);
+      await checker.checkBoth(displayName, description);
     } else if (checkRule.description === true) {
-      checker.checkDescription(description);
+      await checker.checkDescription(description);
     } else if (checkRule.displayName === true) {
-      checker.checkDisplayName(displayName);
+      await checker.checkDisplayName(displayName);
     }
   }
 };

@@ -6,8 +6,9 @@ import {
 } from "../../accountModeration.js";
 import { checkAccountThreshold } from "../../accountThreshold.js";
 import { logger } from "../../logger.js";
+import { moderationActionsFailedCounter } from "../../metrics.js";
 import { createPostLabel, createPostReport } from "../../moderation.js";
-import type { Post } from "../../types.js";
+import type { ModerationResult, Post } from "../../types.js";
 import { getFinalUrl } from "../../utils/getFinalUrl.js";
 import { getLanguage } from "../../utils/getLanguage.js";
 import { countStarterPacks } from "../account/countStarterPacks.js";
@@ -74,10 +75,10 @@ export const checkPosts = async (post: Post[]) => {
   const lang = await getLanguage(post[0].text);
 
   // iterate through the checks
-  POST_CHECKS.forEach((checkPost) => {
+  for (const checkPost of POST_CHECKS) {
     if (checkPost.language) {
       if (!checkPost.language.includes(lang)) {
-        return;
+        continue;
       }
     }
 
@@ -87,7 +88,7 @@ export const checkPosts = async (post: Post[]) => {
           { process: "CHECKPOSTS", did: post[0].did, atURI: post[0].atURI },
           "Whitelisted DID",
         );
-        return;
+        continue;
       }
     }
 
@@ -99,32 +100,53 @@ export const checkPosts = async (post: Post[]) => {
             { process: "CHECKPOSTS", did: post[0].did, atURI: post[0].atURI },
             "Whitelisted phrase found",
           );
-          return;
+          continue;
         }
       }
 
-      void countStarterPacks(post[0].did, post[0].time);
+      await countStarterPacks(post[0].did, post[0].time);
 
       const postURL = `https://pdsls.dev/${post[0].atURI}`;
       const formattedComment = `${checkPost.comment}\n\nPost: ${postURL}\n\nText: "${post[0].text}"`;
 
+      const results: ModerationResult = { success: true, errors: [] };
+
       if (checkPost.toLabel) {
-        void createPostLabel(
-          post[0].atURI,
-          post[0].cid,
-          checkPost.label,
-          formattedComment,
-          checkPost.duration,
-          post[0].did,
-          post[0].time,
-        );
+        try {
+          await createPostLabel(
+            post[0].atURI,
+            post[0].cid,
+            checkPost.label,
+            formattedComment,
+            checkPost.duration,
+            post[0].did,
+            post[0].time,
+          );
+        } catch (error) {
+          results.success = false;
+          results.errors.push({ action: "label", error });
+        }
       } else if (checkPost.trackOnly) {
-        void checkAccountThreshold(
-          post[0].did,
-          post[0].atURI,
-          checkPost.label,
-          post[0].time,
-        );
+        try {
+          await checkAccountThreshold(
+            post[0].did,
+            post[0].atURI,
+            checkPost.label,
+            post[0].time,
+          );
+        } catch (error) {
+          // Threshold check failures are logged but don't add to results.errors
+          // since it's not a direct moderation action
+          logger.error(
+            {
+              process: "CHECKPOSTS",
+              did: post[0].did,
+              atURI: post[0].atURI,
+              error,
+            },
+            "Account threshold check failed",
+          );
+        }
       }
 
       if (checkPost.reportPost === true) {
@@ -137,7 +159,12 @@ export const checkPosts = async (post: Post[]) => {
           },
           "Reporting post",
         );
-        void createPostReport(post[0].atURI, post[0].cid, formattedComment);
+        try {
+          await createPostReport(post[0].atURI, post[0].cid, formattedComment);
+        } catch (error) {
+          results.success = false;
+          results.errors.push({ action: "report", error });
+        }
       }
 
       if (checkPost.reportAcct) {
@@ -150,12 +177,46 @@ export const checkPosts = async (post: Post[]) => {
           },
           "Reporting account",
         );
-        void createAccountReport(post[0].did, formattedComment);
+        try {
+          await createAccountReport(post[0].did, formattedComment);
+        } catch (error) {
+          results.success = false;
+          results.errors.push({ action: "report", error });
+        }
       }
 
       if (checkPost.commentAcct) {
-        void createAccountComment(post[0].did, formattedComment, post[0].atURI);
+        try {
+          await createAccountComment(
+            post[0].did,
+            formattedComment,
+            post[0].atURI,
+          );
+        } catch (error) {
+          results.success = false;
+          results.errors.push({ action: "comment", error });
+        }
+      }
+
+      // Log and track any failures
+      if (!results.success) {
+        for (const error of results.errors) {
+          logger.error(
+            {
+              process: "CHECKPOSTS",
+              did: post[0].did,
+              atURI: post[0].atURI,
+              action: error.action,
+              error: error.error,
+            },
+            "Moderation action failed",
+          );
+          moderationActionsFailedCounter.inc({
+            action: error.action,
+            target_type: "post",
+          });
+        }
       }
     }
-  });
+  }
 };

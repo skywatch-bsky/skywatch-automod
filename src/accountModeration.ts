@@ -101,6 +101,7 @@ export const createAccountLabel = async (
         { process: "MODERATION", error: e },
         "Failed to create account label",
       );
+      throw e;
     }
   });
 };
@@ -161,6 +162,7 @@ export const createAccountComment = async (
         { process: "MODERATION", error: e },
         "Failed to create account comment",
       );
+      throw e;
     }
   });
 };
@@ -206,6 +208,7 @@ export const createAccountReport = async (did: string, comment: string) => {
         { process: "MODERATION", error: e },
         "Failed to create account report",
       );
+      throw e;
     }
   });
 };
@@ -270,6 +273,7 @@ export const negateAccountLabel = async (
         { process: "MODERATION", error: e },
         "Failed to negate account label",
       );
+      throw e;
     }
   });
 };
