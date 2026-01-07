@@ -3,6 +3,7 @@ import {
   createAccountComment,
   createAccountReport,
 } from "../../../accountModeration.js";
+import { checkAccountThreshold } from "../../../accountThreshold.js";
 import { logger } from "../../../logger.js";
 import { createPostLabel, createPostReport } from "../../../moderation.js";
 import type { Post } from "../../../types.js";
@@ -67,6 +68,16 @@ vi.mock("../../../../rules/posts.js", () => ({
       reportAcct: true,
       commentAcct: true,
     },
+    {
+      label: "track-only-label",
+      comment: "Track only test",
+      check: /shopping/i,
+      toLabel: false,
+      trackOnly: true,
+      reportPost: false,
+      reportAcct: false,
+      commentAcct: false,
+    },
   ],
 }));
 
@@ -86,6 +97,10 @@ vi.mock("../../account/countStarterPacks.js", () => ({
 vi.mock("../../../accountModeration.js", () => ({
   createAccountReport: vi.fn(),
   createAccountComment: vi.fn(),
+}));
+
+vi.mock("../../../accountThreshold.js", () => ({
+  checkAccountThreshold: vi.fn(),
 }));
 
 vi.mock("../../../moderation.js", () => ({
@@ -422,6 +437,31 @@ describe("checkPosts", () => {
         post[0].did,
         expect.any(String),
         expect.any(String),
+      );
+    });
+  });
+
+  describe("trackOnly behavior", () => {
+    it("should track for account threshold without emitting post label when trackOnly is true", async () => {
+      const post = createMockPost({ text: "check out this shopping link" });
+
+      await checkPosts(post);
+
+      expect(createPostLabel).not.toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(String),
+        "track-only-label",
+        expect.any(String),
+        expect.any(Number),
+        expect.any(String),
+        expect.any(Number),
+      );
+
+      expect(checkAccountThreshold).toHaveBeenCalledWith(
+        post[0].did,
+        post[0].atURI,
+        "track-only-label",
+        post[0].time,
       );
     });
   });

@@ -6,13 +6,13 @@ import type { Facet } from "../../types.js";
 export const FACET_SPAM_THRESHOLD = 1;
 
 // Label configuration
-export const FACET_SPAM_LABEL = "suspect-inauthentic";
+export const FACET_SPAM_LABEL = "platform-manipulation";
 export const FACET_SPAM_COMMENT =
   "Abusive facet usage detected (hidden mentions)";
 
 // Allowlist for DIDs with legitimate duplicate facet use cases
 export const FACET_SPAM_ALLOWLIST: string[] = [
-  // Add DIDs here that should be exempt from facet spam detection
+  "did:plc:ei7hqam5oasdpw5cdihdphcv",
 ];
 
 /**
@@ -80,7 +80,7 @@ export const checkFacetSpam = async (
       await createAccountLabel(
         did,
         FACET_SPAM_LABEL,
-        `${time.toString()}: ${FACET_SPAM_COMMENT} - ${uniqueCount.toString()} unique mentions at position ${position} in ${atURI}`,
+        `${time.toString()}: ${FACET_SPAM_COMMENT} \n\n${uniqueCount.toString()} unique mentions at position ${position}. \n\nPost: ${atURI}`,
       );
 
       // Only label once per post even if multiple positions are suspicious

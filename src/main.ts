@@ -19,10 +19,8 @@ import { checkAccountAge } from "./rules/account/age.js";
 import { checkFacetSpam } from "./rules/facets/facets.js";
 import { checkHandle } from "./rules/handles/checkHandles.js";
 import { checkPosts } from "./rules/posts/checkPosts.js";
-import {
-  checkDescription,
-  checkDisplayName,
-} from "./rules/profiles/checkProfiles.js";
+import { checkProfile } from "./rules/profiles/checkProfiles.js";
+import { checkStarterPackThreshold } from "./starterPackThreshold.js";
 import type { Post } from "./types.js";
 
 let cursor = 0;
@@ -282,13 +280,7 @@ jetstream.onUpdate(
   async (event: CommitUpdateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        void checkDescription(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
-        void checkDisplayName(
+        void checkProfile(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
@@ -309,13 +301,7 @@ jetstream.onCreate(
   async (event: CommitCreateEvent<"app.bsky.actor.profile">) => {
     try {
       if (event.commit.record.displayName || event.commit.record.description) {
-        void checkDescription(
-          event.did,
-          event.time_us,
-          event.commit.record.displayName as string,
-          event.commit.record.description as string,
-        );
-        void checkDisplayName(
+        void checkProfile(
           event.did,
           event.time_us,
           event.commit.record.displayName as string,
@@ -337,6 +323,15 @@ jetstream.on(
       // checkHandle is sync but calls async functions with void
       checkHandle(event.identity.did, event.identity.handle, event.time_us);
     }
+  },
+);
+
+// Check for starter pack creation
+jetstream.onCreate(
+  "app.bsky.graph.starterpack",
+  (event: CommitCreateEvent<"app.bsky.graph.starterpack">) => {
+    const starterPackUri = `at://${event.did}/app.bsky.graph.starterpack/${event.commit.rkey}`;
+    void checkStarterPackThreshold(event.did, starterPackUri, event.time_us);
   },
 );
 

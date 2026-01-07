@@ -1,6 +1,6 @@
 {
-  "name": "skywatch-tools",
-  "version": "2.0.1",
+  "name": "skywatch-automod",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
     "start": "npx tsx src/main.ts",

@@ -13,11 +13,14 @@
       "Bash(npm run test:run:*)",
       "Bash(bunx eslint:*)",
       "Bash(bun test:run:*)",
-      "Bash(bun run type-check:*)"
+      "Bash(wc:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["git-mcp-server"]
+  "enabledMcpjsonServers": [
+    "git-mcp-server"
+  ]
 }
