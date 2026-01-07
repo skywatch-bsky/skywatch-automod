@@ -170,4 +170,21 @@ async function authenticateWithRetry(): Promise<void> {
 }
 
 export const login = authenticateWithRetry;
-export const isLoggedIn = authenticateWithRetry().then(() => true);
+
+// Lazy getter for isLoggedIn - authentication only starts when first accessed
+let _isLoggedIn: Promise<boolean> | null = null;
+
+export function getIsLoggedIn(): Promise<boolean> {
+  if (!_isLoggedIn) {
+    _isLoggedIn = authenticateWithRetry().then(() => true);
+  }
+  return _isLoggedIn;
+}
+
+// For backward compatibility - callers can still use `await isLoggedIn`
+// but authentication is now lazy instead of eager
+export const isLoggedIn = {
+  then<T>(onFulfilled: (value: boolean) => T | PromiseLike<T>): Promise<T> {
+    return getIsLoggedIn().then(onFulfilled);
+  },
+};
