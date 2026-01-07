@@ -14,7 +14,13 @@
       "Bash(bunx eslint:*)",
       "Bash(bun test:run:*)",
       "Bash(wc:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm test:*)",
+      "Bash(npx vitest:*)",
+      "Bash(npm install:*)",
+      "Bash(git stash:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr edit:*)"
     ],
     "deny": [],
     "ask": []
