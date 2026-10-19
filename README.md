@@ -1,3 +1,5 @@
+**This tool is no longer being maintained. We suggest using [Osprey](https://github.com/roostorg/osprey) instead.**
+
 # skywatch-automod
 
 Automated moderation tooling for the Bluesky independent labeler skywatch.blue. Monitors the Bluesky firehose and applies labels based on configured moderation rules.
